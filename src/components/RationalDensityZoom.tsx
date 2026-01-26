@@ -107,17 +107,14 @@ export default function RationalDensityZoom() {
           <div className="absolute top-10 text-xs text-red-400 whitespace-nowrap">THE GAP</div>
         </motion.div>
 
-        {/* Fraction markers */}
+        {/* Fraction markers - dots only */}
         {fractions.slice(0, 50).map((f, idx) => {
-          const key = `${f.p}/${f.q}`;
-          const isClosest = f === closestFraction;
-          // Only show label for closest fraction, or at high zoom for simple fractions
-          const showLabel = isClosest || (zoomLevel >= 20 && f.q <= 2);
+          const isClosest = f.p === closestFraction.p && f.q === closestFraction.q;
 
           return (
             <motion.div
-              key={key}
-              className="absolute top-1/2 flex flex-col items-center"
+              key={`${f.p}/${f.q}`}
+              className="absolute top-1/2"
               style={{
                 left: `${getPosition(f.value)}%`,
                 transform: 'translate(-50%, -50%)'
@@ -127,23 +124,26 @@ export default function RationalDensityZoom() {
               transition={{ delay: idx * 0.02 }}
             >
               <div
-                className={`w-2 h-2 rounded-full ${
-                  isClosest ? 'bg-green-500' : 'bg-blue-500'
-                }`}
+                className={`w-2 h-2 rounded-full ${isClosest ? 'bg-green-500' : 'bg-blue-500'}`}
                 style={{
-                  boxShadow: isClosest
-                    ? '0 0 8px rgba(34, 197, 94, 0.6)'
-                    : undefined,
+                  boxShadow: isClosest ? '0 0 8px rgba(34, 197, 94, 0.6)' : undefined,
                 }}
               />
-              {showLabel && (
-                <div className="text-xs text-slate-400 font-mono whitespace-nowrap mt-1">
-                  {f.p}/{f.q}
-                </div>
-              )}
             </motion.div>
           );
         })}
+
+        {/* Single label for closest fraction only - rendered separately to avoid overlap */}
+        <div
+          className="absolute text-xs text-slate-400 font-mono whitespace-nowrap"
+          style={{
+            left: `${getPosition(closestFraction.value)}%`,
+            top: '65%',
+            transform: 'translateX(-50%)'
+          }}
+        >
+          {closestFraction.p}/{closestFraction.q}
+        </div>
 
         {/* Range labels */}
         <div className="absolute bottom-2 left-4 text-xs text-slate-500 font-mono">
