@@ -94,98 +94,99 @@ export default function RationalDensityZoom() {
         </p>
       </div>
 
-      {/* ==================== MOBILE: Fraction Hunter ==================== */}
+      {/* ==================== MOBILE: Simple comparison game ==================== */}
       <div className="md:hidden">
-        <div className="text-center mb-6">
-          <div className="text-slate-400 text-sm mb-1">THE TARGET</div>
-          <div className="text-5xl font-mono text-red-400 mb-1">√2</div>
-          <div className="text-slate-500 font-mono">= 1.41421356237...</div>
-        </div>
-
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="bg-slate-800/50 rounded-xl p-6 mb-6"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="mb-6"
           >
             {!hasStarted ? (
-              <div className="text-center py-4">
-                <div className="text-6xl mb-4">🎯</div>
-                <p className="text-slate-300 text-lg">Can any fraction equal √2?</p>
-                <p className="text-slate-500 text-sm mt-2">Tap below to find out...</p>
+              /* Initial state - pose the question */
+              <div className="bg-slate-800/50 rounded-xl p-6 text-center">
+                <div className="text-slate-400 mb-2">We want to find a fraction equal to:</div>
+                <div className="text-5xl font-mono text-red-400 mb-2">√2</div>
+                <div className="text-slate-500 font-mono mb-6">which is 1.41421356...</div>
+                <div className="text-slate-300">Does such a fraction exist?</div>
               </div>
             ) : (
-              <>
-                <div className="text-center mb-4">
-                  <div className="text-slate-400 text-sm mb-1">ATTEMPT #{currentStep + 1}</div>
-                  <div className="text-5xl font-mono text-green-400 mb-2">
+              /* Trying fractions */
+              <div className="space-y-4">
+                {/* The fraction we're trying */}
+                <div className="bg-slate-800/50 rounded-xl p-5 text-center">
+                  <div className="text-slate-400 text-sm mb-2">What about this fraction?</div>
+                  <div className="text-5xl font-mono text-blue-400 mb-1">
                     {currentApprox.p}/{currentApprox.q}
                   </div>
-                  <div className="text-slate-400 font-mono">= {currentValue.toFixed(10)}</div>
+                  <div className="text-slate-500 font-mono">= {currentValue.toFixed(10)}</div>
                 </div>
 
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm text-slate-500 mb-2">
-                    <span>Distance from √2:</span>
-                    <span className="text-red-400 font-mono">{currentError.toExponential(2)}</span>
+                {/* Comparison */}
+                <div className="bg-slate-800/50 rounded-xl p-5">
+                  <div className="text-center mb-3 text-slate-400 text-sm">Does it equal √2?</div>
+                  <div className="flex items-center justify-center gap-4">
+                    <div className="text-right">
+                      <div className="text-blue-400 font-mono text-lg">{currentValue.toFixed(8)}</div>
+                      <div className="text-slate-500 text-xs">{currentApprox.p}/{currentApprox.q}</div>
+                    </div>
+                    <div className="text-2xl">≠</div>
+                    <div className="text-left">
+                      <div className="text-red-400 font-mono text-lg">{sqrt2.toFixed(8)}</div>
+                      <div className="text-slate-500 text-xs">√2</div>
+                    </div>
                   </div>
-                  <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full"
-                      initial={{ width: '100%' }}
-                      animate={{ width: `${Math.max(3, Math.min(95, 100 - (currentStep * 10)))}%` }}
-                      transition={{ duration: 0.6 }}
-                    />
-                  </div>
-                  <div className="text-sm text-slate-500 mt-2 text-center">
-                    {currentStep < 3 ? "Getting warmer..." : currentStep < 6 ? "So close!" : "Still not √2!"}
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center mt-4"
+                  >
+                    <span className="text-red-400 font-semibold">Nope!</span>
+                    <span className="text-slate-400"> Off by </span>
+                    <span className="text-yellow-400 font-mono">{currentError.toFixed(6)}</span>
+                  </motion.div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
-                    <div className="text-green-400 font-mono text-lg">{currentValue.toFixed(8)}</div>
-                    <div className="text-slate-500 text-xs mt-1">Your fraction</div>
-                  </div>
-                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                    <div className="text-red-400 font-mono text-lg">{sqrt2.toFixed(8)}</div>
-                    <div className="text-slate-500 text-xs mt-1">√2 (target)</div>
-                  </div>
-                </div>
-              </>
+              </div>
             )}
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex gap-3 mb-6">
-          <button
-            onClick={handleTapCloser}
-            disabled={currentStep >= SQRT2_APPROXIMATIONS.length - 1 && hasStarted}
-            className={`flex-1 py-4 rounded-xl font-semibold text-lg transition-all active:scale-[0.98] ${
-              currentStep >= SQRT2_APPROXIMATIONS.length - 1 && hasStarted
-                ? 'bg-red-900/50 text-red-300 border-2 border-red-500/50'
-                : 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
-            }`}
-          >
-            {!hasStarted ? '🎯 Start the Hunt!' : currentStep >= SQRT2_APPROXIMATIONS.length - 1 ? '🚫 No exact match!' : '👆 Find Closer'}
-          </button>
-          {hasStarted && (
-            <button onClick={handleReset} className="px-5 py-4 bg-slate-700 text-slate-300 rounded-xl">↺</button>
-          )}
-        </div>
+        {/* Action button */}
+        <button
+          onClick={handleTapCloser}
+          disabled={currentStep >= SQRT2_APPROXIMATIONS.length - 1 && hasStarted}
+          className={`w-full py-4 rounded-xl font-semibold text-lg mb-4 transition-all active:scale-[0.98] ${
+            currentStep >= SQRT2_APPROXIMATIONS.length - 1 && hasStarted
+              ? 'bg-purple-900/50 text-purple-200 border-2 border-purple-500/50'
+              : 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+          }`}
+        >
+          {!hasStarted
+            ? "Let's try some fractions →"
+            : currentStep >= SQRT2_APPROXIMATIONS.length - 1
+              ? "No fraction will ever work!"
+              : "Try a closer fraction →"}
+        </button>
+
+        {/* Progress indicator */}
+        {hasStarted && (
+          <div className="text-center text-slate-500 text-sm mb-4">
+            Tried {currentStep + 1} of {SQRT2_APPROXIMATIONS.length} fractions
+            {currentStep >= SQRT2_APPROXIMATIONS.length - 1 && (
+              <span className="block text-purple-400 mt-1">...and we could keep going forever!</span>
+            )}
+          </div>
+        )}
 
         {hasStarted && (
-          <div className="flex justify-center items-center gap-2 mb-6">
-            {SQRT2_APPROXIMATIONS.map((_, idx) => (
-              <div
-                key={idx}
-                className={`w-2 h-2 rounded-full ${idx <= currentStep ? 'bg-green-500' : 'bg-slate-600'}`}
-              />
-            ))}
-            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          </div>
+          <button
+            onClick={handleReset}
+            className="w-full py-2 text-slate-400 text-sm hover:text-slate-300"
+          >
+            ↺ Start over
+          </button>
         )}
       </div>
 
