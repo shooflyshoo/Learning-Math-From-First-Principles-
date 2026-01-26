@@ -34,24 +34,47 @@ export default function RationalDensityZoom() {
     lastTouchDistance.current = null;
   }, []);
 
-  // Generate fractions for visualization
+  // Generate fractions - key insight: show FEWER at low zoom, MORE as you zoom in
   const generateFractions = (center: number, zoom: number) => {
     const range = 1 / zoom;
+    const minVal = center - range;
+    const maxVal = center + range;
     const fractions: { value: number; p: number; q: number }[] = [];
-    const maxDenom = Math.min(100, Math.floor(zoom * 10));
+
+    // At low zoom: only simple fractions (small denominators)
+    // At high zoom: allow larger denominators to reveal density
+    const maxDenom = zoom < 5 ? Math.floor(zoom * 3 + 2) : Math.min(150, Math.floor(zoom * 8));
+
+    const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
 
     for (let q = 1; q <= maxDenom; q++) {
-      for (let p = 1; p <= q * 2; p++) {
+      for (let p = 1; p <= q * 3; p++) {
         const value = p / q;
-        if (Math.abs(value - center) < range) {
-          const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
-          if (gcd(p, q) === 1) {
-            fractions.push({ value, p, q });
-          }
+        if (value > minVal && value < maxVal && gcd(p, q) === 1) {
+          fractions.push({ value, p, q });
         }
       }
     }
-    return fractions.sort((a, b) => a.value - b.value);
+
+    // Sort by value
+    fractions.sort((a, b) => a.value - b.value);
+
+    // At low zoom, filter to ensure minimum spacing between dots
+    if (zoom < 10) {
+      const minSpacing = 0.08 / zoom; // Require more spacing at low zoom
+      const filtered: typeof fractions = [];
+      let lastValue = -Infinity;
+
+      for (const f of fractions) {
+        if (f.value - lastValue >= minSpacing) {
+          filtered.push(f);
+          lastValue = f.value;
+        }
+      }
+      return filtered;
+    }
+
+    return fractions;
   };
 
   const fractions = useMemo(() => generateFractions(sqrt2, zoomLevel), [zoomLevel]);
@@ -144,27 +167,30 @@ export default function RationalDensityZoom() {
           <div className="absolute top-10 sm:top-12 text-xs text-red-400 font-semibold">GAP</div>
         </div>
 
-        {/* Fraction dots - scaled to fit within padded area */}
-        {fractions.slice(0, 60).map((f) => (
-          <div
-            key={`${f.p}/${f.q}`}
-            className="absolute top-1/2"
-            style={{
-              left: `calc(${getPosition(f.value)}% * 0.9 + 5%)`,
-              transform: 'translate(-50%, -50%)'
-            }}
-          >
+        {/* Fraction dots - larger at low zoom, smaller at high zoom */}
+        {fractions.slice(0, 80).map((f) => {
+          const isClosest = f.p === closestFraction.p && f.q === closestFraction.q;
+          // Bigger dots at low zoom so they're visible and distinct
+          const dotSize = zoomLevel < 5 ? 'w-3 h-3' : zoomLevel < 15 ? 'w-2.5 h-2.5' : 'w-2 h-2';
+
+          return (
             <div
-              className={`w-2 h-2 rounded-full ${
-                f.p === closestFraction.p && f.q === closestFraction.q ? 'bg-green-500' : 'bg-blue-500'
-              }`}
+              key={`${f.p}/${f.q}`}
+              className="absolute top-1/2"
               style={{
-                boxShadow: f.p === closestFraction.p && f.q === closestFraction.q
-                  ? '0 0 8px rgba(34,197,94,0.8)' : undefined
+                left: `calc(${getPosition(f.value)}% * 0.9 + 5%)`,
+                transform: 'translate(-50%, -50%)'
               }}
-            />
-          </div>
-        ))}
+            >
+              <div
+                className={`${dotSize} rounded-full ${isClosest ? 'bg-green-500' : 'bg-blue-500'}`}
+                style={{
+                  boxShadow: isClosest ? '0 0 10px rgba(34,197,94,0.9)' : '0 0 4px rgba(59,130,246,0.5)'
+                }}
+              />
+            </div>
+          );
+        })}
 
         {/* Range labels - inside container */}
         <div className="absolute bottom-1 left-2 text-xs text-slate-500 font-mono">
