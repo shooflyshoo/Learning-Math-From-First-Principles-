@@ -2,8 +2,6 @@ import { useState, useMemo, useRef, useCallback } from 'react';
 
 export default function RationalDensityZoom() {
   const sqrt2 = Math.SQRT2;
-
-  // Shared zoom state
   const [zoomLevel, setZoomLevel] = useState(1);
 
   // Mobile touch zoom handling
@@ -76,30 +74,38 @@ export default function RationalDensityZoom() {
   const error = Math.abs(closestFraction.value - sqrt2);
 
   return (
-    <div className="interactive-container">
-      <h3 className="text-xl font-semibold text-blue-400 mb-6">
+    <div className="interactive-container px-4 sm:px-6">
+      <h3 className="text-lg sm:text-xl font-semibold text-blue-400 mb-4 sm:mb-6">
         Rationals Are Dense But Have Holes
       </h3>
 
-      <div className="mb-6 p-4 bg-slate-700/30 rounded-lg">
-        <p className="text-slate-300 text-sm sm:text-base">
+      <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-slate-700/30 rounded-lg">
+        <p className="text-slate-300 text-sm">
           Between any two fractions, there's always another. Yet √2
           is <span className="text-red-400 font-semibold">not a fraction</span>.
-          <span className="md:hidden"> Pinch to zoom in on the gap!</span>
-          <span className="hidden md:inline"> Use the slider to zoom in on the gap!</span>
+          <span className="sm:hidden"> Pinch to zoom!</span>
+          <span className="hidden sm:inline"> Use the slider to zoom in on the gap!</span>
         </p>
       </div>
 
-      {/* ==================== UNIFIED: Zoomable Number Line ==================== */}
-
-      {/* Mobile: Pinch-to-zoom instruction */}
-      <div className="md:hidden text-center mb-3">
-        <span className="text-slate-400 text-sm">👆👆 Pinch to zoom • </span>
-        <span className="text-purple-400 font-mono text-sm">{zoomLevel}×</span>
+      {/* Mobile: Pinch instruction + slider fallback */}
+      <div className="sm:hidden mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-slate-400 text-xs">👆👆 Pinch or drag slider</span>
+          <span className="text-purple-400 font-mono text-sm font-bold">{zoomLevel}×</span>
+        </div>
+        <input
+          type="range"
+          min={1}
+          max={50}
+          value={zoomLevel}
+          onChange={(e) => setZoomLevel(parseInt(e.target.value))}
+          className="w-full h-8"
+        />
       </div>
 
       {/* Desktop: Slider */}
-      <div className="hidden md:block mb-6">
+      <div className="hidden sm:block mb-6">
         <label className="block text-sm text-slate-400 mb-2">
           Zoom Level: <span className="text-purple-400 font-mono">{zoomLevel}×</span>
         </label>
@@ -117,32 +123,36 @@ export default function RationalDensityZoom() {
         </div>
       </div>
 
-      {/* Number line - touch-zoomable on mobile */}
+      {/* Number line - with proper padding */}
       <div
         ref={touchRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="relative h-32 bg-slate-800/50 rounded-lg mb-6 overflow-hidden touch-none"
+        className="relative h-28 sm:h-32 bg-slate-800/50 rounded-lg mb-4 sm:mb-6 overflow-hidden touch-none mx-0"
       >
-        <div className="absolute left-4 right-4 top-1/2 h-0.5 bg-slate-600" />
+        {/* The line itself - inset from edges */}
+        <div className="absolute left-3 right-3 sm:left-4 sm:right-4 top-1/2 h-0.5 bg-slate-600" />
 
         {/* √2 marker - THE GAP */}
         <div
           className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center z-10"
-          style={{ left: `${getPosition(sqrt2)}%` }}
+          style={{ left: `calc(${getPosition(sqrt2)}% * 0.9 + 5%)` }}
         >
-          <div className="w-1 h-10 bg-red-500 rounded-full" style={{ boxShadow: '0 0 12px rgba(239,68,68,0.8)' }} />
-          <div className="absolute -top-6 text-xs text-red-400 font-mono font-bold">√2</div>
-          <div className="absolute top-12 text-xs text-red-400 font-semibold whitespace-nowrap">THE GAP</div>
+          <div className="w-1 h-8 sm:h-10 bg-red-500 rounded-full" style={{ boxShadow: '0 0 12px rgba(239,68,68,0.8)' }} />
+          <div className="absolute -top-5 text-xs text-red-400 font-mono font-bold">√2</div>
+          <div className="absolute top-10 sm:top-12 text-xs text-red-400 font-semibold">GAP</div>
         </div>
 
-        {/* Fraction dots */}
-        {fractions.slice(0, 80).map((f) => (
+        {/* Fraction dots - scaled to fit within padded area */}
+        {fractions.slice(0, 60).map((f) => (
           <div
             key={`${f.p}/${f.q}`}
             className="absolute top-1/2"
-            style={{ left: `${getPosition(f.value)}%`, transform: 'translate(-50%, -50%)' }}
+            style={{
+              left: `calc(${getPosition(f.value)}% * 0.9 + 5%)`,
+              transform: 'translate(-50%, -50%)'
+            }}
           >
             <div
               className={`w-2 h-2 rounded-full ${
@@ -156,44 +166,48 @@ export default function RationalDensityZoom() {
           </div>
         ))}
 
-        {/* Range labels */}
-        <div className="absolute bottom-2 left-4 text-xs text-slate-500 font-mono">{minValue.toFixed(4)}</div>
-        <div className="absolute bottom-2 right-4 text-xs text-slate-500 font-mono">{maxValue.toFixed(4)}</div>
-      </div>
-
-      {/* Info panel */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-slate-700/30 rounded-lg p-3">
-          <div className="text-green-400 font-semibold text-xs sm:text-sm mb-1">Closest Fraction</div>
-          <div className="text-xl sm:text-2xl font-mono text-green-400">{closestFraction.p}/{closestFraction.q}</div>
-          <div className="text-xs sm:text-sm text-slate-400">= {closestFraction.value.toFixed(6)}</div>
+        {/* Range labels - inside container */}
+        <div className="absolute bottom-1 left-2 text-xs text-slate-500 font-mono">
+          {minValue.toFixed(2)}
         </div>
-        <div className="bg-slate-700/30 rounded-lg p-3">
-          <div className="text-red-400 font-semibold text-xs sm:text-sm mb-1">Error (Gap)</div>
-          <div className="text-xl sm:text-2xl font-mono text-red-400">{error.toExponential(2)}</div>
-          <div className="text-xs sm:text-sm text-slate-400">Can't hit √2!</div>
+        <div className="absolute bottom-1 right-2 text-xs text-slate-500 font-mono">
+          {maxValue.toFixed(2)}
         </div>
       </div>
 
-      <div className="text-center text-slate-400 mb-6 text-sm">
-        <span className="text-blue-400 font-mono">{fractions.length}</span> fractions visible
-        {zoomLevel > 5 && <span className="text-slate-500"> • Zoom in more to see the gap never fills!</span>}
+      {/* Info panel - properly sized for mobile */}
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <div className="bg-slate-700/30 rounded-lg p-2 sm:p-3">
+          <div className="text-green-400 font-semibold text-xs mb-1">Closest</div>
+          <div className="text-lg sm:text-2xl font-mono text-green-400">{closestFraction.p}/{closestFraction.q}</div>
+          <div className="text-xs text-slate-400 truncate">= {closestFraction.value.toFixed(4)}</div>
+        </div>
+        <div className="bg-slate-700/30 rounded-lg p-2 sm:p-3">
+          <div className="text-red-400 font-semibold text-xs mb-1">Error</div>
+          <div className="text-lg sm:text-2xl font-mono text-red-400">{error.toExponential(1)}</div>
+          <div className="text-xs text-slate-400">Never zero!</div>
+        </div>
       </div>
 
-      {/* Historical approximations */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
-        {[{ p: 7, q: 5 }, { p: 99, q: 70 }, { p: 239, q: 169 }, { p: 577, q: 408 }].map(({ p, q }) => (
-          <div key={`${p}/${q}`} className="bg-slate-700/50 rounded-lg p-2 sm:p-3 text-center">
-            <div className="font-mono text-blue-400 text-sm sm:text-base">{p}/{q}</div>
-            <div className="text-xs text-slate-500">err: {Math.abs(p/q - sqrt2).toExponential(1)}</div>
+      <div className="text-center text-slate-400 mb-4 sm:mb-6 text-xs sm:text-sm">
+        <span className="text-blue-400 font-mono">{fractions.length}</span> fractions
+        {zoomLevel > 5 && <span className="text-slate-500"> • Gap never fills!</span>}
+      </div>
+
+      {/* Historical approximations - 2 columns always on mobile */}
+      <div className="grid grid-cols-2 gap-2 mb-4 sm:mb-6">
+        {[{ p: 7, q: 5 }, { p: 99, q: 70 }].map(({ p, q }) => (
+          <div key={`${p}/${q}`} className="bg-slate-700/50 rounded-lg p-2 text-center">
+            <div className="font-mono text-blue-400 text-sm">{p}/{q}</div>
+            <div className="text-xs text-slate-500">≈{(p/q).toFixed(4)}</div>
           </div>
         ))}
       </div>
 
-      <div className="p-4 bg-purple-500/10 border-l-4 border-purple-500 rounded-r-lg">
-        <p className="text-sm text-slate-300">
-          <strong className="text-purple-400">The Profound Truth:</strong> No matter how far you zoom,
-          you'll never find a fraction at √2. The rationals have "holes" where irrationals live.
+      <div className="p-3 sm:p-4 bg-purple-500/10 border-l-4 border-purple-500 rounded-r-lg">
+        <p className="text-xs sm:text-sm text-slate-300">
+          <strong className="text-purple-400">Key Insight:</strong> No matter how far you zoom,
+          you'll never find a fraction at √2. Rationals have "holes" where irrationals live.
         </p>
       </div>
     </div>
