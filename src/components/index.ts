@@ -1,3 +1,4 @@
+// Core components
 export { default as AdditionAsMovement } from './AdditionAsMovement';
 export { default as MultiplicationAsScaling } from './MultiplicationAsScaling';
 export { default as NegativeTimesNegative } from './NegativeTimesNegative';
@@ -19,3 +20,7 @@ export { default as PlaceValueExploder } from './PlaceValueExploder';
 export { default as PrimeFactorTree } from './PrimeFactorTree';
 export { default as DomainBoundaryExplorer } from './DomainBoundaryExplorer';
 export { default as DebugKit } from './DebugKit';
+
+// Layout components
+export { default as InteractiveWrapper } from './InteractiveWrapper';
+export { default as ScrollSection } from './ScrollSection';
