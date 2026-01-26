@@ -56,25 +56,6 @@ export default function RationalDensityZoom() {
 
   const error = Math.abs(closestFraction.value - sqrt2);
 
-  // Simple label visibility: at low zoom, only show closest fraction
-  // At higher zoom, show simple fractions (small denominators) with spacing
-  const shouldShowLabel = (f: { p: number; q: number; value: number }) => {
-    const key = `${f.p}/${f.q}`;
-    const closestKey = `${closestFraction.p}/${closestFraction.q}`;
-
-    // Always show the closest fraction
-    if (key === closestKey) return true;
-
-    // At low zoom (< 8), only show closest - too many fractions otherwise
-    if (zoomLevel < 8) return false;
-
-    // At medium zoom (8-20), only show very simple fractions (q <= 2)
-    if (zoomLevel < 20) return f.q <= 2;
-
-    // At high zoom (20+), show simple fractions (q <= 5)
-    return f.q <= 5;
-  };
-
   return (
     <div className="interactive-container">
       <h3 className="text-xl font-semibold text-blue-400 mb-6">
@@ -129,29 +110,34 @@ export default function RationalDensityZoom() {
         {/* Fraction markers */}
         {fractions.slice(0, 50).map((f, idx) => {
           const key = `${f.p}/${f.q}`;
-          const showLabel = shouldShowLabel(f);
+          const isClosest = f === closestFraction;
+          // Only show label for closest fraction, or at high zoom for simple fractions
+          const showLabel = isClosest || (zoomLevel >= 20 && f.q <= 2);
 
           return (
             <motion.div
               key={key}
-              className="absolute top-1/2 -translate-y-1/2"
-              style={{ left: `${getPosition(f.value)}%` }}
+              className="absolute top-1/2 flex flex-col items-center"
+              style={{
+                left: `${getPosition(f.value)}%`,
+                transform: 'translate(-50%, -50%)'
+              }}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.02 }}
             >
               <div
                 className={`w-2 h-2 rounded-full ${
-                  f === closestFraction ? 'bg-green-500' : 'bg-blue-500'
+                  isClosest ? 'bg-green-500' : 'bg-blue-500'
                 }`}
                 style={{
-                  boxShadow: f === closestFraction
+                  boxShadow: isClosest
                     ? '0 0 8px rgba(34, 197, 94, 0.6)'
                     : undefined,
                 }}
               />
               {showLabel && (
-                <div className="absolute top-4 -translate-x-1/2 text-xs text-slate-400 font-mono whitespace-nowrap">
+                <div className="text-xs text-slate-400 font-mono whitespace-nowrap mt-1">
                   {f.p}/{f.q}
                 </div>
               )}
