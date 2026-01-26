@@ -56,44 +56,24 @@ export default function RationalDensityZoom() {
 
   const error = Math.abs(closestFraction.value - sqrt2);
 
-  // Collision detection for labels - only show labels that are far enough apart
-  const labelsToShow = useMemo(() => {
-    // Increase minimum distance at low zoom levels where more fractions are visible
-    const minDistance = zoomLevel < 5 ? 18 : zoomLevel < 15 ? 14 : 10;
-    const shownPositions: number[] = [];
-    const showSet = new Set<string>();
-
-    // Always show the closest fraction first
+  // Simple label visibility: at low zoom, only show closest fraction
+  // At higher zoom, show simple fractions (small denominators) with spacing
+  const shouldShowLabel = (f: { p: number; q: number; value: number }) => {
+    const key = `${f.p}/${f.q}`;
     const closestKey = `${closestFraction.p}/${closestFraction.q}`;
-    if (closestFraction.q <= 10) {
-      const closestPos = getPosition(closestFraction.value);
-      showSet.add(closestKey);
-      shownPositions.push(closestPos);
-    }
 
-    // Sort by denominator (simpler fractions first) - prioritize showing 1/1, 3/2, etc.
-    const sortedForLabels = [...fractions]
-      .filter(f => f.q <= 10 && `${f.p}/${f.q}` !== closestKey)
-      .sort((a, b) => a.q - b.q || a.value - b.value);
+    // Always show the closest fraction
+    if (key === closestKey) return true;
 
-    // Add labels that don't collide with ANY already-shown label
-    for (const f of sortedForLabels) {
-      const pos = getPosition(f.value);
-      const key = `${f.p}/${f.q}`;
+    // At low zoom (< 8), only show closest - too many fractions otherwise
+    if (zoomLevel < 8) return false;
 
-      // Check if this position is far enough from ALL shown positions
-      const isFarEnough = shownPositions.every(
-        shownPos => Math.abs(pos - shownPos) >= minDistance
-      );
+    // At medium zoom (8-20), only show very simple fractions (q <= 2)
+    if (zoomLevel < 20) return f.q <= 2;
 
-      if (isFarEnough) {
-        showSet.add(key);
-        shownPositions.push(pos);
-      }
-    }
-
-    return showSet;
-  }, [fractions, closestFraction, zoomLevel, minValue, maxValue]);
+    // At high zoom (20+), show simple fractions (q <= 5)
+    return f.q <= 5;
+  };
 
   return (
     <div className="interactive-container">
@@ -149,7 +129,7 @@ export default function RationalDensityZoom() {
         {/* Fraction markers */}
         {fractions.slice(0, 50).map((f, idx) => {
           const key = `${f.p}/${f.q}`;
-          const shouldShowLabel = labelsToShow.has(key);
+          const showLabel = shouldShowLabel(f);
 
           return (
             <motion.div
@@ -170,7 +150,7 @@ export default function RationalDensityZoom() {
                     : undefined,
                 }}
               />
-              {shouldShowLabel && (
+              {showLabel && (
                 <div className="absolute top-4 -translate-x-1/2 text-xs text-slate-400 font-mono whitespace-nowrap">
                   {f.p}/{f.q}
                 </div>
