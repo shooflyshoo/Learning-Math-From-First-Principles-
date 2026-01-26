@@ -42,10 +42,10 @@ export default function DistributivityRectangle() {
       </div>
 
       {/* Controls */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
-            a (width): <span className="text-blue-400 font-mono">{a}</span>
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">
+            a: <span className="text-blue-400 font-mono">{a}</span>
           </label>
           <input
             type="range"
@@ -53,12 +53,12 @@ export default function DistributivityRectangle() {
             max={6}
             value={a}
             onChange={(e) => setA(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
-            b (height 1): <span className="text-green-400 font-mono">{b}</span>
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">
+            b: <span className="text-green-400 font-mono">{b}</span>
           </label>
           <input
             type="range"
@@ -66,12 +66,12 @@ export default function DistributivityRectangle() {
             max={5}
             value={b}
             onChange={(e) => setB(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
-            c (height 2): <span className="text-purple-400 font-mono">{c}</span>
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">
+            c: <span className="text-purple-400 font-mono">{c}</span>
           </label>
           <input
             type="range"
@@ -79,7 +79,7 @@ export default function DistributivityRectangle() {
             max={5}
             value={c}
             onChange={(e) => setC(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
       </div>
@@ -106,12 +106,8 @@ export default function DistributivityRectangle() {
               }}
               transition={{ type: 'spring', stiffness: 100 }}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-green-400 font-mono text-lg">
+              <span className="absolute inset-0 flex items-center justify-center text-green-400 font-mono text-sm sm:text-lg">
                 {area1}
-              </span>
-              {/* b label */}
-              <span className="absolute -right-8 top-1/2 -translate-y-1/2 text-green-400 font-mono">
-                b={b}
               </span>
             </motion.div>
 
@@ -139,27 +135,10 @@ export default function DistributivityRectangle() {
               }}
               transition={{ type: 'spring', stiffness: 100 }}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-purple-400 font-mono text-lg">
+              <span className="absolute inset-0 flex items-center justify-center text-purple-400 font-mono text-sm sm:text-lg">
                 {area2}
               </span>
-              {/* c label */}
-              <span className="absolute -right-8 top-1/2 -translate-y-1/2 text-purple-400 font-mono">
-                c={c}
-              </span>
             </motion.div>
-
-            {/* Width label */}
-            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-blue-400 font-mono">
-              a={a}
-            </span>
-
-            {/* Total height label */}
-            <motion.span
-              className="absolute -left-12 top-1/2 -translate-y-1/2 text-yellow-400 font-mono whitespace-nowrap"
-              animate={{ opacity: isSplit ? 0 : 1 }}
-            >
-              b+c={b + c}
-            </motion.span>
           </motion.div>
         </div>
       </div>

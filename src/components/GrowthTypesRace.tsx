@@ -129,20 +129,20 @@ export default function GrowthTypesRace() {
           <span className="text-slate-500"> / {maxSteps}</span>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <button
             onClick={isRunning ? () => setIsRunning(false) : startRace}
-            className={`px-5 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-4 sm:px-5 py-2 sm:py-2 rounded-lg font-semibold text-sm sm:text-base transition-all min-h-[44px] ${
               isRunning
                 ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
                 : 'bg-green-600 hover:bg-green-700 text-white'
             }`}
           >
-            {isRunning ? 'Pause' : currentStep > 0 ? 'Continue' : '▶ Start Race'}
+            {isRunning ? 'Pause' : currentStep > 0 ? 'Continue' : '▶ Start'}
           </button>
           <button
             onClick={reset}
-            className="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg"
+            className="px-4 sm:px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm sm:text-base min-h-[44px]"
           >
             Reset
           </button>
@@ -262,40 +262,40 @@ export default function GrowthTypesRace() {
         </AnimatePresence>
       </div>
 
-      {/* Score cards */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-3 text-center">
-          <div className="text-blue-400 text-xs font-semibold uppercase tracking-wide mb-1">Linear</div>
-          <div className="text-2xl md:text-3xl font-mono text-blue-300">
+      {/* Score cards - stack on mobile, 3-col on sm+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+        <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-3 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-start sm:text-center">
+          <div className="text-blue-400 text-xs font-semibold uppercase tracking-wide sm:mb-1">Linear</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-mono text-blue-300">
             {current.linear.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500">+5 each step</div>
+          <div className="text-xs text-slate-500 hidden sm:block">+5 each step</div>
         </div>
 
-        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-3 text-center">
-          <div className="text-green-400 text-xs font-semibold uppercase tracking-wide mb-1">Quadratic</div>
-          <div className="text-2xl md:text-3xl font-mono text-green-300">
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-3 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-start sm:text-center">
+          <div className="text-green-400 text-xs font-semibold uppercase tracking-wide sm:mb-1">Quadratic</div>
+          <div className="text-xl sm:text-2xl md:text-3xl font-mono text-green-300">
             {current.quadratic.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500">n²</div>
+          <div className="text-xs text-slate-500 hidden sm:block">n²</div>
         </div>
 
-        <div className={`border rounded-lg p-3 text-center transition-colors ${
+        <div className={`border rounded-lg p-3 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-start sm:text-center transition-colors ${
           showDanger
             ? 'bg-red-900/50 border-red-500/50 animate-pulse'
             : 'bg-red-900/30 border-red-500/30'
         }`}>
-          <div className="text-red-400 text-xs font-semibold uppercase tracking-wide mb-1 flex items-center justify-center gap-1">
+          <div className="text-red-400 text-xs font-semibold uppercase tracking-wide sm:mb-1 flex items-center gap-1">
             Exponential
             {showDanger && <Skull size={12} />}
           </div>
-          <div className="text-2xl md:text-3xl font-mono text-red-300">
+          <div className="text-xl sm:text-2xl md:text-3xl font-mono text-red-300">
             {current.exponential > 999999
               ? current.exponential.toExponential(1)
               : current.exponential.toLocaleString()
             }
           </div>
-          <div className="text-xs text-slate-500">×2 each step</div>
+          <div className="text-xs text-slate-500 hidden sm:block">×2 each step</div>
         </div>
       </div>
 

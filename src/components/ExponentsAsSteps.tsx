@@ -63,10 +63,10 @@ export default function ExponentsAsSteps() {
         Exponents as Repeated Scaling
       </h3>
 
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-4 sm:mb-6">
         <button
           onClick={() => setMode('forward')}
-          className={`px-3 py-2 rounded-lg text-sm ${
+          className={`flex-1 sm:flex-none px-4 py-3 rounded-lg text-sm min-h-[44px] ${
             mode === 'forward' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'
           }`}
         >
@@ -74,7 +74,7 @@ export default function ExponentsAsSteps() {
         </button>
         <button
           onClick={() => setMode('laws')}
-          className={`px-3 py-2 rounded-lg text-sm ${
+          className={`flex-1 sm:flex-none px-4 py-3 rounded-lg text-sm min-h-[44px] ${
             mode === 'laws' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'
           }`}
         >
@@ -85,9 +85,9 @@ export default function ExponentsAsSteps() {
       {mode === 'forward' && (
         <>
           {/* Controls */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-6 sm:mb-8">
             <div>
-              <label className="block text-sm text-slate-400 mb-2">
+              <label className="block text-xs sm:text-sm text-slate-400 mb-2">
                 Base: <span className="text-blue-400 font-mono">{base}</span>
               </label>
               <input
@@ -96,11 +96,11 @@ export default function ExponentsAsSteps() {
                 max={5}
                 value={base}
                 onChange={(e) => setBase(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full h-8"
               />
             </div>
             <div>
-              <label className="block text-sm text-slate-400 mb-2">
+              <label className="block text-xs sm:text-sm text-slate-400 mb-2">
                 Exponent: <span className="text-purple-400 font-mono">{exponent}</span>
               </label>
               <input
@@ -109,7 +109,7 @@ export default function ExponentsAsSteps() {
                 max={6}
                 value={exponent}
                 onChange={(e) => setExponent(parseInt(e.target.value))}
-                className="w-full"
+                className="w-full h-8"
               />
             </div>
           </div>
@@ -171,25 +171,25 @@ export default function ExponentsAsSteps() {
           </div>
 
           {/* Controls - wrap on mobile */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             <button
               onClick={runAnimation}
               disabled={isAnimating}
-              className={`px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base ${
+              className={`px-4 sm:px-6 py-3 rounded-lg font-semibold text-sm min-h-[44px] ${
                 isAnimating
                   ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
             >
-              {isAnimating ? 'Animating...' : 'Play'}
+              {isAnimating ? 'Running...' : 'Play'}
             </button>
             <button
               onClick={() => setCurrentStep(Math.abs(exponent))}
-              className="px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm sm:text-base"
+              className="px-4 sm:px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm min-h-[44px]"
             >
               Show All
             </button>
-            <button onClick={reset} className="px-4 sm:px-6 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm sm:text-base">
+            <button onClick={reset} className="px-4 sm:px-6 py-3 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm min-h-[44px]">
               Reset
             </button>
           </div>

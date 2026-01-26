@@ -86,7 +86,7 @@ export default function UnitCalculator() {
       </div>
 
       {/* Preset buttons */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
         {presets.map((preset) => (
           <button
             key={preset.label}
@@ -97,7 +97,7 @@ export default function UnitCalculator() {
               setQ2Unit(preset.q2.u);
               setOperation(preset.op);
             }}
-            className="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded text-sm"
+            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded text-xs sm:text-sm min-h-[40px]"
           >
             {preset.label}
           </button>
@@ -105,31 +105,31 @@ export default function UnitCalculator() {
       </div>
 
       {/* Input section */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-          <label className="block text-sm text-slate-400 mb-2">Quantity 1</label>
+      <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 sm:p-4">
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">Quantity 1</label>
           <div className="flex gap-2">
             <input
               type="number"
               value={q1Value}
               onChange={(e) => setQ1Value(parseFloat(e.target.value) || 0)}
-              className="w-20 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-slate-200 font-mono"
+              className="w-16 sm:w-20 px-2 py-2 bg-slate-800 border border-slate-600 rounded text-slate-200 font-mono text-sm"
             />
             <input
               type="text"
               value={q1Unit}
               onChange={(e) => setQ1Unit(e.target.value)}
-              placeholder="e.g., m, m^2"
-              className="flex-1 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-blue-400 font-mono"
+              placeholder="m, m^2"
+              className="flex-1 px-2 py-2 bg-slate-800 border border-slate-600 rounded text-blue-400 font-mono text-sm"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center py-2 sm:py-0">
           <div className="flex gap-2">
             <button
               onClick={() => setOperation('multiply')}
-              className={`px-4 py-2 rounded-lg text-xl ${
+              className={`px-5 py-3 rounded-lg text-xl min-w-[48px] min-h-[48px] ${
                 operation === 'multiply'
                   ? 'bg-yellow-600 text-white'
                   : 'bg-slate-700 text-slate-400'
@@ -139,7 +139,7 @@ export default function UnitCalculator() {
             </button>
             <button
               onClick={() => setOperation('divide')}
-              className={`px-4 py-2 rounded-lg text-xl ${
+              className={`px-5 py-3 rounded-lg text-xl min-w-[48px] min-h-[48px] ${
                 operation === 'divide'
                   ? 'bg-yellow-600 text-white'
                   : 'bg-slate-700 text-slate-400'
@@ -150,21 +150,21 @@ export default function UnitCalculator() {
           </div>
         </div>
 
-        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-          <label className="block text-sm text-slate-400 mb-2">Quantity 2</label>
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 sm:p-4">
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">Quantity 2</label>
           <div className="flex gap-2">
             <input
               type="number"
               value={q2Value}
               onChange={(e) => setQ2Value(parseFloat(e.target.value) || 0)}
-              className="w-20 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-slate-200 font-mono"
+              className="w-16 sm:w-20 px-2 py-2 bg-slate-800 border border-slate-600 rounded text-slate-200 font-mono text-sm"
             />
             <input
               type="text"
               value={q2Unit}
               onChange={(e) => setQ2Unit(e.target.value)}
-              placeholder="e.g., m, hours"
-              className="flex-1 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-green-400 font-mono"
+              placeholder="m, hrs"
+              className="flex-1 px-2 py-2 bg-slate-800 border border-slate-600 rounded text-green-400 font-mono text-sm"
             />
           </div>
         </div>
@@ -212,24 +212,24 @@ export default function UnitCalculator() {
       </div>
 
       {/* Common patterns */}
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-slate-700/30 rounded-lg p-3">
-          <div className="font-mono text-sm text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 mb-6">
+        <div className="bg-slate-700/30 rounded-lg p-3 flex sm:block items-center justify-between sm:text-center">
+          <div className="font-mono text-sm">
             <span className="text-blue-400">m</span> × <span className="text-blue-400">m</span> = <span className="text-yellow-400">m²</span>
           </div>
-          <div className="text-xs text-slate-500 text-center">Length × Length = Area</div>
+          <div className="text-xs text-slate-500">Area</div>
         </div>
-        <div className="bg-slate-700/30 rounded-lg p-3">
-          <div className="font-mono text-sm text-center">
-            <span className="text-blue-400">miles</span> ÷ <span className="text-green-400">hours</span> = <span className="text-yellow-400">miles/hour</span>
+        <div className="bg-slate-700/30 rounded-lg p-3 flex sm:block items-center justify-between sm:text-center">
+          <div className="font-mono text-sm">
+            <span className="text-blue-400">mi</span> ÷ <span className="text-green-400">hr</span> = <span className="text-yellow-400">mi/hr</span>
           </div>
-          <div className="text-xs text-slate-500 text-center">Distance ÷ Time = Speed</div>
+          <div className="text-xs text-slate-500">Speed</div>
         </div>
-        <div className="bg-slate-700/30 rounded-lg p-3">
-          <div className="font-mono text-sm text-center">
+        <div className="bg-slate-700/30 rounded-lg p-3 flex sm:block items-center justify-between sm:text-center">
+          <div className="font-mono text-sm">
             <span className="text-blue-400">m/s</span> × <span className="text-green-400">s</span> = <span className="text-yellow-400">m</span>
           </div>
-          <div className="text-xs text-slate-500 text-center">Speed × Time = Distance</div>
+          <div className="text-xs text-slate-500">Distance</div>
         </div>
       </div>
 

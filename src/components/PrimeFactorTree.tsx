@@ -166,44 +166,46 @@ export default function PrimeFactorTree() {
         Prime Factorization Tree
       </h3>
 
-      <div className="mb-6 p-4 bg-slate-700/30 rounded-lg text-center">
-        <p className="text-slate-300">
-          Every integer greater than 1 can be broken down into prime factors—the "atoms" of multiplication.
-          Click on non-prime numbers to factor them!
+      <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-slate-700/30 rounded-lg text-center">
+        <p className="text-slate-300 text-sm sm:text-base">
+          Every integer &gt; 1 breaks down into prime factors—the "atoms" of multiplication.
+          <span className="block sm:inline"> Tap non-primes to factor them!</span>
         </p>
       </div>
 
       {/* Input */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6">
         <input
           type="number"
           value={inputNumber}
           onChange={(e) => setInputNumber(Math.max(2, parseInt(e.target.value) || 2))}
-          className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-slate-200 font-mono text-xl"
+          className="flex-1 px-3 py-3 bg-slate-800 border border-slate-600 rounded-lg text-slate-200 font-mono text-lg sm:text-xl"
           min={2}
           max={1000}
         />
-        <button
-          onClick={initTree}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-        >
-          Start
-        </button>
-        <button
-          onClick={fullyFactor}
-          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-        >
-          Auto Factor
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={initTree}
+            className="flex-1 sm:flex-none px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg min-h-[44px] text-sm sm:text-base"
+          >
+            Start
+          </button>
+          <button
+            onClick={fullyFactor}
+            className="flex-1 sm:flex-none px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg min-h-[44px] text-sm sm:text-base"
+          >
+            Auto
+          </button>
+        </div>
       </div>
 
       {/* Quick examples */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
         {[12, 24, 60, 100, 360].map((n) => (
           <button
             key={n}
             onClick={() => setInputNumber(n)}
-            className="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded text-sm font-mono"
+            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded text-sm font-mono min-h-[40px]"
           >
             {n}
           </button>

@@ -26,10 +26,10 @@ export default function NegativeTimesNegative() {
         Negative × Negative = Positive (The Double Flip)
       </h3>
 
-      <div className="text-center mb-8">
-        <p className="text-slate-300 mb-4">
+      <div className="text-center mb-4 sm:mb-8">
+        <p className="text-slate-300 text-sm sm:text-base mb-4">
           Multiplying by <span className="text-red-400 font-mono">-1</span> flips the number line.
-          Two flips bring you back to where you started.
+          <span className="hidden sm:inline"> Two flips bring you back to where you started.</span>
         </p>
       </div>
 
@@ -108,33 +108,33 @@ export default function NegativeTimesNegative() {
       </div>
 
       {/* Controls */}
-      <div className="flex justify-center gap-4 mb-8">
+      <div className="flex justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
         <button
           onClick={handleFlip}
           disabled={isAnimating}
-          className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+          className={`px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all text-sm sm:text-base min-h-[44px] ${
             isAnimating
               ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
               : 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl'
           }`}
         >
-          Multiply by -1 (Flip!)
+          × -1 (Flip!)
         </button>
         <button
           onClick={handleReset}
-          className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all"
+          className="px-4 sm:px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold transition-all text-sm sm:text-base min-h-[44px]"
         >
           Reset
         </button>
       </div>
 
       {/* Flip counter and equation */}
-      <div className="bg-slate-700/30 rounded-lg p-6 text-center">
-        <div className="text-lg text-slate-400 mb-4">
-          Flips applied: <span className="text-purple-400 font-mono">{flips}</span>
+      <div className="bg-slate-700/30 rounded-lg p-4 sm:p-6 text-center">
+        <div className="text-sm sm:text-lg text-slate-400 mb-3 sm:mb-4">
+          Flips: <span className="text-purple-400 font-mono">{flips}</span>
         </div>
 
-        <div className="text-2xl font-mono mb-4">
+        <div className="text-lg sm:text-2xl font-mono mb-3 sm:mb-4">
           {flips === 0 && (
             <span className="text-green-400">3</span>
           )}
@@ -180,15 +180,15 @@ export default function NegativeTimesNegative() {
           )}
         </div>
 
-        <div className="text-slate-400">
-          {flips === 0 && "Start with +3, facing right"}
-          {flips === 1 && "One flip: now at -3, facing left"}
-          {flips === 2 && "Two flips: back at +3, facing right!"}
+        <div className="text-slate-400 text-xs sm:text-base">
+          {flips === 0 && "Start at +3, facing right"}
+          {flips === 1 && "One flip → -3"}
+          {flips === 2 && "Two flips → back to +3!"}
           {flips >= 3 && (
             <>
               {flips % 2 === 0
-                ? "Even number of flips: back to positive!"
-                : "Odd number of flips: negative"}
+                ? "Even flips → positive!"
+                : "Odd flips → negative"}
             </>
           )}
         </div>

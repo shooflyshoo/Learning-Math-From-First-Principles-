@@ -29,10 +29,10 @@ export default function ThreeFacesOfDivision() {
       </h3>
 
       {/* Input controls */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-6 sm:mb-8">
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
-            Dividend (total): <span className="text-blue-400 font-mono">{dividend}</span>
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">
+            Total: <span className="text-blue-400 font-mono">{dividend}</span>
           </label>
           <input
             type="range"
@@ -40,11 +40,11 @@ export default function ThreeFacesOfDivision() {
             max={24}
             value={dividend}
             onChange={(e) => setDividend(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
+          <label className="block text-xs sm:text-sm text-slate-400 mb-2">
             Divisor: <span className="text-purple-400 font-mono">{divisor}</span>
           </label>
           <input
@@ -53,14 +53,14 @@ export default function ThreeFacesOfDivision() {
             max={12}
             value={divisor}
             onChange={(e) => setDivisor(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
       </div>
 
       {/* Central equation */}
-      <div className="text-center mb-8">
-        <div className="text-3xl font-mono">
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="text-2xl sm:text-3xl font-mono">
           <span className="text-blue-400">{dividend}</span>
           <span className="text-slate-400"> ÷ </span>
           <span className="text-purple-400">{divisor}</span>
@@ -70,17 +70,17 @@ export default function ThreeFacesOfDivision() {
           </span>
         </div>
         {!isWhole && (
-          <p className="text-yellow-400/70 text-sm mt-2">
-            (Not a whole number - see how each interpretation handles this)
+          <p className="text-yellow-400/70 text-xs sm:text-sm mt-2">
+            (Not whole - see how each interpretation handles this)
           </p>
         )}
       </div>
 
-      {/* Three panels */}
-      <div className="grid md:grid-cols-3 gap-4">
+      {/* Three panels - stack on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {/* Panel 1: Partitive (Sharing) */}
         <motion.div
-          className={`p-4 rounded-lg cursor-pointer transition-all ${
+          className={`p-3 sm:p-4 rounded-lg cursor-pointer transition-all min-h-[80px] ${
             activePanel === 0
               ? 'bg-blue-500/20 border-2 border-blue-500'
               : 'bg-slate-700/30 border-2 border-transparent hover:border-slate-600'
@@ -88,9 +88,9 @@ export default function ThreeFacesOfDivision() {
           onClick={() => setActivePanel(activePanel === 0 ? null : 0)}
           layout
         >
-          <h4 className="text-blue-400 font-semibold mb-3">1. Sharing (Partitive)</h4>
-          <p className="text-sm text-slate-400 mb-4">
-            "{dividend} cookies shared among {divisor} kids"
+          <h4 className="text-blue-400 font-semibold mb-2 sm:mb-3 text-sm sm:text-base">1. Sharing</h4>
+          <p className="text-xs sm:text-sm text-slate-400 mb-3 sm:mb-4">
+            "{dividend} cookies ÷ {divisor} kids"
           </p>
 
           <AnimatePresence>
@@ -142,7 +142,7 @@ export default function ThreeFacesOfDivision() {
 
         {/* Panel 2: Measurement (Grouping) */}
         <motion.div
-          className={`p-4 rounded-lg cursor-pointer transition-all ${
+          className={`p-3 sm:p-4 rounded-lg cursor-pointer transition-all min-h-[80px] ${
             activePanel === 1
               ? 'bg-green-500/20 border-2 border-green-500'
               : 'bg-slate-700/30 border-2 border-transparent hover:border-slate-600'
@@ -150,9 +150,9 @@ export default function ThreeFacesOfDivision() {
           onClick={() => setActivePanel(activePanel === 1 ? null : 1)}
           layout
         >
-          <h4 className="text-green-400 font-semibold mb-3">2. Grouping (Measurement)</h4>
-          <p className="text-sm text-slate-400 mb-4">
-            "{dividend} cookies, groups of {divisor}"
+          <h4 className="text-green-400 font-semibold mb-2 sm:mb-3 text-sm sm:text-base">2. Grouping</h4>
+          <p className="text-xs sm:text-sm text-slate-400 mb-3 sm:mb-4">
+            "{dividend} cookies in groups of {divisor}"
           </p>
 
           <AnimatePresence>
@@ -203,7 +203,7 @@ export default function ThreeFacesOfDivision() {
 
         {/* Panel 3: Rate */}
         <motion.div
-          className={`p-4 rounded-lg cursor-pointer transition-all ${
+          className={`p-3 sm:p-4 rounded-lg cursor-pointer transition-all min-h-[80px] ${
             activePanel === 2
               ? 'bg-purple-500/20 border-2 border-purple-500'
               : 'bg-slate-700/30 border-2 border-transparent hover:border-slate-600'
@@ -211,9 +211,9 @@ export default function ThreeFacesOfDivision() {
           onClick={() => setActivePanel(activePanel === 2 ? null : 2)}
           layout
         >
-          <h4 className="text-purple-400 font-semibold mb-3">3. Rate (Per Unit)</h4>
-          <p className="text-sm text-slate-400 mb-4">
-            "{dividend} miles in {divisor} hours"
+          <h4 className="text-purple-400 font-semibold mb-2 sm:mb-3 text-sm sm:text-base">3. Rate</h4>
+          <p className="text-xs sm:text-sm text-slate-400 mb-3 sm:mb-4">
+            "{dividend} mi in {divisor} hrs"
           </p>
 
           <AnimatePresence>
