@@ -1,8 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle, Skull } from 'lucide-react';
+
+/**
+ * Growth Types Race
+ *
+ * The point isn't just to show three lines going up.
+ * It's to make you FEEL the deception of exponential growth.
+ *
+ * At first they all look similar. "Exponential is only a little ahead."
+ * Then suddenly it's not even on the same scale.
+ * That drama is the insight.
+ */
 
 interface DataPoint {
-  x: number;
+  step: number;
   linear: number;
   quadratic: number;
   exponential: number;
@@ -11,20 +23,21 @@ interface DataPoint {
 export default function GrowthTypesRace() {
   const [isRunning, setIsRunning] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [speed, setSpeed] = useState(1);
-  const [maxSteps] = useState(15);
   const [data, setData] = useState<DataPoint[]>([]);
+  const [showDanger, setShowDanger] = useState(false);
+  const [raceComplete, setRaceComplete] = useState(false);
   const intervalRef = useRef<number | null>(null);
 
-  // Parameters
-  const linearSlope = 3;
-  const expBase = 1.5;
+  const maxSteps = 20;
 
-  const calculateValues = (x: number) => ({
-    x,
-    linear: linearSlope * x,
-    quadratic: x * x,
-    exponential: Math.pow(expBase, x),
+  // Using values that make the race interesting
+  // At step 10, exponential should start to clearly pull ahead
+  // By step 15-20, it should be ridiculous
+  const calculateValues = (step: number): DataPoint => ({
+    step,
+    linear: 5 * step, // 0, 5, 10, 15...
+    quadratic: step * step, // 0, 1, 4, 9, 16, 25...
+    exponential: Math.pow(2, step), // 1, 2, 4, 8, 16, 32, 64...
   });
 
   useEffect(() => {
@@ -33,263 +46,307 @@ export default function GrowthTypesRace() {
       newData.push(calculateValues(i));
     }
     setData(newData);
-  }, [currentStep]);
+
+    // Trigger danger warning when exponential gets scary
+    if (currentStep >= 12 && !showDanger) {
+      setShowDanger(true);
+    }
+
+    if (currentStep >= maxSteps) {
+      setRaceComplete(true);
+      setIsRunning(false);
+    }
+  }, [currentStep, showDanger]);
 
   const startRace = () => {
     setIsRunning(true);
-    setCurrentStep(0);
-    setData([calculateValues(0)]);
-  };
-
-  const stopRace = () => {
-    setIsRunning(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+    if (currentStep === 0) {
+      setShowDanger(false);
+      setRaceComplete(false);
     }
   };
 
-  const resetRace = () => {
-    stopRace();
+  const reset = () => {
+    setIsRunning(false);
+    if (intervalRef.current) clearTimeout(intervalRef.current);
     setCurrentStep(0);
     setData([calculateValues(0)]);
+    setShowDanger(false);
+    setRaceComplete(false);
   };
 
   useEffect(() => {
     if (isRunning && currentStep < maxSteps) {
+      // Speed up slightly as we go to build tension
+      const baseDelay = currentStep < 8 ? 600 : currentStep < 15 ? 400 : 300;
       intervalRef.current = window.setTimeout(() => {
-        setCurrentStep((s) => s + 1);
-      }, 1000 / speed);
-    } else if (currentStep >= maxSteps) {
-      setIsRunning(false);
+        setCurrentStep(s => s + 1);
+      }, baseDelay);
     }
 
     return () => {
-      if (intervalRef.current) {
-        clearTimeout(intervalRef.current);
-      }
+      if (intervalRef.current) clearTimeout(intervalRef.current);
     };
-  }, [isRunning, currentStep, speed, maxSteps]);
+  }, [isRunning, currentStep]);
 
-  const maxY = data.length > 0
-    ? Math.max(...data.map(d => Math.max(d.linear, d.quadratic, d.exponential)), 10)
-    : 10;
+  const current = data[data.length - 1] || calculateValues(0);
 
-  const getY = (value: number) => {
-    const chartHeight = 300;
-    return chartHeight - (value / maxY) * chartHeight;
+  // Calculate chart scaling - exponential will blow this up
+  const maxY = Math.max(current.linear, current.quadratic, current.exponential, 50);
+
+  // For display purposes, cap how high exponential can go on chart
+  const chartMax = Math.min(maxY, current.quadratic * 3 + 100);
+  const expOffChart = current.exponential > chartMax;
+
+  const getY = (value: number, cap = chartMax) => {
+    const clamped = Math.min(value, cap);
+    return 280 - (clamped / cap) * 260;
   };
 
   const getX = (step: number) => {
-    const chartWidth = 600;
-    return (step / maxSteps) * chartWidth;
+    return 50 + (step / maxSteps) * 500;
   };
 
-  const currentValues = data[data.length - 1] || calculateValues(0);
+  // Commentary based on race progress
+  const getCommentary = () => {
+    if (currentStep <= 3) return { text: "They all look pretty similar...", color: "text-slate-400" };
+    if (currentStep <= 6) return { text: "Exponential is starting to pull ahead slightly.", color: "text-yellow-400" };
+    if (currentStep <= 9) return { text: "Wait, exponential is really moving now.", color: "text-orange-400" };
+    if (currentStep <= 12) return { text: "This is getting out of hand...", color: "text-red-400" };
+    if (currentStep <= 15) return { text: "EXPONENTIAL HAS LEFT THE CHAT", color: "text-red-500" };
+    return { text: "Linear and quadratic aren't even visible from exponential's perspective.", color: "text-red-600" };
+  };
+
+  const commentary = getCommentary();
 
   return (
-    <div className="interactive-container">
-      <h3 className="text-xl font-semibold text-blue-400 mb-6">
-        Growth Types Race: Linear vs Polynomial vs Exponential
-      </h3>
-
-      {/* Controls */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <button
-          onClick={isRunning ? stopRace : startRace}
-          className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-            isRunning
-              ? 'bg-red-600 hover:bg-red-700 text-white'
-              : 'bg-green-600 hover:bg-green-700 text-white'
-          }`}
-        >
-          {isRunning ? 'Pause' : currentStep > 0 ? 'Resume' : 'Start Race'}
-        </button>
-        <button
-          onClick={resetRace}
-          className="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg font-semibold"
-        >
-          Reset
-        </button>
-        <div className="flex items-center gap-2">
-          <label className="text-slate-400 text-sm">Speed:</label>
-          <input
-            type="range"
-            min={0.5}
-            max={3}
-            step={0.5}
-            value={speed}
-            onChange={(e) => setSpeed(parseFloat(e.target.value))}
-            className="w-24"
-          />
-          <span className="text-slate-300 font-mono">{speed}x</span>
+    <div className="space-y-6">
+      {/* Race header */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span className="text-slate-400">Step: </span>
+          <span className="text-2xl font-mono text-white">{currentStep}</span>
+          <span className="text-slate-500"> / {maxSteps}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-slate-400 text-sm">Jump to step:</label>
-          <input
-            type="number"
-            min={0}
-            max={25}
-            value={currentStep}
-            onChange={(e) => {
-              stopRace();
-              setCurrentStep(Math.min(25, Math.max(0, parseInt(e.target.value) || 0)));
-            }}
-            className="w-16 px-2 py-1 bg-slate-800 border border-slate-600 rounded text-slate-200"
-          />
+
+        <div className="flex gap-3">
+          <button
+            onClick={isRunning ? () => setIsRunning(false) : startRace}
+            className={`px-5 py-2 rounded-lg font-semibold transition-all ${
+              isRunning
+                ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                : 'bg-green-600 hover:bg-green-700 text-white'
+            }`}
+          >
+            {isRunning ? 'Pause' : currentStep > 0 ? 'Continue' : '▶ Start Race'}
+          </button>
+          <button
+            onClick={reset}
+            className="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg"
+          >
+            Reset
+          </button>
         </div>
       </div>
 
-      {/* Chart */}
-      <div className="relative bg-slate-800/50 rounded-lg p-4 mb-6 overflow-hidden">
-        <svg viewBox="0 0 650 350" className="w-full h-auto">
+      {/* Live commentary */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={commentary.text}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          className={`text-center py-3 px-4 bg-slate-800/50 rounded-lg ${commentary.color} font-medium`}
+        >
+          {commentary.text}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* The Chart */}
+      <div className="relative bg-slate-900/70 rounded-xl p-2 overflow-hidden">
+        <svg viewBox="0 0 600 320" className="w-full h-auto">
           {/* Grid */}
           <defs>
-            <pattern id="grid" width="50" height="30" patternUnits="userSpaceOnUse">
-              <path d="M 50 0 L 0 0 0 30" fill="none" stroke="#334155" strokeWidth="0.5" />
+            <pattern id="growth-grid" width="50" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 50 0 L 0 0 0 40" fill="none" stroke="#1e293b" strokeWidth="1" />
             </pattern>
           </defs>
-          <rect x="25" y="10" width="600" height="300" fill="url(#grid)" />
+          <rect x="50" y="20" width="500" height="260" fill="url(#growth-grid)" />
 
           {/* Axes */}
-          <line x1="25" y1="310" x2="625" y2="310" stroke="#64748b" strokeWidth="2" />
-          <line x1="25" y1="10" x2="25" y2="310" stroke="#64748b" strokeWidth="2" />
-
-          {/* Y-axis labels */}
-          <text x="20" y="315" fill="#64748b" fontSize="10" textAnchor="end">0</text>
-          <text x="20" y="165" fill="#64748b" fontSize="10" textAnchor="end">{Math.round(maxY / 2)}</text>
-          <text x="20" y="15" fill="#64748b" fontSize="10" textAnchor="end">{Math.round(maxY)}</text>
+          <line x1="50" y1="280" x2="550" y2="280" stroke="#475569" strokeWidth="2" />
+          <line x1="50" y1="20" x2="50" y2="280" stroke="#475569" strokeWidth="2" />
 
           {/* Lines */}
           {data.length > 1 && (
             <>
-              {/* Linear */}
+              {/* Linear - Blue */}
               <motion.path
-                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${25 + getX(d.x)} ${10 + getY(d.linear)}`).join(' ')}
+                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(d.step)} ${getY(d.linear)}`).join(' ')}
                 fill="none"
                 stroke="#3b82f6"
                 strokeWidth="3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
+                strokeLinecap="round"
               />
 
-              {/* Quadratic */}
+              {/* Quadratic - Green */}
               <motion.path
-                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${25 + getX(d.x)} ${10 + getY(d.quadratic)}`).join(' ')}
+                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(d.step)} ${getY(d.quadratic)}`).join(' ')}
                 fill="none"
                 stroke="#22c55e"
                 strokeWidth="3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
+                strokeLinecap="round"
               />
 
-              {/* Exponential */}
+              {/* Exponential - Red */}
               <motion.path
-                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${25 + getX(d.x)} ${10 + getY(Math.min(d.exponential, maxY))}`).join(' ')}
+                d={data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${getX(d.step)} ${getY(d.exponential)}`).join(' ')}
                 fill="none"
                 stroke="#ef4444"
-                strokeWidth="3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
+                strokeWidth="4"
+                strokeLinecap="round"
               />
             </>
           )}
 
-          {/* Current points */}
-          {data.length > 0 && (
+          {/* Current position dots */}
+          {currentStep > 0 && (
             <>
-              <circle cx={25 + getX(currentStep)} cy={10 + getY(currentValues.linear)} r="6" fill="#3b82f6" />
-              <circle cx={25 + getX(currentStep)} cy={10 + getY(currentValues.quadratic)} r="6" fill="#22c55e" />
-              <circle
-                cx={25 + getX(currentStep)}
-                cy={10 + getY(Math.min(currentValues.exponential, maxY))}
-                r="6"
-                fill="#ef4444"
-              />
+              <circle cx={getX(currentStep)} cy={getY(current.linear)} r="8" fill="#3b82f6" />
+              <circle cx={getX(currentStep)} cy={getY(current.quadratic)} r="8" fill="#22c55e" />
+              {!expOffChart && (
+                <circle cx={getX(currentStep)} cy={getY(current.exponential)} r="10" fill="#ef4444" />
+              )}
+            </>
+          )}
+
+          {/* "Off the chart" indicator for exponential */}
+          {expOffChart && (
+            <>
+              <motion.g
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <line
+                  x1={getX(currentStep)}
+                  y1="20"
+                  x2={getX(currentStep)}
+                  y2="5"
+                  stroke="#ef4444"
+                  strokeWidth="3"
+                  strokeDasharray="5,3"
+                />
+                <polygon
+                  points={`${getX(currentStep)},0 ${getX(currentStep) - 8},12 ${getX(currentStep) + 8},12`}
+                  fill="#ef4444"
+                />
+              </motion.g>
             </>
           )}
         </svg>
 
-        {/* Step indicator */}
-        <div className="absolute top-4 right-4 bg-slate-900/80 px-3 py-1 rounded-lg">
-          <span className="text-slate-400">Step: </span>
-          <span className="text-white font-mono">{currentStep}</span>
+        {/* Off-chart warning */}
+        <AnimatePresence>
+          {expOffChart && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute top-4 right-4 bg-red-900/90 border border-red-500 rounded-lg px-3 py-2 flex items-center gap-2"
+            >
+              <AlertTriangle className="text-red-400" size={16} />
+              <span className="text-red-300 text-sm font-medium">
+                Exponential: {current.exponential.toLocaleString()}
+              </span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Score cards */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-3 text-center">
+          <div className="text-blue-400 text-xs font-semibold uppercase tracking-wide mb-1">Linear</div>
+          <div className="text-2xl md:text-3xl font-mono text-blue-300">
+            {current.linear.toLocaleString()}
+          </div>
+          <div className="text-xs text-slate-500">+5 each step</div>
+        </div>
+
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-3 text-center">
+          <div className="text-green-400 text-xs font-semibold uppercase tracking-wide mb-1">Quadratic</div>
+          <div className="text-2xl md:text-3xl font-mono text-green-300">
+            {current.quadratic.toLocaleString()}
+          </div>
+          <div className="text-xs text-slate-500">n²</div>
+        </div>
+
+        <div className={`border rounded-lg p-3 text-center transition-colors ${
+          showDanger
+            ? 'bg-red-900/50 border-red-500/50 animate-pulse'
+            : 'bg-red-900/30 border-red-500/30'
+        }`}>
+          <div className="text-red-400 text-xs font-semibold uppercase tracking-wide mb-1 flex items-center justify-center gap-1">
+            Exponential
+            {showDanger && <Skull size={12} />}
+          </div>
+          <div className="text-2xl md:text-3xl font-mono text-red-300">
+            {current.exponential > 999999
+              ? current.exponential.toExponential(1)
+              : current.exponential.toLocaleString()
+            }
+          </div>
+          <div className="text-xs text-slate-500">×2 each step</div>
         </div>
       </div>
 
-      {/* Legend and current values */}
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-4 h-4 bg-blue-500 rounded" />
-            <span className="text-blue-400 font-semibold">Linear</span>
-            <span className="text-slate-500 text-sm">(y = {linearSlope}x)</span>
-          </div>
-          <div className="text-3xl font-mono text-blue-400">
-            {currentValues.linear.toFixed(1)}
-          </div>
-          <div className="text-sm text-slate-400">+{linearSlope} each step</div>
-        </div>
-
-        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-4 h-4 bg-green-500 rounded" />
-            <span className="text-green-400 font-semibold">Quadratic</span>
-            <span className="text-slate-500 text-sm">(y = x²)</span>
-          </div>
-          <div className="text-3xl font-mono text-green-400">
-            {currentValues.quadratic.toFixed(1)}
-          </div>
-          <div className="text-sm text-slate-400">
-            {currentStep > 0
-              ? `+${currentValues.quadratic - (currentStep - 1) * (currentStep - 1)} this step`
-              : 'Starts slow, accelerates'
-            }
-          </div>
-        </div>
-
-        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-4 h-4 bg-red-500 rounded" />
-            <span className="text-red-400 font-semibold">Exponential</span>
-            <span className="text-slate-500 text-sm">(y = {expBase}^x)</span>
-          </div>
-          <div className="text-3xl font-mono text-red-400">
-            {currentValues.exponential > 1000000
-              ? currentValues.exponential.toExponential(2)
-              : currentValues.exponential.toFixed(1)
-            }
-          </div>
-          <div className="text-sm text-slate-400">×{expBase} each step</div>
-        </div>
-      </div>
-
-      {/* Ratio comparison */}
-      {currentStep > 0 && (
-        <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
-          <div className="text-sm text-slate-400 mb-2">Exponential vs Linear ratio:</div>
-          <div className="text-xl font-mono">
-            <span className="text-red-400">{currentValues.exponential.toFixed(1)}</span>
-            <span className="text-slate-500"> / </span>
-            <span className="text-blue-400">{currentValues.linear.toFixed(1)}</span>
-            <span className="text-slate-500"> = </span>
-            <span className="text-purple-400">
-              {(currentValues.exponential / currentValues.linear).toFixed(2)}×
+      {/* How much bigger is exponential? */}
+      {currentStep >= 5 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="bg-slate-800/50 rounded-lg p-4 text-center"
+        >
+          <p className="text-slate-400 text-sm mb-2">Exponential is now...</p>
+          <p className="text-xl">
+            <span className="text-red-400 font-bold">
+              {(current.exponential / current.linear).toFixed(1)}×
             </span>
-          </div>
-        </div>
+            <span className="text-slate-500"> larger than linear, and </span>
+            <span className="text-red-400 font-bold">
+              {(current.exponential / Math.max(current.quadratic, 1)).toFixed(1)}×
+            </span>
+            <span className="text-slate-500"> larger than quadratic</span>
+          </p>
+        </motion.div>
       )}
 
-      {/* Key insight */}
-      <div className="p-4 bg-purple-500/10 border-l-4 border-purple-500 rounded-r-lg">
-        <p className="text-sm text-slate-300">
-          <strong className="text-purple-400">The Pattern:</strong> Linear adds the same amount each step
-          (constant first differences). Quadratic adds increasing amounts (constant second differences).
-          Exponential multiplies by the same factor (constant ratios).
-          {currentStep >= 10 && (
-            <span className="text-red-400"> Notice how exponential looks harmless at first but then explodes!</span>
-          )}
-        </p>
-      </div>
+      {/* Final revelation */}
+      <AnimatePresence>
+        {raceComplete && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-6 bg-gradient-to-br from-red-900/40 to-orange-900/40 border border-red-500/30 rounded-xl"
+          >
+            <h4 className="text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
+              <Skull size={24} />
+              The Exponential Trap
+            </h4>
+            <p className="text-slate-300 mb-4">
+              At step 5, exponential was only <strong>32</strong> — barely ahead of linear's 25.
+              "No big deal," you might think.
+            </p>
+            <p className="text-slate-300 mb-4">
+              At step 20, exponential is <strong>{Math.pow(2, 20).toLocaleString()}</strong>.
+              Linear is at 100. Quadratic is at 400.
+            </p>
+            <p className="text-red-400 font-semibold">
+              This is why exponential growth "looks cute at first, then eats your civilization."
+              By the time you notice it's a problem, it's already too late.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

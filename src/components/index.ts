@@ -24,3 +24,7 @@ export { default as DebugKit } from './DebugKit';
 // Layout components
 export { default as InteractiveWrapper } from './InteractiveWrapper';
 export { default as ScrollSection } from './ScrollSection';
+
+// Experiential components (make you FEEL the insight)
+export { default as WallExperience } from './WallExperience';
+export { default as RuleBreaker } from './RuleBreaker';

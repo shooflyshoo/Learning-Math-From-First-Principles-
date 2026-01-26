@@ -37,6 +37,8 @@ import {
   DebugKit,
   InteractiveWrapper,
   ScrollSection,
+  WallExperience,
+  RuleBreaker,
 } from './components';
 import './index.css';
 
@@ -304,6 +306,14 @@ function Part1Section() {
         <p>
           <strong>The Wall:</strong> 3 − 5 = ? You can't have negative apples in counting-world.
         </p>
+
+        <InteractiveWrapper
+          title="Hit The Wall Yourself"
+          hint="Try to remove 5 apples when you only have 3"
+          interactionType="click"
+        >
+          <WallExperience />
+        </InteractiveWrapper>
       </ScrollSection>
 
       <ScrollSection delay={0.15}>
@@ -447,6 +457,18 @@ function Part2Section() {
           interactionType="click"
         >
           <NegativeTimesNegative />
+        </InteractiveWrapper>
+
+        <p className="mt-6 text-slate-400">
+          But why <em>must</em> it be this way? What if we just... decided differently?
+        </p>
+
+        <InteractiveWrapper
+          title="What If We Broke This Rule?"
+          hint="Choose what (−1)×(−1) should equal and see what happens"
+          interactionType="click"
+        >
+          <RuleBreaker />
         </InteractiveWrapper>
       </ScrollSection>
 
