@@ -94,8 +94,8 @@ export default function LogarithmCounter() {
       </div>
 
       {/* Expression */}
-      <div className="text-center mb-8">
-        <div className="text-3xl font-mono mb-2">
+      <div className="text-center mb-6">
+        <div className="text-2xl sm:text-3xl font-mono mb-2">
           <span className="text-slate-400">log</span>
           <sub className="text-blue-400">{base}</sub>
           <span className="text-slate-400">(</span>
@@ -107,14 +107,14 @@ export default function LogarithmCounter() {
               animate={{ scale: 1, opacity: 1 }}
               className="text-purple-400"
             >
-              {isExact ? logResult : logResult.toFixed(3)}
+              {isExact ? logResult : logResult.toFixed(2)}
             </motion.span>
           ) : (
             <span className="text-slate-500">?</span>
           )}
         </div>
-        <div className="text-slate-400">
-          "How many times do I {isAnimating ? 'divide' : 'multiply'} by {base} to {isAnimating ? 'reach 1 from' : 'reach'} {targetValue}?"
+        <div className="text-slate-400 text-sm">
+          How many ÷{base} to reach 1 from {targetValue}?
         </div>
       </div>
 
@@ -153,19 +153,19 @@ export default function LogarithmCounter() {
       </div>
 
       {/* Controls */}
-      <div className="flex justify-center gap-4 mb-8">
+      <div className="flex justify-center gap-2 mb-6">
         <button
           onClick={startDivision}
           disabled={isAnimating}
-          className={`px-6 py-2 rounded-lg font-semibold ${
+          className={`px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm ${
             isAnimating
               ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
               : 'bg-purple-600 hover:bg-purple-700 text-white'
           }`}
         >
-          {isAnimating ? 'Dividing...' : 'Count Backwards'}
+          {isAnimating ? 'Dividing...' : 'Start'}
         </button>
-        <button onClick={reset} className="px-6 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg">
+        <button onClick={reset} className="px-4 sm:px-6 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm">
           Reset
         </button>
       </div>
@@ -207,7 +207,7 @@ export default function LogarithmCounter() {
       </AnimatePresence>
 
       {/* Quick examples */}
-      <div className="grid md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-2 mb-6">
         {[
           { base: 2, target: 8, result: 3 },
           { base: 10, target: 100, result: 2 },
@@ -219,13 +219,10 @@ export default function LogarithmCounter() {
               setBase(b);
               setTargetValue(target);
             }}
-            className="p-3 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-left transition-all"
+            className="p-2 bg-slate-700/50 hover:bg-slate-700 rounded-lg text-center transition-all"
           >
-            <div className="font-mono text-sm">
-              log<sub className="text-blue-400">{b}</sub>({target}) = {result}
-            </div>
-            <div className="text-xs text-slate-500">
-              {b}^{result} = {target}
+            <div className="font-mono text-xs sm:text-sm">
+              log<sub className="text-blue-400">{b}</sub>({target})={result}
             </div>
           </button>
         ))}

@@ -72,26 +72,26 @@ export default function ComplexPlane() {
         The Complex Plane (2D Number Space)
       </h3>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-2 mb-6">
         <button
           onClick={() => setMode('explore')}
-          className={`px-4 py-2 rounded-lg transition-all ${
+          className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-sm transition-all ${
             mode === 'explore'
               ? 'bg-blue-600 text-white'
               : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
           }`}
         >
-          Explore Mode
+          Explore
         </button>
         <button
           onClick={() => setMode('rotate')}
-          className={`px-4 py-2 rounded-lg transition-all ${
+          className={`flex-1 sm:flex-none px-3 py-2 rounded-lg text-sm transition-all ${
             mode === 'rotate'
               ? 'bg-purple-600 text-white'
               : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
           }`}
         >
-          Rotation Mode
+          Rotate
         </button>
       </div>
 
@@ -252,15 +252,15 @@ export default function ComplexPlane() {
         </div>
 
         {/* Info Panel */}
-        <div className="lg:w-64">
+        <div className="w-full lg:w-64">
           <div className="bg-slate-700/30 rounded-lg p-4 mb-4">
             <h4 className="text-slate-400 text-sm mb-2">Current Point</h4>
-            <div className="text-2xl font-mono text-blue-400 mb-2">
+            <div className="text-xl sm:text-2xl font-mono text-blue-400 mb-2">
               {point.real >= 0 ? '' : ''}{point.real}
               {point.imag >= 0 ? ' + ' : ' - '}
               {Math.abs(point.imag)}i
             </div>
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-slate-400 flex gap-4 lg:block">
               <div>Magnitude: <span className="text-yellow-400">{magnitude.toFixed(2)}</span></div>
               <div>Angle: <span className="text-yellow-400">{angle.toFixed(1)}°</span></div>
             </div>

@@ -145,37 +145,37 @@ export default function RationalDensityZoom() {
       </div>
 
       {/* Info panel */}
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-slate-700/30 rounded-lg p-4">
-          <h4 className="text-green-400 font-semibold mb-2">Closest Fraction Found</h4>
-          <div className="text-2xl font-mono text-green-400">
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="bg-slate-700/30 rounded-lg p-3">
+          <h4 className="text-green-400 font-semibold mb-1 text-sm">Closest Fraction</h4>
+          <div className="text-xl sm:text-2xl font-mono text-green-400">
             {closestFraction.p}/{closestFraction.q}
           </div>
-          <div className="text-sm text-slate-400">
-            = {closestFraction.value.toFixed(8)}
+          <div className="text-xs sm:text-sm text-slate-400">
+            = {closestFraction.value.toFixed(6)}
           </div>
         </div>
-        <div className="bg-slate-700/30 rounded-lg p-4">
-          <h4 className="text-red-400 font-semibold mb-2">Error (Gap Size)</h4>
-          <div className="text-2xl font-mono text-red-400">
-            {error.toExponential(4)}
+        <div className="bg-slate-700/30 rounded-lg p-3">
+          <h4 className="text-red-400 font-semibold mb-1 text-sm">Error (Gap)</h4>
+          <div className="text-xl sm:text-2xl font-mono text-red-400">
+            {error.toExponential(2)}
           </div>
-          <div className="text-sm text-slate-400">
-            Still can't hit √2 exactly!
+          <div className="text-xs sm:text-sm text-slate-400">
+            Can't hit √2!
           </div>
         </div>
       </div>
 
       {/* Visible fractions counter */}
-      <div className="text-center text-slate-400 mb-6">
-        <span className="text-blue-400 font-mono">{fractions.length}</span> fractions visible in this range
+      <div className="text-center text-slate-400 mb-6 text-sm">
+        <span className="text-blue-400 font-mono">{fractions.length}</span> fractions visible
         {zoomLevel > 1 && (
-          <span className="text-slate-500"> (denominator ≤ {Math.min(100, Math.floor(zoomLevel * 10))})</span>
+          <span className="text-slate-500 block sm:inline"> (denom ≤ {Math.min(100, Math.floor(zoomLevel * 10))})</span>
         )}
       </div>
 
       {/* Famous approximations */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
         {[
           { p: 7, q: 5, error: Math.abs(7/5 - sqrt2) },
           { p: 99, q: 70, error: Math.abs(99/70 - sqrt2) },

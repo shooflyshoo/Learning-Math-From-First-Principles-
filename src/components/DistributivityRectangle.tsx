@@ -22,21 +22,22 @@ export default function DistributivityRectangle() {
       </h3>
 
       <div className="mb-6 p-4 bg-slate-700/30 rounded-lg text-center">
-        <div className="text-2xl font-mono">
+        <div className="text-lg sm:text-2xl font-mono">
           <span className="text-blue-400">a</span>
           <span className="text-slate-400">(</span>
           <span className="text-green-400">b</span>
-          <span className="text-slate-400"> + </span>
+          <span className="text-slate-400">+</span>
           <span className="text-purple-400">c</span>
-          <span className="text-slate-400">) = </span>
+          <span className="text-slate-400">)</span>
+          <span className="text-slate-400">=</span>
           <span className="text-blue-400">a</span>
           <span className="text-green-400">b</span>
-          <span className="text-slate-400"> + </span>
+          <span className="text-slate-400">+</span>
           <span className="text-blue-400">a</span>
           <span className="text-purple-400">c</span>
         </div>
-        <p className="text-slate-400 mt-2 text-sm">
-          Scaling a combined thing = scaling each part and recombining
+        <p className="text-slate-400 mt-2 text-xs sm:text-sm">
+          Scaling a combined thing = scaling each part
         </p>
       </div>
 
@@ -178,47 +179,35 @@ export default function DistributivityRectangle() {
       </div>
 
       {/* Area calculations */}
-      <div className="grid md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         <motion.div
-          className={`p-4 rounded-lg border-2 transition-all ${
+          className={`p-3 rounded-lg border-2 transition-all ${
             !isSplit ? 'bg-yellow-500/20 border-yellow-500' : 'bg-slate-700/30 border-slate-600'
           }`}
         >
-          <h4 className="font-semibold text-yellow-400 mb-2">Combined View</h4>
-          <div className="font-mono text-xl">
+          <h4 className="font-semibold text-yellow-400 mb-1 text-sm">Combined</h4>
+          <div className="font-mono text-base sm:text-lg">
             <span className="text-blue-400">{a}</span>
-            <span className="text-slate-400"> × (</span>
+            <span className="text-slate-400">×(</span>
             <span className="text-green-400">{b}</span>
-            <span className="text-slate-400"> + </span>
+            <span className="text-slate-400">+</span>
             <span className="text-purple-400">{c}</span>
-            <span className="text-slate-400">) = </span>
-            <span className="text-blue-400">{a}</span>
-            <span className="text-slate-400"> × </span>
-            <span className="text-yellow-400">{b + c}</span>
-            <span className="text-slate-400"> = </span>
+            <span className="text-slate-400">)=</span>
             <span className="text-yellow-400">{totalArea}</span>
           </div>
         </motion.div>
 
         <motion.div
-          className={`p-4 rounded-lg border-2 transition-all ${
+          className={`p-3 rounded-lg border-2 transition-all ${
             isSplit ? 'bg-green-500/20 border-green-500' : 'bg-slate-700/30 border-slate-600'
           }`}
         >
-          <h4 className="font-semibold text-green-400 mb-2">Split View</h4>
-          <div className="font-mono text-xl">
-            <span className="text-blue-400">{a}</span>
-            <span className="text-slate-400">×</span>
-            <span className="text-green-400">{b}</span>
-            <span className="text-slate-400"> + </span>
-            <span className="text-blue-400">{a}</span>
-            <span className="text-slate-400">×</span>
-            <span className="text-purple-400">{c}</span>
-            <span className="text-slate-400"> = </span>
+          <h4 className="font-semibold text-green-400 mb-1 text-sm">Split</h4>
+          <div className="font-mono text-base sm:text-lg">
             <span className="text-green-400">{area1}</span>
-            <span className="text-slate-400"> + </span>
+            <span className="text-slate-400">+</span>
             <span className="text-purple-400">{area2}</span>
-            <span className="text-slate-400"> = </span>
+            <span className="text-slate-400">=</span>
             <span className="text-yellow-400">{area1 + area2}</span>
           </div>
         </motion.div>
