@@ -99,12 +99,12 @@ export default function PlaceValueExploder() {
       </div>
 
       {/* Main display */}
-      <div className="bg-slate-800/50 rounded-lg p-6 mb-6">
+      <div className="bg-slate-800/50 rounded-lg p-4 sm:p-6 mb-6">
         <div className="text-center mb-6">
           <div className="text-sm text-slate-400 mb-2">In base {base}:</div>
-          <div className="text-5xl font-mono text-blue-400 tracking-wider">
+          <div className="text-3xl sm:text-5xl font-mono text-blue-400 tracking-wider break-all">
             {digits.join('')}
-            <sub className="text-lg text-slate-500">{base}</sub>
+            <sub className="text-base sm:text-lg text-slate-500">{base}</sub>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export default function PlaceValueExploder() {
             key={`${number}-${base}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-wrap justify-center gap-3"
+            className="flex flex-wrap justify-center gap-2 sm:gap-3"
           >
             {expandedParts.map((part, i) => (
               <motion.div
@@ -122,18 +122,18 @@ export default function PlaceValueExploder() {
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-slate-700/50 rounded-lg p-4 text-center min-w-24"
+                className="bg-slate-700/50 rounded-lg p-2 sm:p-4 text-center min-w-[4.5rem] sm:min-w-24"
               >
-                <div className="text-3xl font-mono text-green-400 mb-2">
+                <div className="text-2xl sm:text-3xl font-mono text-green-400 mb-1 sm:mb-2">
                   {part.digit}
                 </div>
-                <div className="text-sm text-slate-400">
+                <div className="text-xs sm:text-sm text-slate-400">
                   × {base}<sup>{part.position}</sup>
                 </div>
-                <div className="text-sm text-slate-500">
+                <div className="text-xs sm:text-sm text-slate-500 hidden sm:block">
                   = {part.digit} × {part.placeValue}
                 </div>
-                <div className="text-lg font-mono text-yellow-400 mt-2">
+                <div className="text-sm sm:text-lg font-mono text-yellow-400 mt-1 sm:mt-2">
                   {part.total}
                 </div>
               </motion.div>
@@ -141,9 +141,9 @@ export default function PlaceValueExploder() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Sum */}
-        <div className="mt-6 text-center">
-          <div className="text-xl font-mono">
+        {/* Sum - scrollable on mobile */}
+        <div className="mt-6 text-center overflow-x-auto">
+          <div className="text-base sm:text-xl font-mono whitespace-nowrap inline-block">
             {expandedParts.map((part, i) => (
               <span key={i}>
                 {i > 0 && <span className="text-slate-400"> + </span>}

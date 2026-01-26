@@ -63,10 +63,10 @@ export default function ExponentsAsSteps() {
         Exponents as Repeated Scaling
       </h3>
 
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-2 mb-6">
         <button
           onClick={() => setMode('forward')}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-3 py-2 rounded-lg text-sm ${
             mode === 'forward' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'
           }`}
         >
@@ -74,7 +74,7 @@ export default function ExponentsAsSteps() {
         </button>
         <button
           onClick={() => setMode('laws')}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-3 py-2 rounded-lg text-sm ${
             mode === 'laws' ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-300'
           }`}
         >
@@ -116,7 +116,7 @@ export default function ExponentsAsSteps() {
 
           {/* Expression */}
           <div className="text-center mb-6">
-            <div className="text-4xl font-mono">
+            <div className="text-2xl sm:text-4xl font-mono">
               <span className="text-blue-400">{base}</span>
               <sup className="text-purple-400">{exponent}</sup>
               <span className="text-slate-400"> = </span>
@@ -134,7 +134,7 @@ export default function ExponentsAsSteps() {
                 </motion.span>
               </AnimatePresence>
             </div>
-            <div className="text-slate-400 mt-2">
+            <div className="text-slate-400 mt-2 text-sm sm:text-base">
               {exponent >= 0
                 ? `Start at 1, multiply by ${base}, ${Math.abs(exponent)} time${Math.abs(exponent) !== 1 ? 's' : ''}`
                 : `Start at 1, divide by ${base}, ${Math.abs(exponent)} time${Math.abs(exponent) !== 1 ? 's' : ''}`
@@ -142,54 +142,54 @@ export default function ExponentsAsSteps() {
             </div>
           </div>
 
-          {/* Visual bars */}
-          <div className="relative h-64 mb-6 bg-slate-800/30 rounded-lg p-4">
-            <div className="flex items-end justify-center gap-4 h-full">
+          {/* Visual bars - scrollable on mobile */}
+          <div className="relative h-64 mb-6 bg-slate-800/30 rounded-lg p-4 overflow-x-auto">
+            <div className="flex items-end justify-center gap-2 sm:gap-4 h-full min-w-fit">
               {displayedValues.map((value, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ height: 0 }}
                   animate={{ height: getBarHeight(value) }}
                   transition={{ type: 'spring', stiffness: 100, damping: 15 }}
-                  className="w-12 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg relative"
+                  className="w-8 sm:w-12 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg relative flex-shrink-0"
                   style={{ minHeight: 20 }}
                 >
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-sm font-mono text-slate-200">
+                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 text-xs sm:text-sm font-mono text-slate-200 whitespace-nowrap">
                     {value >= 1 ? value : value.toFixed(3)}
                   </div>
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-slate-500">
-                    Step {idx}
+                  <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs text-slate-500 whitespace-nowrap">
+                    {idx}
                   </div>
                 </motion.div>
               ))}
             </div>
 
             {/* Step indicator */}
-            <div className="absolute top-4 right-4 text-sm text-slate-400">
-              Scalings applied: <span className="text-purple-400 font-mono">{currentStep}</span> / {Math.abs(exponent)}
+            <div className="absolute top-2 right-2 text-xs sm:text-sm text-slate-400 bg-slate-900/70 px-2 py-1 rounded">
+              <span className="text-purple-400 font-mono">{currentStep}</span>/{Math.abs(exponent)}
             </div>
           </div>
 
-          {/* Controls */}
-          <div className="flex justify-center gap-4">
+          {/* Controls - wrap on mobile */}
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
             <button
               onClick={runAnimation}
               disabled={isAnimating}
-              className={`px-6 py-2 rounded-lg font-semibold ${
+              className={`px-4 sm:px-6 py-2 rounded-lg font-semibold text-sm sm:text-base ${
                 isAnimating
                   ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   : 'bg-green-600 hover:bg-green-700 text-white'
               }`}
             >
-              {isAnimating ? 'Animating...' : 'Play Animation'}
+              {isAnimating ? 'Animating...' : 'Play'}
             </button>
             <button
               onClick={() => setCurrentStep(Math.abs(exponent))}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+              className="px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm sm:text-base"
             >
               Show All
             </button>
-            <button onClick={reset} className="px-6 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg">
+            <button onClick={reset} className="px-4 sm:px-6 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm sm:text-base">
               Reset
             </button>
           </div>

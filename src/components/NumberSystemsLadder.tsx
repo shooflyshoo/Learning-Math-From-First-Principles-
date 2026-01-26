@@ -241,7 +241,8 @@ export default function NumberSystemsLadder() {
       <div className="bg-slate-700/30 rounded-lg p-4 mb-6">
         <div className="text-sm text-slate-400 mb-3">Test an expression in current world:</div>
 
-        <div className="flex gap-3 mb-4">
+        {/* Mobile-friendly stacked layout */}
+        <div className="space-y-3 mb-4">
           <input
             type="text"
             value={expression}
@@ -251,20 +252,22 @@ export default function NumberSystemsLadder() {
               setShowUpgrade(false);
             }}
             placeholder="e.g., 3 - 5, 7/3, √2, √(-1)"
-            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-slate-200 font-mono"
+            className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-slate-200 font-mono"
           />
-          <button
-            onClick={handleTest}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
-          >
-            Test in {systems[currentSystem].symbol}
-          </button>
-          <button
-            onClick={handleReset}
-            className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg"
-          >
-            Reset
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleTest}
+              className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm"
+            >
+              Test in {systems[currentSystem].symbol}
+            </button>
+            <button
+              onClick={handleReset}
+              className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm"
+            >
+              Reset
+            </button>
+          </div>
         </div>
 
         {/* Presets */}

@@ -82,10 +82,10 @@ export default function ModularClock() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
+      <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
         {/* Clock face */}
-        <div className="relative">
-          <svg viewBox="0 0 300 300" className="w-72 h-72">
+        <div className="relative w-full max-w-[240px] md:max-w-[288px]">
+          <svg viewBox="0 0 300 300" className="w-full h-auto">
             {/* Clock face background */}
             <circle cx="150" cy="150" r="140" fill="#1e293b" stroke="#475569" strokeWidth="3" />
 
@@ -188,14 +188,14 @@ export default function ModularClock() {
 
         {/* Result display */}
         <div className="text-center">
-          <div className="text-4xl font-mono mb-4">
+          <div className="text-2xl md:text-4xl font-mono mb-2 md:mb-4">
             <span className="text-blue-400">{startValue}</span>
             <span className="text-slate-400"> + </span>
             <span className="text-green-400">{addValue}</span>
             <span className="text-slate-400"> ≡ </span>
             <span className="text-purple-400">{result}</span>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-400 text-sm md:text-base">
             (mod {modulus})
           </div>
 

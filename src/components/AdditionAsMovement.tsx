@@ -62,14 +62,15 @@ export default function AdditionAsMovement() {
 
   return (
     <div className="interactive-container">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-blue-400">
-          Addition as Movement on the Number Line
+      {/* Mobile-friendly header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-blue-400">
+          Addition as Movement
         </h3>
         <div className="flex gap-2">
           <button
             onClick={() => { setMode('add'); setGuessResult(null); }}
-            className={`px-3 py-1 rounded-lg text-sm transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
               mode === 'add'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -79,13 +80,13 @@ export default function AdditionAsMovement() {
           </button>
           <button
             onClick={() => { setMode('find'); resetFindMode(); }}
-            className={`px-3 py-1 rounded-lg text-sm transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
               mode === 'find'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
-            Find the Move
+            Find Move
           </button>
         </div>
       </div>
@@ -125,31 +126,34 @@ export default function AdditionAsMovement() {
         </div>
       ) : (
         <div className="mb-6 p-4 bg-slate-700/50 rounded-lg">
-          <p className="text-slate-300 mb-4">
+          <p className="text-slate-300 mb-4 text-sm sm:text-base">
             The dot moved from <span className="text-blue-400 font-mono">{startPos}</span> to{' '}
             <span className="text-green-400 font-mono">{startPos + moveBy}</span>.
             What was the move?
           </p>
-          <div className="flex gap-4 items-center">
+          {/* Mobile-friendly stacked layout */}
+          <div className="space-y-3">
             <input
               type="number"
               value={guess}
               onChange={(e) => setGuess(e.target.value)}
               placeholder="Enter move amount"
-              className="px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-slate-200 w-40"
+              className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-slate-200"
             />
-            <button
-              onClick={handleCheckGuess}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-            >
-              Check
-            </button>
-            <button
-              onClick={resetFindMode}
-              className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg"
-            >
-              New Problem
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleCheckGuess}
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+              >
+                Check
+              </button>
+              <button
+                onClick={resetFindMode}
+                className="flex-1 px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm"
+              >
+                New Problem
+              </button>
+            </div>
           </div>
           <AnimatePresence>
             {guessResult && (
@@ -268,14 +272,14 @@ export default function AdditionAsMovement() {
                 exit={{ opacity: 0, scale: 0.8 }}
                 className="text-center"
               >
-                <div className="text-3xl font-mono">
+                <div className="text-xl sm:text-3xl font-mono">
                   <span className="text-blue-400">{startPos}</span>
                   <span className="text-slate-400"> + </span>
                   <span className="text-purple-400">({moveBy >= 0 ? '+' : ''}{moveBy})</span>
                   <span className="text-slate-400"> = </span>
                   <span className="text-green-400">{result}</span>
                 </div>
-                <p className="text-slate-400 mt-2">
+                <p className="text-slate-400 mt-2 text-sm sm:text-base">
                   Start at {startPos}, move {Math.abs(moveBy)} steps {moveBy >= 0 ? 'right' : 'left'}, end at {result}
                 </p>
               </motion.div>

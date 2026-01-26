@@ -49,12 +49,12 @@ export default function DivisionByZero() {
         <label className="block text-sm text-slate-400 mb-2">
           Target value (a): <span className="text-blue-400 font-mono">{target}</span>
         </label>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {[0, 1, 5, 12, 100].map((t) => (
             <button
               key={t}
               onClick={() => { setTarget(t); setSearchResults([]); }}
-              className={`px-4 py-2 rounded-lg font-mono ${
+              className={`px-3 sm:px-4 py-2 rounded-lg font-mono text-sm ${
                 target === t
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -86,7 +86,7 @@ export default function DivisionByZero() {
           </button>
         </div>
 
-        {/* Search results */}
+        {/* Search results - mobile optimized */}
         <div className="space-y-2">
           <AnimatePresence>
             {searchResults.map(({ x, result }, idx) => (
@@ -94,14 +94,14 @@ export default function DivisionByZero() {
                 key={idx}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg"
+                className="flex flex-wrap items-center gap-x-2 gap-y-1 p-3 bg-slate-700/50 rounded-lg text-sm sm:text-base"
               >
-                <span className="text-slate-400">Try x = </span>
-                <span className="text-blue-400 font-mono w-24">{x.toLocaleString()}</span>
-                <span className="text-slate-400">→ 0 × {x.toLocaleString()} = </span>
+                <span className="text-slate-400">x=</span>
+                <span className="text-blue-400 font-mono">{x.toLocaleString()}</span>
+                <span className="text-slate-400">→</span>
                 <span className="text-yellow-400 font-mono">{result}</span>
                 <span className="text-red-400 ml-auto">
-                  {target !== 0 ? `≠ ${target}` : '= 0 ✓'}
+                  {target !== 0 ? `≠${target}` : '✓'}
                 </span>
               </motion.div>
             ))}
