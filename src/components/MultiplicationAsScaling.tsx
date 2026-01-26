@@ -125,7 +125,7 @@ export default function MultiplicationAsScaling() {
         })}
 
         {/* Scaled points with connecting lines */}
-        {originalPoints.map((point, idx) => {
+        {originalPoints.map((point) => {
           const scaled = getScaledPoint(point);
           const clampedScaled = clamp(scaled, -10, 10);
           const isOutOfBounds = Math.abs(scaled) > 10;
