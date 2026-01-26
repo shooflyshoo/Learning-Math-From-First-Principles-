@@ -58,36 +58,42 @@ export default function RationalDensityZoom() {
 
   // Collision detection for labels - only show labels that are far enough apart
   const labelsToShow = useMemo(() => {
-    const minDistance = 12; // Minimum % distance between labels
+    // Increase minimum distance at low zoom levels where more fractions are visible
+    const minDistance = zoomLevel < 5 ? 18 : zoomLevel < 15 ? 14 : 10;
+    const shownPositions: number[] = [];
     const showSet = new Set<string>();
-    let lastShownPosition = -Infinity;
 
-    // Always show the closest fraction
+    // Always show the closest fraction first
     const closestKey = `${closestFraction.p}/${closestFraction.q}`;
+    if (closestFraction.q <= 10) {
+      const closestPos = getPosition(closestFraction.value);
+      showSet.add(closestKey);
+      shownPositions.push(closestPos);
+    }
 
-    // Sort by denominator (simpler fractions first) then by position
+    // Sort by denominator (simpler fractions first) - prioritize showing 1/1, 3/2, etc.
     const sortedForLabels = [...fractions]
-      .filter(f => f.q <= 10)
+      .filter(f => f.q <= 10 && `${f.p}/${f.q}` !== closestKey)
       .sort((a, b) => a.q - b.q || a.value - b.value);
 
-    // First pass: prioritize simpler fractions
+    // Add labels that don't collide with ANY already-shown label
     for (const f of sortedForLabels) {
       const pos = getPosition(f.value);
       const key = `${f.p}/${f.q}`;
 
-      if (key === closestKey) {
-        showSet.add(key);
-        continue;
-      }
+      // Check if this position is far enough from ALL shown positions
+      const isFarEnough = shownPositions.every(
+        shownPos => Math.abs(pos - shownPos) >= minDistance
+      );
 
-      if (Math.abs(pos - lastShownPosition) >= minDistance) {
+      if (isFarEnough) {
         showSet.add(key);
-        lastShownPosition = pos;
+        shownPositions.push(pos);
       }
     }
 
     return showSet;
-  }, [fractions, closestFraction, minValue, maxValue]);
+  }, [fractions, closestFraction, zoomLevel, minValue, maxValue]);
 
   return (
     <div className="interactive-container">
