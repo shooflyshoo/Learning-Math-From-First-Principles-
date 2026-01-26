@@ -68,19 +68,24 @@ export default function MultiplicationAsScaling() {
       <div className="relative h-16 mb-8">
         <div className="absolute left-0 right-0 top-1/2 h-1 bg-slate-600 rounded-full" />
 
-        {/* Ticks */}
-        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => (
-          <div
-            key={num}
-            className="absolute top-1/2 -translate-y-1/2"
-            style={{ left: `${getPositionPercent(num)}%` }}
-          >
-            <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-3 -mt-1.5 bg-slate-500'}`} />
-            <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500' : 'text-slate-500'}`}>
-              {num}
+        {/* Ticks - show every 5 on mobile, all on desktop */}
+        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => {
+          const showLabel = num === 0 || num % 5 === 0;
+          return (
+            <div
+              key={num}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `${getPositionPercent(num)}%` }}
+            >
+              <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-3 -mt-1.5 bg-slate-500'}`} />
+              {showLabel && (
+                <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500' : 'text-slate-500'}`}>
+                  {num}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Original points */}
         {originalPoints.map((point) => (
@@ -100,25 +105,36 @@ export default function MultiplicationAsScaling() {
       <div className="relative h-16 mb-8">
         <div className="absolute left-0 right-0 top-1/2 h-1 bg-slate-700 rounded-full" />
 
-        {/* Ticks for reference */}
-        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => (
-          <div
-            key={num}
-            className="absolute top-1/2 -translate-y-1/2"
-            style={{ left: `${getPositionPercent(num)}%` }}
-          >
-            <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-2 -mt-1 bg-slate-600'}`} />
-            <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500' : 'text-slate-600'}`}>
-              {num}
+        {/* Ticks for reference - show every 5 on mobile */}
+        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => {
+          const showLabel = num === 0 || num % 5 === 0;
+          return (
+            <div
+              key={num}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `${getPositionPercent(num)}%` }}
+            >
+              <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-2 -mt-1 bg-slate-600'}`} />
+              {showLabel && (
+                <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500' : 'text-slate-600'}`}>
+                  {num}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Scaled points with connecting lines */}
-        {originalPoints.map((point) => {
+        {originalPoints.map((point, idx) => {
           const scaled = getScaledPoint(point);
           const clampedScaled = clamp(scaled, -10, 10);
           const isOutOfBounds = Math.abs(scaled) > 10;
+
+          // Only show value labels for points that are far enough apart
+          // When scale factor is small, only show for 0 and extremes
+          const showLabel = Math.abs(scaleFactor) >= 0.5 ||
+            point === 0 ||
+            Math.abs(point) === 3;
 
           return (
             <motion.div
@@ -144,9 +160,11 @@ export default function MultiplicationAsScaling() {
                     : 'bg-green-500 border-green-400 shadow-lg shadow-green-500/30'
                 }`}
               />
-              <div className="text-xs text-green-400 mt-1 -ml-4 w-8 text-center font-mono">
-                {scaled.toFixed(1)}
-              </div>
+              {showLabel && (
+                <div className="text-xs text-green-400 mt-1 -ml-4 w-8 text-center font-mono">
+                  {scaled.toFixed(1)}
+                </div>
+              )}
             </motion.div>
           );
         })}

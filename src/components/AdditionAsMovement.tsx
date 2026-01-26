@@ -181,19 +181,24 @@ export default function AdditionAsMovement() {
         {/* Main line */}
         <div className="absolute left-4 right-4 top-1/2 h-1 bg-slate-600 rounded-full" />
 
-        {/* Ticks and labels */}
-        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => (
-          <div
-            key={num}
-            className="absolute top-1/2 -translate-y-1/2"
-            style={{ left: `calc(${getPositionPercent(num)}% + 16px - ${getPositionPercent(num) * 0.32}px)` }}
-          >
-            <div className={`w-0.5 h-4 -mt-2 ${num === 0 ? 'bg-yellow-500 h-6 -mt-3' : 'bg-slate-500'}`} />
-            <div className={`text-xs mt-3 -ml-2 ${num === 0 ? 'text-yellow-500 font-bold' : 'text-slate-500'}`}>
-              {num}
+        {/* Ticks and labels - show every 5 on mobile to prevent overlap */}
+        {Array.from({ length: 21 }, (_, i) => i - 10).map((num) => {
+          const showLabel = num === 0 || num % 5 === 0;
+          return (
+            <div
+              key={num}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `calc(${getPositionPercent(num)}% + 16px - ${getPositionPercent(num) * 0.32}px)` }}
+            >
+              <div className={`w-0.5 h-4 -mt-2 ${num === 0 ? 'bg-yellow-500 h-6 -mt-3' : 'bg-slate-500'}`} />
+              {showLabel && (
+                <div className={`text-xs mt-3 -ml-2 ${num === 0 ? 'text-yellow-500 font-bold' : 'text-slate-500'}`}>
+                  {num}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Arrow showing movement */}
         <AnimatePresence>

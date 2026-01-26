@@ -38,19 +38,24 @@ export default function NegativeTimesNegative() {
         {/* Number line */}
         <div className="absolute left-0 right-0 top-1/2 h-1 bg-slate-600 rounded-full" />
 
-        {/* Ticks */}
-        {[-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((num) => (
-          <div
-            key={num}
-            className="absolute top-1/2 -translate-y-1/2"
-            style={{ left: `${((num + 6) / 12) * 100}%` }}
-          >
-            <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-3 -mt-1.5 bg-slate-500'}`} />
-            <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500 font-bold' : 'text-slate-500'}`}>
-              {num}
+        {/* Ticks - show every 3 labels on mobile to prevent overlap */}
+        {[-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].map((num) => {
+          const showLabel = num === 0 || num % 3 === 0;
+          return (
+            <div
+              key={num}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `${((num + 6) / 12) * 100}%` }}
+            >
+              <div className={`w-0.5 -ml-px ${num === 0 ? 'h-6 -mt-3 bg-yellow-500' : 'h-3 -mt-1.5 bg-slate-500'}`} />
+              {showLabel && (
+                <div className={`text-xs mt-4 -ml-2 ${num === 0 ? 'text-yellow-500 font-bold' : 'text-slate-500'}`}>
+                  {num}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* The flipping arrow/character */}
         <motion.div

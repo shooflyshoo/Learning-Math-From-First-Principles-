@@ -56,6 +56,39 @@ export default function RationalDensityZoom() {
 
   const error = Math.abs(closestFraction.value - sqrt2);
 
+  // Collision detection for labels - only show labels that are far enough apart
+  const labelsToShow = useMemo(() => {
+    const minDistance = 12; // Minimum % distance between labels
+    const showSet = new Set<string>();
+    let lastShownPosition = -Infinity;
+
+    // Always show the closest fraction
+    const closestKey = `${closestFraction.p}/${closestFraction.q}`;
+
+    // Sort by denominator (simpler fractions first) then by position
+    const sortedForLabels = [...fractions]
+      .filter(f => f.q <= 10)
+      .sort((a, b) => a.q - b.q || a.value - b.value);
+
+    // First pass: prioritize simpler fractions
+    for (const f of sortedForLabels) {
+      const pos = getPosition(f.value);
+      const key = `${f.p}/${f.q}`;
+
+      if (key === closestKey) {
+        showSet.add(key);
+        continue;
+      }
+
+      if (Math.abs(pos - lastShownPosition) >= minDistance) {
+        showSet.add(key);
+        lastShownPosition = pos;
+      }
+    }
+
+    return showSet;
+  }, [fractions, closestFraction, minValue, maxValue]);
+
   return (
     <div className="interactive-container">
       <h3 className="text-xl font-semibold text-blue-400 mb-6">
@@ -108,32 +141,37 @@ export default function RationalDensityZoom() {
         </motion.div>
 
         {/* Fraction markers */}
-        {fractions.slice(0, 50).map((f, idx) => (
-          <motion.div
-            key={`${f.p}/${f.q}`}
-            className="absolute top-1/2 -translate-y-1/2"
-            style={{ left: `${getPosition(f.value)}%` }}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: idx * 0.02 }}
-          >
-            <div
-              className={`w-2 h-2 rounded-full ${
-                f === closestFraction ? 'bg-green-500' : 'bg-blue-500'
-              }`}
-              style={{
-                boxShadow: f === closestFraction
-                  ? '0 0 8px rgba(34, 197, 94, 0.6)'
-                  : undefined,
-              }}
-            />
-            {f.q <= 10 && (
-              <div className="absolute top-4 -translate-x-1/2 text-xs text-slate-400 font-mono whitespace-nowrap">
-                {f.p}/{f.q}
-              </div>
-            )}
-          </motion.div>
-        ))}
+        {fractions.slice(0, 50).map((f, idx) => {
+          const key = `${f.p}/${f.q}`;
+          const shouldShowLabel = labelsToShow.has(key);
+
+          return (
+            <motion.div
+              key={key}
+              className="absolute top-1/2 -translate-y-1/2"
+              style={{ left: `${getPosition(f.value)}%` }}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.02 }}
+            >
+              <div
+                className={`w-2 h-2 rounded-full ${
+                  f === closestFraction ? 'bg-green-500' : 'bg-blue-500'
+                }`}
+                style={{
+                  boxShadow: f === closestFraction
+                    ? '0 0 8px rgba(34, 197, 94, 0.6)'
+                    : undefined,
+                }}
+              />
+              {shouldShowLabel && (
+                <div className="absolute top-4 -translate-x-1/2 text-xs text-slate-400 font-mono whitespace-nowrap">
+                  {f.p}/{f.q}
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
 
         {/* Range labels */}
         <div className="absolute bottom-2 left-4 text-xs text-slate-500 font-mono">

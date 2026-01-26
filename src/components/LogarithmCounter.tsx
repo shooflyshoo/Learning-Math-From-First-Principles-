@@ -125,30 +125,33 @@ export default function LogarithmCounter() {
           <span className="text-sm text-slate-400">Current value: <span className="text-green-400 font-mono">{currentValue.toFixed(3)}</span></span>
         </div>
 
-        {/* Steps display */}
-        <div className="flex flex-wrap items-center gap-2 justify-center">
-          {steps.map((val, idx) => (
+        {/* Steps display - compact on mobile, limit visible steps */}
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2 justify-center overflow-x-auto">
+          {steps.slice(0, 8).map((val, idx) => (
             <motion.div
               key={idx}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center"
             >
-              <div className={`px-4 py-2 rounded-lg font-mono ${
+              <div className={`px-2 sm:px-4 py-1 sm:py-2 rounded-lg font-mono text-sm sm:text-base ${
                 idx === steps.length - 1 && val <= 1
                   ? 'bg-green-500/20 text-green-400 border border-green-500'
                   : 'bg-slate-700 text-slate-200'
               }`}>
-                {val >= 1 ? val : val.toFixed(3)}
+                {val >= 1 ? val : val.toFixed(2)}
               </div>
-              {idx < steps.length - 1 && (
-                <div className="mx-2 flex flex-col items-center">
-                  <span className="text-slate-500">÷{base}</span>
-                  <span className="text-slate-600">→</span>
+              {idx < Math.min(steps.length - 1, 7) && (
+                <div className="mx-1 sm:mx-2 flex flex-col items-center">
+                  <span className="text-slate-500 text-xs sm:text-sm">÷{base}</span>
+                  <span className="text-slate-600 text-xs">→</span>
                 </div>
               )}
             </motion.div>
           ))}
+          {steps.length > 8 && (
+            <span className="text-slate-500 text-sm">...+{steps.length - 8} more</span>
+          )}
         </div>
       </div>
 

@@ -228,19 +228,19 @@ export default function PrimeFactorTree() {
         </AnimatePresence>
       </div>
 
-      {/* Legend */}
-      <div className="flex justify-center gap-6 mb-6">
+      {/* Legend - wrap on mobile */}
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-6 mb-6">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-green-500 rounded-full" />
-          <span className="text-sm text-slate-400">Prime (can't factor)</span>
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex-shrink-0" />
+          <span className="text-xs sm:text-sm text-slate-400">Prime</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-blue-500/50 border-2 border-dashed border-blue-400 rounded-full" />
-          <span className="text-sm text-slate-400">Click to factor</span>
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-500/50 border-2 border-dashed border-blue-400 rounded-full flex-shrink-0" />
+          <span className="text-xs sm:text-sm text-slate-400">Click to expand</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-slate-600 rounded-full" />
-          <span className="text-sm text-slate-400">Already factored</span>
+          <div className="w-5 h-5 sm:w-6 sm:h-6 bg-slate-600 rounded-full flex-shrink-0" />
+          <span className="text-xs sm:text-sm text-slate-400">Factored</span>
         </div>
       </div>
 

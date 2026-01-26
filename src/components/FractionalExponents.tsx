@@ -181,25 +181,26 @@ export default function FractionalExponents() {
 
         <AnimatePresence>
           {showAutoSolve && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2 overflow-x-auto">
               {autoSteps.map((step, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="flex items-center gap-4 p-2 bg-slate-700/50 rounded text-sm"
+                  className="flex items-center gap-2 sm:gap-4 p-2 bg-slate-700/50 rounded text-xs sm:text-sm min-w-fit"
                 >
-                  <span className="text-slate-500 w-8">#{idx + 1}</span>
-                  <span className="font-mono text-blue-400 w-24">{step.guess.toFixed(6)}</span>
-                  <span className="text-slate-400">× itself =</span>
-                  <span className="font-mono text-yellow-400 w-24">{step.product.toFixed(6)}</span>
-                  <span className={
+                  <span className="text-slate-500 w-6 sm:w-8 flex-shrink-0">#{idx + 1}</span>
+                  <span className="font-mono text-blue-400 flex-shrink-0">{step.guess.toFixed(4)}</span>
+                  <span className="text-slate-400 hidden sm:inline">× itself =</span>
+                  <span className="text-slate-400 sm:hidden">=</span>
+                  <span className="font-mono text-yellow-400 flex-shrink-0">{step.product.toFixed(4)}</span>
+                  <span className={`flex-shrink-0 ${
                     step.comparison === 'exact!'
                       ? 'text-green-400'
                       : step.comparison === 'too low'
                       ? 'text-yellow-400'
                       : 'text-red-400'
-                  }>
+                  }`}>
                     {step.comparison}
                   </span>
                 </motion.div>
