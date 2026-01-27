@@ -143,10 +143,23 @@ export default function NumberSystemsLadder() {
   const [expression, setExpression] = useState('3 - 5');
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [shakingLevel, setShakingLevel] = useState<NumberSystem | null>(null);
   const { showToast } = useToast();
   const towerRef = useRef<HTMLDivElement>(null);
 
   const currentIndex = systemOrder.indexOf(currentSystem);
+
+  // Handle clicking on a locked level
+  const handleLockedClick = (sys: NumberSystem) => {
+    setShakingLevel(sys);
+    setTimeout(() => setShakingLevel(null), 500);
+
+    const info = systems[sys];
+    showToast(`${info.symbol} ${info.name} is locked!`, {
+      type: 'warning',
+      icon: '🔒',
+    });
+  };
 
   const handleTest = () => {
     const result = evaluateInSystem(expression, currentSystem);
@@ -208,11 +221,18 @@ export default function NumberSystemsLadder() {
               className={`relative p-4 rounded-lg border-2 transition-all cursor-pointer ${
                 isUnlocked
                   ? `${info.bgColor} ${info.borderColor} ${isCurrent ? 'ring-2 ring-white/20' : ''}`
-                  : 'bg-slate-800/50 border-slate-700 opacity-50'
+                  : 'bg-slate-800/50 border-slate-700 opacity-50 hover:opacity-60'
               }`}
-              onClick={() => isUnlocked && setCurrentSystem(sys)}
+              onClick={() => isUnlocked ? setCurrentSystem(sys) : handleLockedClick(sys)}
               whileHover={isUnlocked ? { scale: 1.02 } : {}}
-              animate={isCurrent ? { scale: 1.02 } : { scale: 1 }}
+              animate={
+                shakingLevel === sys
+                  ? { x: [0, -8, 8, -8, 8, -4, 4, 0], scale: 1 }
+                  : isCurrent
+                    ? { scale: 1.02, x: 0 }
+                    : { scale: 1, x: 0 }
+              }
+              transition={shakingLevel === sys ? { duration: 0.4 } : { type: 'spring' }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -229,7 +249,13 @@ export default function NumberSystemsLadder() {
                   </div>
                 </div>
                 {!isUnlocked && (
-                  <div className="text-2xl">🔒</div>
+                  <motion.div
+                    className="text-2xl"
+                    animate={shakingLevel === sys ? { rotate: [0, -15, 15, -15, 15, 0] } : { rotate: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    🔒
+                  </motion.div>
                 )}
                 {isCurrent && (
                   <div className="text-xl">📍</div>
