@@ -25,6 +25,9 @@ export { default as DebugKit } from './DebugKit';
 export { default as InteractiveWrapper } from './InteractiveWrapper';
 export { default as ScrollSection } from './ScrollSection';
 
+// Toast notification system
+export { ToastProvider, useToast } from './Toast';
+
 // Experiential components (make you FEEL the insight)
 export { default as WallExperience } from './WallExperience';
 export { default as RuleBreaker } from './RuleBreaker';

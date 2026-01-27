@@ -39,6 +39,7 @@ import {
   ScrollSection,
   WallExperience,
   RuleBreaker,
+  ToastProvider,
 } from './components';
 import './index.css';
 
@@ -100,6 +101,7 @@ function App() {
   };
 
   return (
+    <ToastProvider>
     <div className="min-h-screen">
       {/* Progress bar */}
       <motion.div className="progress-bar" style={{ scaleX, transformOrigin: '0%' }} />
@@ -223,6 +225,7 @@ function App() {
         })}
       </nav>
     </div>
+    </ToastProvider>
   );
 }
 

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from './Toast';
 
 type NumberSystem = 'N' | 'Z' | 'Q' | 'R' | 'C';
 
@@ -142,6 +143,8 @@ export default function NumberSystemsLadder() {
   const [expression, setExpression] = useState('3 - 5');
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const { showToast } = useToast();
+  const towerRef = useRef<HTMLDivElement>(null);
 
   const currentIndex = systemOrder.indexOf(currentSystem);
 
@@ -154,9 +157,22 @@ export default function NumberSystemsLadder() {
   const handleUpgrade = () => {
     if (currentIndex < systemOrder.length - 1) {
       const nextSystem = systemOrder[currentIndex + 1];
+      const nextInfo = systems[nextSystem];
       setCurrentSystem(nextSystem);
       setTestResult(evaluateInSystem(expression, nextSystem));
       setShowUpgrade(false);
+
+      // Show toast and scroll to reveal the unlocked level
+      showToast(`${nextInfo.symbol} ${nextInfo.name} unlocked!`, {
+        type: 'success',
+        icon: '🔓',
+        action: {
+          label: 'View',
+          onClick: () => {
+            towerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      });
     }
   };
 
@@ -180,7 +196,7 @@ export default function NumberSystemsLadder() {
       </h3>
 
       {/* The Tower */}
-      <div className="flex flex-col-reverse gap-2 mb-8">
+      <div ref={towerRef} className="flex flex-col-reverse gap-2 mb-8">
         {systemOrder.map((sys, index) => {
           const info = systems[sys];
           const isUnlocked = index <= currentIndex;
