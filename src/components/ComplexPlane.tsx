@@ -93,7 +93,7 @@ export default function ComplexPlane() {
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
-            Rotate
+            Rotate (×i)
           </button>
         </div>
 
@@ -108,7 +108,7 @@ export default function ComplexPlane() {
           >
             {mode === 'explore' ? (
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 text-sm text-slate-300">
-                👆 <strong className="text-blue-400">Tap the grid below</strong> to place a complex number anywhere.
+                👇 <strong className="text-blue-400">Tap the grid below</strong> to place a complex number anywhere.
               </div>
             ) : (
               <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
