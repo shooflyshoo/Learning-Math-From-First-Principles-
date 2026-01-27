@@ -77,6 +77,7 @@ export default function ThreeFacesOfDivision() {
       </div>
 
       {/* Three panels - stack on mobile */}
+      <p className="text-xs text-slate-500 mb-2 sm:hidden">👆 Tap a panel to see it in action</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {/* Panel 1: Partitive (Sharing) */}
         <motion.div

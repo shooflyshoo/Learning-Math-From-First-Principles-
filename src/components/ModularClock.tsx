@@ -40,10 +40,10 @@ export default function ModularClock() {
       </div>
 
       {/* Controls */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
-            Modulus: <span className="text-purple-400 font-mono">{modulus}</span>
+          <label className="block text-xs sm:text-sm text-slate-400 mb-1 sm:mb-2">
+            Mod: <span className="text-purple-400 font-mono">{modulus}</span>
           </label>
           <input
             type="range"
@@ -51,11 +51,11 @@ export default function ModularClock() {
             max={24}
             value={modulus}
             onChange={(e) => setModulus(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
+          <label className="block text-xs sm:text-sm text-slate-400 mb-1 sm:mb-2">
             Start: <span className="text-blue-400 font-mono">{startValue}</span>
           </label>
           <input
@@ -64,11 +64,11 @@ export default function ModularClock() {
             max={modulus - 1}
             value={startValue % modulus}
             onChange={(e) => setStartValue(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
         <div>
-          <label className="block text-sm text-slate-400 mb-2">
+          <label className="block text-xs sm:text-sm text-slate-400 mb-1 sm:mb-2">
             Add: <span className="text-green-400 font-mono">{addValue >= 0 ? '+' : ''}{addValue}</span>
           </label>
           <input
@@ -77,12 +77,35 @@ export default function ModularClock() {
             max={20}
             value={addValue}
             onChange={(e) => setAddValue(parseInt(e.target.value))}
-            className="w-full"
+            className="w-full h-8"
           />
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6 items-center justify-center">
+      {/* Result - shown prominently BEFORE visualization on mobile */}
+      <motion.div
+        className="bg-slate-700/30 rounded-lg p-3 sm:p-4 mb-4 text-center"
+        key={`${startValue}-${addValue}-${modulus}`}
+        initial={{ scale: 1 }}
+        animate={{ scale: [1, 1.02, 1] }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="text-xl sm:text-2xl font-mono mb-1">
+          <span className="text-blue-400">{startValue}</span>
+          <span className="text-slate-400"> + </span>
+          <span className="text-green-400">{addValue}</span>
+          <span className="text-slate-400"> ≡ </span>
+          <span className="text-purple-400 font-bold">{result}</span>
+          <span className="text-slate-500 text-sm sm:text-base"> (mod {modulus})</span>
+        </div>
+        {addValue !== 0 && Math.abs(startValue + addValue) >= modulus && (
+          <div className="text-purple-300 text-xs sm:text-sm">
+            Wrapped {Math.floor(Math.abs(startValue + addValue) / modulus)}×
+          </div>
+        )}
+      </motion.div>
+
+      <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-center justify-center">
         {/* Clock face */}
         <div className="relative w-full max-w-[240px] md:max-w-[288px]">
           <svg viewBox="0 0 300 300" className="w-full h-auto">
@@ -186,28 +209,11 @@ export default function ModularClock() {
           </svg>
         </div>
 
-        {/* Result display */}
+        {/* Controls for visualization */}
         <div className="text-center">
-          <div className="text-2xl md:text-4xl font-mono mb-2 md:mb-4">
-            <span className="text-blue-400">{startValue}</span>
-            <span className="text-slate-400"> + </span>
-            <span className="text-green-400">{addValue}</span>
-            <span className="text-slate-400"> ≡ </span>
-            <span className="text-purple-400">{result}</span>
-          </div>
-          <div className="text-slate-400 text-sm md:text-base">
-            (mod {modulus})
-          </div>
-
-          {addValue !== 0 && Math.abs(startValue + addValue) >= modulus && (
-            <div className="mt-4 p-3 bg-purple-500/20 rounded-lg text-purple-300 text-sm">
-              Wrapped around {Math.floor(Math.abs(startValue + addValue) / modulus)} time{Math.floor(Math.abs(startValue + addValue) / modulus) !== 1 ? 's' : ''}!
-            </div>
-          )}
-
           <button
             onClick={() => setShowSteps(!showSteps)}
-            className={`mt-4 px-4 py-2 rounded-lg transition-all ${
+            className={`px-4 py-3 rounded-lg transition-all min-h-[44px] text-sm ${
               showSteps
                 ? 'bg-purple-600 text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
