@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function RationalDensityZoom() {
   const sqrt2 = Math.SQRT2;
@@ -172,21 +173,29 @@ export default function RationalDensityZoom() {
           const dotSize = zoomLevel < 5 ? 'w-3 h-3' : zoomLevel < 15 ? 'w-2.5 h-2.5' : 'w-2 h-2';
 
           return (
-            <div
+            <motion.div
               key={`${f.p}/${f.q}`}
               className="absolute top-1/2"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: Math.random() * 0.2 }}
               style={{
                 left: `calc(${getPosition(f.value)}% * 0.9 + 5%)`,
                 transform: 'translate(-50%, -50%)'
               }}
             >
-              <div
+              <motion.div
                 className={`${dotSize} rounded-full ${isClosest ? 'bg-green-500' : 'bg-blue-500'}`}
+                animate={isClosest ? {
+                  scale: [1, 1.3, 1],
+                  boxShadow: ['0 0 10px rgba(34,197,94,0.9)', '0 0 20px rgba(34,197,94,1)', '0 0 10px rgba(34,197,94,0.9)']
+                } : {}}
+                transition={isClosest ? { duration: 1.5, repeat: Infinity } : {}}
                 style={{
                   boxShadow: isClosest ? '0 0 10px rgba(34,197,94,0.9)' : '0 0 4px rgba(59,130,246,0.5)'
                 }}
               />
-            </div>
+            </motion.div>
           );
         })}
 
@@ -215,26 +224,38 @@ export default function RationalDensityZoom() {
         </div>
       </div>
 
-      {/* The reveal - changes based on zoom level */}
-      <div className={`p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 ${
-        zoomLevel < 5
-          ? 'bg-slate-700/30'
-          : zoomLevel < 20
-            ? 'bg-yellow-500/10 border border-yellow-500/30'
-            : 'bg-purple-500/10 border-l-4 border-purple-500'
-      }`}>
-        <p className="text-xs sm:text-sm text-slate-300">
-          {zoomLevel < 5 && (
-            <>Fractions crowd around √2, getting closer and closer. Surely one will hit it?</>
-          )}
-          {zoomLevel >= 5 && zoomLevel < 20 && (
-            <><span className="text-yellow-400">Interesting...</span> No matter how close we zoom, there's always a gap. The fractions keep missing.</>
-          )}
-          {zoomLevel >= 20 && (
-            <><strong className="text-purple-400">The truth:</strong> √2 is <em>unreachable</em> by fractions. It exists in the gaps—a number that's real but not rational. The ancient Greeks discovered this and called it "irrational."</>
-          )}
-        </p>
-      </div>
+      {/* The reveal - changes based on zoom level with smooth transitions */}
+      <motion.div
+        className={`p-3 sm:p-4 rounded-lg mb-4 sm:mb-6 transition-colors duration-500 ${
+          zoomLevel < 5
+            ? 'bg-slate-700/30'
+            : zoomLevel < 20
+              ? 'bg-yellow-500/10 border border-yellow-500/30'
+              : 'bg-purple-500/10 border-l-4 border-purple-500'
+        }`}
+        layout
+      >
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={zoomLevel < 5 ? 'early' : zoomLevel < 20 ? 'mid' : 'late'}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="text-xs sm:text-sm text-slate-300"
+          >
+            {zoomLevel < 5 && (
+              <>Fractions crowd around √2, getting closer and closer. Surely one will hit it?</>
+            )}
+            {zoomLevel >= 5 && zoomLevel < 20 && (
+              <><span className="text-yellow-400">Interesting...</span> No matter how close we zoom, there's always a gap. The fractions keep missing.</>
+            )}
+            {zoomLevel >= 20 && (
+              <><strong className="text-purple-400">The truth:</strong> √2 is <em>unreachable</em> by fractions. It exists in the gaps—a number that's real but not rational. The ancient Greeks discovered this and called it "irrational."</>
+            )}
+          </motion.p>
+        </AnimatePresence>
+      </motion.div>
 
       {/* Historical "good tries" */}
       <div className="text-center text-slate-500 text-xs mb-2">Famous attempts to catch √2:</div>

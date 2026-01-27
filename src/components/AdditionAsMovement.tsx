@@ -70,7 +70,7 @@ export default function AdditionAsMovement() {
         <div className="flex gap-2">
           <button
             onClick={() => { setMode('add'); setGuessResult(null); }}
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+            className={`px-4 py-2 rounded-lg text-sm transition-all min-h-[44px] ${
               mode === 'add'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -80,7 +80,7 @@ export default function AdditionAsMovement() {
           </button>
           <button
             onClick={() => { setMode('find'); resetFindMode(); }}
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${
+            className={`px-4 py-2 rounded-lg text-sm transition-all min-h-[44px] ${
               mode === 'find'
                 ? 'bg-blue-600 text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
@@ -257,17 +257,19 @@ export default function AdditionAsMovement() {
       {/* Controls and Result */}
       {mode === 'add' && (
         <div className="flex flex-col items-center gap-4 mt-6">
-          <button
+          <motion.button
             onClick={handleAnimate}
             disabled={isAnimating}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            className={`px-6 py-3 rounded-lg font-semibold transition-all min-h-[48px] ${
               isAnimating
                 ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
                 : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl'
             }`}
           >
-            {isAnimating ? 'Moving...' : 'Animate Move'}
-          </button>
+            {isAnimating ? 'Moving...' : '▶ Watch it move!'}
+          </motion.button>
 
           <AnimatePresence>
             {showResult && (

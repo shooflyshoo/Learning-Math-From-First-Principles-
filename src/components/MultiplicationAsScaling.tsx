@@ -44,23 +44,39 @@ export default function MultiplicationAsScaling() {
       </div>
 
       {/* Scale factor interpretation */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className={`p-3 rounded-lg text-center ${Math.abs(scaleFactor) > 1 ? 'bg-green-500/20 text-green-400' : 'bg-slate-700/50 text-slate-400'}`}>
-          <div className="text-sm">|factor| &gt; 1</div>
-          <div className="font-semibold">Stretch</div>
-        </div>
-        <div className={`p-3 rounded-lg text-center ${Math.abs(scaleFactor) < 1 && scaleFactor !== 0 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700/50 text-slate-400'}`}>
-          <div className="text-sm">|factor| &lt; 1</div>
-          <div className="font-semibold">Compress</div>
-        </div>
-        <div className={`p-3 rounded-lg text-center ${scaleFactor < 0 ? 'bg-red-500/20 text-red-400' : 'bg-slate-700/50 text-slate-400'}`}>
-          <div className="text-sm">factor &lt; 0</div>
-          <div className="font-semibold">Flip</div>
-        </div>
-        <div className={`p-3 rounded-lg text-center ${scaleFactor === 0 ? 'bg-purple-500/20 text-purple-400' : 'bg-slate-700/50 text-slate-400'}`}>
-          <div className="text-sm">factor = 0</div>
-          <div className="font-semibold">Collapse</div>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
+        <motion.div
+          className={`p-2 sm:p-3 rounded-lg text-center transition-colors ${Math.abs(scaleFactor) > 1 ? 'bg-green-500/20 text-green-400' : 'bg-slate-700/50 text-slate-400'}`}
+          animate={Math.abs(scaleFactor) > 1 ? { scale: [1, 1.02, 1] } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="text-xs sm:text-sm">|factor| &gt; 1</div>
+          <div className="font-semibold text-sm sm:text-base">Stretch</div>
+        </motion.div>
+        <motion.div
+          className={`p-2 sm:p-3 rounded-lg text-center transition-colors ${Math.abs(scaleFactor) < 1 && scaleFactor !== 0 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700/50 text-slate-400'}`}
+          animate={Math.abs(scaleFactor) < 1 && scaleFactor !== 0 ? { scale: [1, 1.02, 1] } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="text-xs sm:text-sm">|factor| &lt; 1</div>
+          <div className="font-semibold text-sm sm:text-base">Compress</div>
+        </motion.div>
+        <motion.div
+          className={`p-2 sm:p-3 rounded-lg text-center transition-colors ${scaleFactor < 0 ? 'bg-red-500/20 text-red-400' : 'bg-slate-700/50 text-slate-400'}`}
+          animate={scaleFactor < 0 ? { scale: [1, 1.02, 1] } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="text-xs sm:text-sm">factor &lt; 0</div>
+          <div className="font-semibold text-sm sm:text-base">Flip</div>
+        </motion.div>
+        <motion.div
+          className={`p-2 sm:p-3 rounded-lg text-center transition-colors ${scaleFactor === 0 ? 'bg-purple-500/20 text-purple-400 animate-pulse' : 'bg-slate-700/50 text-slate-400'}`}
+          animate={scaleFactor === 0 ? { scale: [1, 1.05, 1] } : {}}
+          transition={{ duration: 0.5, repeat: scaleFactor === 0 ? Infinity : 0 }}
+        >
+          <div className="text-xs sm:text-sm">factor = 0</div>
+          <div className="font-semibold text-sm sm:text-base">Collapse</div>
+        </motion.div>
       </div>
 
       {/* Original Number Line */}
@@ -101,6 +117,7 @@ export default function MultiplicationAsScaling() {
       {/* Scaled Number Line */}
       <div className="mb-2 text-sm text-slate-400 font-medium">
         Scaled by <span className="text-purple-400 font-mono">{scaleFactor.toFixed(2)}</span>
+        {scaleFactor === 0 && <span className="text-purple-400 ml-2">💥 Everything vanishes!</span>}
       </div>
       <div className="relative h-16 mb-8">
         <div className="absolute left-0 right-0 top-1/2 h-1 bg-slate-700 rounded-full" />
@@ -153,12 +170,19 @@ export default function MultiplicationAsScaling() {
                 }}
               />
               {/* Point */}
-              <div
+              <motion.div
                 className={`w-5 h-5 -ml-2.5 rounded-full border-2 ${
                   isOutOfBounds
                     ? 'bg-red-500/50 border-red-500'
-                    : 'bg-green-500 border-green-400 shadow-lg shadow-green-500/30'
+                    : scaleFactor === 0
+                      ? 'bg-purple-500 border-purple-400'
+                      : 'bg-green-500 border-green-400 shadow-lg shadow-green-500/30'
                 }`}
+                animate={scaleFactor === 0 ? {
+                  scale: [1, 1.5, 0.8, 1],
+                  opacity: [1, 0.5, 1]
+                } : {}}
+                transition={{ duration: 0.5 }}
               />
               {showLabel && (
                 <div className="text-xs text-green-400 mt-1 -ml-4 w-8 text-center font-mono">
