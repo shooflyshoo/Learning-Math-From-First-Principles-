@@ -40,8 +40,9 @@ import {
   WallExperience,
   RuleBreaker,
   ToastProvider,
-  LearningSupportPanel,
   JourneyMap,
+  ConceptBridge,
+  SectionCheckpoint,
 } from './components';
 import './index.css';
 
@@ -183,7 +184,6 @@ function App() {
           <IntroSection />
           <Suspense fallback={<WebGLFallback label="Loading visual map..." />}><WebGLHero /></Suspense>
           <JourneyMap onJump={scrollToSection} />
-          <LearningSupportPanel />
           <Part1Section />
           <Part2Section />
           <Part3Section />
@@ -296,6 +296,13 @@ function IntroSection() {
           <strong>That is the engine of mathematical progress:</strong> Preserve the contracts.
           Extend the world. Gain new powers.
         </p>
+
+        <ConceptBridge
+          visual="You are navigating worlds with different allowed moves."
+          formal="A number system is useful when operations stay consistent inside it."
+          transfer="When confusion hits, ask: did I hit a boundary or misuse an operation?"
+        />
+
       </motion.div>
     </ScrollSection>
   );
@@ -309,6 +316,12 @@ function Part1Section() {
         Each level of this ladder exists because <strong>someone hit a wall</strong> and decided
         to extend the system rather than accept the limitation.
       </p>
+
+      <ConceptBridge
+        visual="Treat each system like a game map with unlockable moves."
+        formal="Closure + consistency determine whether an operation is valid in that map."
+        transfer="When stuck, move to the smallest system extension that preserves old truths."
+      />
 
       <InteractiveWrapper
         title="Number Systems Ladder"
@@ -408,6 +421,14 @@ function Part1Section() {
           (i²) = 180° = pointing backwards = −1. That's why i² = −1!
         </div>
       </ScrollSection>
+      <SectionCheckpoint
+        title="Part 1 checkpoint"
+        prompts={[
+          'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
+          'I can identify when an expression hits a system boundary.',
+          'I can describe i as rotation, not magic.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -416,6 +437,12 @@ function Part2Section() {
   return (
     <ScrollSection id="part2">
       <h2>PART TWO: Operations as "Moves"</h2>
+
+      <ConceptBridge
+        visual="Addition slides. Multiplication stretches. Division asks for the reverse stretch."
+        formal="Operations are transformations with inverses and constraints."
+        transfer="Use this lens in code, finance, and scaling systems: what changes linearly vs multiplicatively?"
+      />
 
       <div className="overflow-x-auto mb-8">
         <table>
@@ -532,6 +559,14 @@ function Part2Section() {
           <DivisionByZero />
         </InteractiveWrapper>
       </ScrollSection>
+      <SectionCheckpoint
+        title="Part 2 checkpoint"
+        prompts={[
+          'I can distinguish shift vs scale operations visually.',
+          'I can justify why division by zero fails uniqueness.',
+          'I can explain distributivity in my own words.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -540,6 +575,12 @@ function Part3Section() {
   return (
     <ScrollSection id="part3">
       <h2>PART THREE: Exponents and Logarithms</h2>
+
+      <ConceptBridge
+        visual="Exponents are repeated zooms; logs count how many zooms happened."
+        formal="Exponentiation and logarithms are inverse operators on positive reals."
+        transfer="Use this to decode growth, sound levels, pH, and compounding timelines."
+      />
 
       <ScrollSection delay={0.1}>
         <h3>Exponents: Repeated Scaling</h3>
@@ -593,6 +634,14 @@ function Part3Section() {
           <LogMultiplicationAddition />
         </InteractiveWrapper>
       </ScrollSection>
+      <SectionCheckpoint
+        title="Part 3 checkpoint"
+        prompts={[
+          'I can move between exponent and log viewpoints.',
+          'I can test whether a log input is valid.',
+          'I can explain fractional exponents as root-questions.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -601,6 +650,12 @@ function Part4Section() {
   return (
     <ScrollSection id="part4">
       <h2>PART FOUR: Growth Types</h2>
+
+      <ConceptBridge
+        visual="Race the curves to feel when one trend overtakes another."
+        formal="Asymptotic behavior decides long-run dominance."
+        transfer="Predict workload, costs, and risk by classifying growth type early."
+      />
       <p>
         This section tells you whether something will <strong>stay stable, creep up, or explode</strong>.
       </p>
@@ -635,6 +690,14 @@ function Part4Section() {
         <strong>Rule of thumb:</strong> Linear = manageable. Polynomial = manageable with effort.
         Exponential = you're on a timer.
       </div>
+      <SectionCheckpoint
+        title="Part 4 checkpoint"
+        prompts={[
+          'I can classify a growth pattern by its long-run behavior.',
+          'I can articulate why exponential growth becomes dominant.',
+          'I can connect growth type to practical risk.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -643,6 +706,12 @@ function Part5Section() {
   return (
     <ScrollSection id="part5">
       <h2>PART FIVE: Units as Type Labels</h2>
+
+      <ConceptBridge
+        visual="Units are colored tags attached to numbers."
+        formal="Dimensional consistency is a non-negotiable equation invariant."
+        transfer="Treat units like type safety to catch bugs before computation."
+      />
       <p>
         If you like <strong>type systems</strong> in programming, units are exactly that.
       </p>
@@ -659,6 +728,14 @@ function Part5Section() {
         <strong>Dimensional Analysis = Built-In Error Checking:</strong> If units don't match on
         both sides of an equation, something is wrong — before you even compute!
       </div>
+      <SectionCheckpoint
+        title="Part 5 checkpoint"
+        prompts={[
+          'I can detect unit/type mismatches quickly.',
+          'I can track unit cancellation through multiplication/division.',
+          'I can use dimensional analysis as pre-check.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -667,6 +744,12 @@ function Part6Section() {
   return (
     <ScrollSection id="part6">
       <h2>PART SIX: Number Bases</h2>
+
+      <ConceptBridge
+        visual="A number is stacked place-value blocks in whatever base you choose."
+        formal="Representation changes with base; value does not."
+        transfer="Read binary/hex and data encodings without mysticism."
+      />
       <p>
         <strong>3456 in base 10</strong> = 3×10³ + 4×10² + 5×10¹ + 6×10⁰
       </p>
@@ -682,6 +765,14 @@ function Part6Section() {
       <p>
         <strong>Why base 10?</strong> You have 10 fingers. That's it. Any base works mathematically.
       </p>
+      <SectionCheckpoint
+        title="Part 6 checkpoint"
+        prompts={[
+          'I can rewrite a value in another base without changing value.',
+          'I can explain place-value expansion clearly.',
+          'I can read positional notation as weighted sum.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -690,6 +781,12 @@ function Part7Section() {
   return (
     <ScrollSection id="part7">
       <h2>PART SEVEN: Number Theory</h2>
+
+      <ConceptBridge
+        visual="Primes are atoms; modular arithmetic wraps the number line into loops."
+        formal="Unique factorization and congruence classes structure integer behavior."
+        transfer="This is the backbone of cryptography, checksums, and scheduling cycles."
+      />
 
       <ScrollSection delay={0.1}>
         <h3>Primes: The Atoms of Multiplication</h3>
@@ -726,6 +823,14 @@ function Part7Section() {
           scheduling, anything that cycles.
         </div>
       </ScrollSection>
+      <SectionCheckpoint
+        title="Part 7 checkpoint"
+        prompts={[
+          'I can factor numbers into primes methodically.',
+          'I can reason with modular wrap-around.',
+          'I can identify where modular arithmetic appears in real systems.'
+        ]}
+      />
     </ScrollSection>
   );
 }
@@ -734,6 +839,12 @@ function Part8Section() {
   return (
     <ScrollSection id="part8">
       <h2>PART EIGHT: Domain Boundaries</h2>
+
+      <ConceptBridge
+        visual="Boundaries are cliffs in the operation landscape."
+        formal="Domain restrictions define where a function is valid."
+        transfer="Boundary awareness prevents silent errors in modeling and code."
+      />
       <p>
         <strong>Boundaries are not embarrassing. They're the truth serum.</strong>
       </p>
@@ -749,6 +860,14 @@ function Part8Section() {
       >
         <DomainBoundaryExplorer />
       </InteractiveWrapper>
+      <SectionCheckpoint
+        title="Part 8 checkpoint"
+        prompts={[
+          'I can test whether an operation is outside its domain.',
+          'I can treat undefined as a model signal, not personal failure.',
+          'I can choose a better world/model when boundaries appear.'
+        ]}
+      />
     </ScrollSection>
   );
 }
