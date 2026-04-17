@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import {
   BookOpen,
@@ -41,8 +41,7 @@ import {
   RuleBreaker,
   ToastProvider,
   LearningSupportPanel,
-  WebGLHero,
-  FirstVisitNavigator,
+  JourneyMap,
 } from './components';
 import './index.css';
 
@@ -58,6 +57,10 @@ const sections = [
   { id: 'part8', title: 'Boundaries', icon: AlertCircle },
 ];
 
+
+
+const WebGLHero = lazy(() => import('./components/WebGLHero'));
+const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
 function App() {
   const [activeSection, setActiveSection] = useState('intro');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -178,8 +181,8 @@ function App() {
       <main ref={mainRef} className="pt-16 md:pt-0 md:ml-64">
         <article className="essay-content py-8 md:py-16">
           <IntroSection />
-          <WebGLHero />
-          <FirstVisitNavigator onJump={scrollToSection} />
+          <Suspense fallback={<WebGLFallback label="Loading visual map..." />}><WebGLHero /></Suspense>
+          <JourneyMap onJump={scrollToSection} />
           <LearningSupportPanel />
           <Part1Section />
           <Part2Section />
@@ -232,6 +235,14 @@ function App() {
       </nav>
     </div>
     </ToastProvider>
+  );
+}
+
+
+
+function WebGLFallback({ label }: { label: string }) {
+  return (
+    <div className="webgl-fallback">{label}</div>
   );
 }
 
@@ -379,6 +390,10 @@ function Part1Section() {
         <p>
           <strong>ℂ = {'{'}a + bi{'}'} where i² = −1</strong>
         </p>
+
+        <div className="my-6">
+          <Suspense fallback={<WebGLFallback label="Loading complex rotation..." />}><ComplexRotationWebGL /></Suspense>
+        </div>
 
         <InteractiveWrapper
           title="The Complex Plane"
