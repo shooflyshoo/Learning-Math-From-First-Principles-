@@ -1561,3 +1561,87 @@ body.low-motion .webgl-hero-shell {
   flex-wrap: wrap;
   align-items: center;
 }
+
+/* Delight polish additions */
+.section-checkpoint-meter {
+  width: 100%;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.8);
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.section-checkpoint-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.7), rgba(6, 182, 212, 0.9));
+  transition: width 0.3s ease;
+}
+
+.journey-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.journey-card::after {
+  content: '';
+  position: absolute;
+  inset: auto -20% -70% -20%;
+  height: 120px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.16), transparent 65%);
+  pointer-events: none;
+}
+
+.transfer-challenge {
+  position: relative;
+  overflow: hidden;
+}
+
+.transfer-meter {
+  margin-top: 0.55rem;
+  width: 100%;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.8);
+  overflow: hidden;
+}
+
+.transfer-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7dd3fc, #34d399);
+  transition: width 0.35s ease;
+}
+
+.transfer-delight {
+  margin: 0.55rem 0 0;
+  color: #a7f3d0;
+  font-size: 0.8rem;
+}
+
+.module-shell {
+  margin: 1.4rem 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.55), rgba(2, 6, 23, 0.35));
+  position: relative;
+}
+
+.module-shell::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.35), transparent);
+}
+
+.module-part1 { box-shadow: inset 0 0 40px rgba(56, 189, 248, 0.08); }
+.module-part2 { box-shadow: inset 0 0 40px rgba(34, 197, 94, 0.08); }
+.module-part3 { box-shadow: inset 0 0 40px rgba(167, 139, 250, 0.08); }
+.module-part4 { box-shadow: inset 0 0 40px rgba(251, 146, 60, 0.08); }
+.module-part5 { box-shadow: inset 0 0 40px rgba(20, 184, 166, 0.08); }
+.module-part6 { box-shadow: inset 0 0 40px rgba(244, 114, 182, 0.08); }
+.module-part7 { box-shadow: inset 0 0 40px rgba(250, 204, 21, 0.08); }
+.module-part8 { box-shadow: inset 0 0 40px rgba(248, 113, 113, 0.08); }

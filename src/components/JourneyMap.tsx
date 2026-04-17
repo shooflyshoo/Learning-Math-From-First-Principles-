@@ -1,4 +1,5 @@
 import { Compass, Flag, Sparkles, Timer } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface JourneyMapProps {
   onJump: (id: string) => void;
@@ -47,7 +48,14 @@ export default function JourneyMap({ onJump }: JourneyMapProps) {
 
       <div className="journey-grid">
         {route.map((step, idx) => (
-          <article key={step.id} className="journey-card">
+          <motion.article
+            key={step.id}
+            className="journey-card"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.08, duration: 0.35 }}
+          >
             <div className="journey-topline">
               <span className="journey-step">Step {idx + 1}</span>
               <span className="journey-time"><Timer size={12} /> {step.time}</span>
@@ -58,7 +66,7 @@ export default function JourneyMap({ onJump }: JourneyMapProps) {
             <button onClick={() => onJump(step.id)} className="journey-start-btn">
               <Flag size={14} /> Start this step
             </button>
-          </article>
+          </motion.article>
         ))}
       </div>
     </section>

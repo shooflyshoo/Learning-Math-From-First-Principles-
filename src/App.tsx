@@ -610,7 +610,7 @@ function IntroSection() {
 
 function Part1Section() {
   return (
-    <ScrollSection id="part1">
+    <ScrollSection id="part1" className="module-shell module-part1">
       <h2>PART ONE: The Number Systems Ladder</h2>
       <p>
         Each level of this ladder exists because <strong>someone hit a wall</strong> and decided
@@ -746,7 +746,7 @@ function Part1Section() {
 
 function Part2Section() {
   return (
-    <ScrollSection id="part2">
+    <ScrollSection id="part2" className="module-shell module-part2">
       <h2>PART TWO: Operations as "Moves"</h2>
 
       <ConceptBridge
@@ -896,7 +896,7 @@ function Part2Section() {
 
 function Part3Section() {
   return (
-    <ScrollSection id="part3">
+    <ScrollSection id="part3" className="module-shell module-part3">
       <h2>PART THREE: Exponents and Logarithms</h2>
 
       <ConceptBridge
@@ -983,7 +983,7 @@ function Part3Section() {
 
 function Part4Section() {
   return (
-    <ScrollSection id="part4">
+    <ScrollSection id="part4" className="module-shell module-part4">
       <h2>PART FOUR: Growth Types</h2>
 
       <ConceptBridge
@@ -1051,7 +1051,7 @@ function Part4Section() {
 
 function Part5Section() {
   return (
-    <ScrollSection id="part5">
+    <ScrollSection id="part5" className="module-shell module-part5">
       <h2>PART FIVE: Units as Type Labels</h2>
 
       <ConceptBridge
@@ -1101,7 +1101,7 @@ function Part5Section() {
 
 function Part6Section() {
   return (
-    <ScrollSection id="part6">
+    <ScrollSection id="part6" className="module-shell module-part6">
       <h2>PART SIX: Number Bases</h2>
 
       <ConceptBridge
@@ -1150,7 +1150,7 @@ function Part6Section() {
 
 function Part7Section() {
   return (
-    <ScrollSection id="part7">
+    <ScrollSection id="part7" className="module-shell module-part7">
       <h2>PART SEVEN: Number Theory</h2>
 
       <ConceptBridge
@@ -1220,7 +1220,7 @@ function Part7Section() {
 
 function Part8Section() {
   return (
-    <ScrollSection id="part8">
+    <ScrollSection id="part8" className="module-shell module-part8">
       <h2>PART EIGHT: Domain Boundaries</h2>
 
       <ConceptBridge

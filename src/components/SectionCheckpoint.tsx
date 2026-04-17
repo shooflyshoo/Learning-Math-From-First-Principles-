@@ -72,6 +72,9 @@ export default function SectionCheckpoint({ title, prompts, sectionId, reflectio
         <h4>{title}</h4>
         <span>{done}/{prompts.length} grounded</span>
       </div>
+      <div className="section-checkpoint-meter" aria-hidden>
+        <div className="section-checkpoint-meter-fill" style={{ width: `${(done / prompts.length) * 100}%` }} />
+      </div>
 
       <div className="section-checkpoint-list">
         {prompts.map((prompt, idx) => (
@@ -98,7 +101,7 @@ export default function SectionCheckpoint({ title, prompts, sectionId, reflectio
         />
         <p className={`mt-2 text-xs ${reflectionReady ? 'text-green-300' : 'text-slate-500'}`}>
           {reflectionReady
-            ? 'Gate complete: your explanation is long enough to count as an active recall check.'
+            ? 'Gate complete: clear reflection recorded.'
             : `Need ${MIN_REFLECTION_CHARS - state.reflection.trim().length} more characters to complete this gate.`}
         </p>
       </div>
