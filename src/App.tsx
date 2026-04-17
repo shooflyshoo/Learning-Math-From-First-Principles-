@@ -12,6 +12,7 @@ import {
   X,
   ChevronUp,
   Sparkles,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   AdditionAsMovement,
@@ -59,6 +60,7 @@ const sections = [
 ];
 
 
+const checkpointSections = ['part1', 'part2', 'part3', 'part4', 'part5', 'part6', 'part7', 'part8'] as const;
 
 const WebGLHero = lazy(() => import('./components/WebGLHero'));
 const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
@@ -66,6 +68,7 @@ function App() {
   const [activeSection, setActiveSection] = useState('intro');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [completedSections, setCompletedSections] = useState<Record<string, boolean>>({});
   const mainRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll();
@@ -95,6 +98,31 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
+  useEffect(() => {
+    const refreshCheckpointState = () => {
+      const status: Record<string, boolean> = {};
+      checkpointSections.forEach((id) => {
+        const raw = localStorage.getItem(`mfp.checkpoint.${id}`);
+        if (!raw) {
+          status[id] = false;
+          return;
+        }
+        try {
+          const parsed = JSON.parse(raw) as boolean[];
+          status[id] = Array.isArray(parsed) && parsed.length > 0 && parsed.every(Boolean);
+        } catch {
+          status[id] = false;
+        }
+      });
+      setCompletedSections(status);
+    };
+
+    refreshCheckpointState();
+    window.addEventListener('mfp-checkpoint-updated', refreshCheckpointState);
+    return () => window.removeEventListener('mfp-checkpoint-updated', refreshCheckpointState);
+  }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -106,6 +134,9 @@ function App() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const completedCount = checkpointSections.filter((id) => completedSections[id]).length;
+  const nextSection = checkpointSections.find((id) => !completedSections[id]);
 
   return (
     <ToastProvider>
@@ -170,7 +201,8 @@ function App() {
                   className={`nav-link w-full text-left ${activeSection === section.id ? 'active' : ''}`}
                 >
                   <Icon size={16} />
-                  {section.title}
+                  <span>{section.title}</span>
+                  {completedSections[section.id] && <CheckCircle2 size={14} className="text-green-400 ml-auto" />}
                 </button>
               );
             })}
@@ -184,6 +216,12 @@ function App() {
           <IntroSection />
           <Suspense fallback={<WebGLFallback label="Loading visual map..." />}><WebGLHero /></Suspense>
           <JourneyMap onJump={scrollToSection} />
+          <LearningProgressBanner
+            completed={completedCount}
+            total={checkpointSections.length}
+            nextSectionId={nextSection ?? null}
+            onJump={scrollToSection}
+          />
           <Part1Section />
           <Part2Section />
           <Part3Section />
@@ -229,6 +267,7 @@ function App() {
             >
               <Icon size={20} />
               <span>{section.title.split(' ')[0]}</span>
+              {completedSections[section.id] && <CheckCircle2 size={12} className="text-green-400" />}
             </button>
           );
         })}
@@ -239,6 +278,38 @@ function App() {
 }
 
 
+
+
+
+function LearningProgressBanner({
+  completed,
+  total,
+  nextSectionId,
+  onJump,
+}: {
+  completed: number;
+  total: number;
+  nextSectionId: string | null;
+  onJump: (id: string) => void;
+}) {
+  const percent = Math.round((completed / total) * 100);
+  return (
+    <section className="learning-progress-banner">
+      <div>
+        <h3>Your learning arc</h3>
+        <p>{completed}/{total} chapter checkpoints completed ({percent}%).</p>
+      </div>
+      <div className="learning-progress-bar">
+        <div className="learning-progress-fill" style={{ width: `${percent}%` }} />
+      </div>
+      {nextSectionId && (
+        <button className="learning-progress-btn" onClick={() => onJump(nextSectionId)}>
+          Continue where friction is lowest: {nextSectionId.toUpperCase()}
+        </button>
+      )}
+    </section>
+  );
+}
 
 function WebGLFallback({ label }: { label: string }) {
   return (
@@ -423,6 +494,7 @@ function Part1Section() {
       </ScrollSection>
       <SectionCheckpoint
         title="Part 1 checkpoint"
+        sectionId="part1"
         prompts={[
           'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
           'I can identify when an expression hits a system boundary.',
@@ -561,6 +633,7 @@ function Part2Section() {
       </ScrollSection>
       <SectionCheckpoint
         title="Part 2 checkpoint"
+        sectionId="part2"
         prompts={[
           'I can distinguish shift vs scale operations visually.',
           'I can justify why division by zero fails uniqueness.',
@@ -636,6 +709,7 @@ function Part3Section() {
       </ScrollSection>
       <SectionCheckpoint
         title="Part 3 checkpoint"
+        sectionId="part3"
         prompts={[
           'I can move between exponent and log viewpoints.',
           'I can test whether a log input is valid.',
@@ -692,6 +766,7 @@ function Part4Section() {
       </div>
       <SectionCheckpoint
         title="Part 4 checkpoint"
+        sectionId="part4"
         prompts={[
           'I can classify a growth pattern by its long-run behavior.',
           'I can articulate why exponential growth becomes dominant.',
@@ -730,6 +805,7 @@ function Part5Section() {
       </div>
       <SectionCheckpoint
         title="Part 5 checkpoint"
+        sectionId="part5"
         prompts={[
           'I can detect unit/type mismatches quickly.',
           'I can track unit cancellation through multiplication/division.',
@@ -767,6 +843,7 @@ function Part6Section() {
       </p>
       <SectionCheckpoint
         title="Part 6 checkpoint"
+        sectionId="part6"
         prompts={[
           'I can rewrite a value in another base without changing value.',
           'I can explain place-value expansion clearly.',
@@ -825,6 +902,7 @@ function Part7Section() {
       </ScrollSection>
       <SectionCheckpoint
         title="Part 7 checkpoint"
+        sectionId="part7"
         prompts={[
           'I can factor numbers into primes methodically.',
           'I can reason with modular wrap-around.',
@@ -862,6 +940,7 @@ function Part8Section() {
       </InteractiveWrapper>
       <SectionCheckpoint
         title="Part 8 checkpoint"
+        sectionId="part8"
         prompts={[
           'I can test whether an operation is outside its domain.',
           'I can treat undefined as a model signal, not personal failure.',
