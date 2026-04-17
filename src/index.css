@@ -1458,3 +1458,89 @@ body.low-motion .webgl-hero-shell {
   border-color: rgba(239, 68, 68, 0.45);
   background: rgba(239, 68, 68, 0.12);
 }
+
+.op-machine-shell,
+.log-bridge-shell {
+  margin: 0.9rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 0.85rem;
+  background: rgba(2, 6, 23, 0.55);
+  padding: 0.75rem;
+}
+
+.op-machine-shell h4,
+.log-bridge-shell h4 {
+  margin: 0;
+  color: #7dd3fc;
+  font-size: 0.88rem;
+}
+
+.op-machine-shell p,
+.log-bridge-shell p {
+  margin: 0.35rem 0 0.6rem;
+  color: var(--color-slate-400);
+  font-size: 0.8rem;
+}
+
+.op-machine-controls input[type="range"] {
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.op-mode-btn {
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: rgba(30, 41, 59, 0.65);
+  color: var(--color-slate-200);
+  border-radius: 0.5rem;
+  padding: 0.28rem 0.52rem;
+  font-size: 0.74rem;
+}
+
+.op-mode-btn.active {
+  border-color: rgba(34, 211, 238, 0.5);
+  color: var(--color-cyan-300);
+}
+
+.op-machine-lane {
+  margin-top: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.op-node,
+.op-rule {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.28rem 0.45rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--color-slate-100);
+}
+
+.op-node.output {
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #86efac;
+}
+
+.op-arrow {
+  color: var(--color-slate-500);
+}
+
+.log-bridge-grid {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.log-row {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 0.52rem;
+  padding: 0.34rem 0.45rem;
+  background: rgba(15, 23, 42, 0.45);
+  font-size: 0.78rem;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  align-items: center;
+}

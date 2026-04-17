@@ -41,3 +41,5 @@ export { default as TransferChallenge } from './TransferChallenge';
 export { default as UnitCancellationFlow } from './UnitCancellationFlow';
 export { default as BasePlaceValueStory } from './BasePlaceValueStory';
 export { default as DomainHeatmap } from './DomainHeatmap';
+export { default as OperationMachine } from './OperationMachine';
+export { default as LogScaleBridge } from './LogScaleBridge';

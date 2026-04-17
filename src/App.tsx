@@ -48,6 +48,8 @@ import {
   UnitCancellationFlow,
   BasePlaceValueStory,
   DomainHeatmap,
+  OperationMachine,
+  LogScaleBridge,
 } from './components';
 import './index.css';
 
@@ -458,6 +460,7 @@ function Part1Section() {
         <NumberSystemsLadder />
       </InteractiveWrapper>
 
+
       <ScrollSection delay={0.1}>
         <h3>Level 1 — Natural Numbers: Counting World</h3>
         <p>
@@ -578,6 +581,8 @@ function Part2Section() {
         formal="Operations are transformations with inverses and constraints."
         transfer="Use this lens in code, finance, and scaling systems: what changes linearly vs multiplicatively?"
       />
+
+      <OperationMachine />
 
       <div className="overflow-x-auto mb-8">
         <table>
@@ -724,6 +729,8 @@ function Part3Section() {
         formal="Exponentiation and logarithms are inverse operators on positive reals."
         transfer="Use this to decode growth, sound levels, pH, and compounding timelines."
       />
+
+      <LogScaleBridge />
 
       <ScrollSection delay={0.1}>
         <h3>Exponents: Repeated Scaling</h3>
