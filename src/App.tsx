@@ -280,9 +280,10 @@ function App() {
           return;
         }
         try {
-          const parsed = JSON.parse(raw) as boolean[] | { checked?: boolean[] };
+          const parsed = JSON.parse(raw) as boolean[] | { checked?: boolean[]; challengeSolved?: boolean };
           const checks = Array.isArray(parsed) ? parsed : parsed.checked;
-          status[id] = Array.isArray(checks) && checks.length > 0 && checks.every(Boolean);
+          const challengeSolved = Array.isArray(parsed) ? true : Boolean(parsed.challengeSolved);
+          status[id] = Array.isArray(checks) && checks.length > 0 && checks.every(Boolean) && challengeSolved;
         } catch {
           status[id] = false;
         }
@@ -733,12 +734,17 @@ function Part1Section() {
       <SectionCheckpoint
         title="Part 1 checkpoint"
         sectionId="part1"
-        reflectionPrompt="Explain to a new learner how “hitting a wall” leads to extending number systems."
         prompts={[
           'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
           'I can identify when an expression hits a system boundary.',
           'I can describe i as rotation, not magic.'
         ]}
+        visualChallenge={{
+          prompt: 'You hit √(-9) while working in reals. Which move keeps old rules intact?',
+          options: ['Force it to be -3', 'Switch to complex numbers and represent it as 3i', 'Ignore the boundary and continue'],
+          correctIndex: 1,
+          celebration: 'Yes—minimal extension unlocked while preserving previous truths.',
+        }}
       />
     </ScrollSection>
   );
@@ -883,12 +889,17 @@ function Part2Section() {
       <SectionCheckpoint
         title="Part 2 checkpoint"
         sectionId="part2"
-        reflectionPrompt="Describe operations as transformations and explain one contradiction you can expose by rule-breaking."
         prompts={[
           'I can distinguish shift vs scale operations visually.',
           'I can justify why division by zero fails uniqueness.',
           'I can explain distributivity in my own words.'
         ]}
+        visualChallenge={{
+          prompt: 'If output triples when input triples, which operation lens fits best?',
+          options: ['Shift/add lens', 'Scale/multiply lens', 'Random/no structure'],
+          correctIndex: 1,
+          celebration: 'Nice read—this is multiplicative behavior.',
+        }}
       />
     </ScrollSection>
   );
@@ -970,12 +981,17 @@ function Part3Section() {
       <SectionCheckpoint
         title="Part 3 checkpoint"
         sectionId="part3"
-        reflectionPrompt="Teach exponents and logs as inverse processes using a concrete example."
         prompts={[
           'I can move between exponent and log viewpoints.',
           'I can test whether a log input is valid.',
           'I can explain fractional exponents as root-questions.'
         ]}
+        visualChallenge={{
+          prompt: '5·2^n = 40. Which button solves n fastest?',
+          options: ['Additive difference button', 'Log/inverse-step counter button', 'Square-root button'],
+          correctIndex: 1,
+          celebration: 'Perfect—logs count multiplicative steps.',
+        }}
       />
     </ScrollSection>
   );
@@ -1038,12 +1054,17 @@ function Part4Section() {
       <SectionCheckpoint
         title="Part 4 checkpoint"
         sectionId="part4"
-        reflectionPrompt="Give an example where linear intuition fails because growth is exponential."
         prompts={[
           'I can classify a growth pattern by its long-run behavior.',
           'I can articulate why exponential growth becomes dominant.',
           'I can connect growth type to practical risk.'
         ]}
+        visualChallenge={{
+          prompt: 'Sequence: 3, 6, 12, 24... which response posture is safest?',
+          options: ['Treat as linear and monitor monthly', 'Urgent exponential mitigation', 'No action needed'],
+          correctIndex: 1,
+          celebration: 'Exactly—exponential systems need early intervention.',
+        }}
       />
     </ScrollSection>
   );
@@ -1088,12 +1109,17 @@ function Part5Section() {
       <SectionCheckpoint
         title="Part 5 checkpoint"
         sectionId="part5"
-        reflectionPrompt="Explain why units behave like type safety and how that prevents a specific error."
         prompts={[
           'I can detect unit/type mismatches quickly.',
           'I can track unit cancellation through multiplication/division.',
           'I can use dimensional analysis as pre-check.'
         ]}
+        visualChallenge={{
+          prompt: 'Which expression is dimensionally valid?',
+          options: ['60 km/h + 2 h', '60 km/h × 2 h', '60 km/h ÷ 2 km'],
+          correctIndex: 1,
+          celebration: 'Great catch—unit multiplication yields distance.',
+        }}
       />
     </ScrollSection>
   );
@@ -1137,12 +1163,17 @@ function Part6Section() {
       <SectionCheckpoint
         title="Part 6 checkpoint"
         sectionId="part6"
-        reflectionPrompt="Explain base conversion while keeping “same value, different encoding” central."
         prompts={[
           'I can rewrite a value in another base without changing value.',
           'I can explain place-value expansion clearly.',
           'I can read positional notation as weighted sum.'
         ]}
+        visualChallenge={{
+          prompt: 'What stays unchanged when converting 1010₂ to 10₁₀?',
+          options: ['Digit symbols', 'Underlying quantity/value', 'Place weights'],
+          correctIndex: 1,
+          celebration: 'Yes—the encoding changes, the value does not.',
+        }}
       />
     </ScrollSection>
   );
@@ -1207,12 +1238,17 @@ function Part7Section() {
       <SectionCheckpoint
         title="Part 7 checkpoint"
         sectionId="part7"
-        reflectionPrompt="Connect prime factors or modular arithmetic to one real system (crypto/checksums/scheduling)."
         prompts={[
           'I can factor numbers into primes methodically.',
           'I can reason with modular wrap-around.',
           'I can identify where modular arithmetic appears in real systems.'
         ]}
+        visualChallenge={{
+          prompt: '38 mod 12 lands where on the clock?',
+          options: ['2', '6', '10'],
+          correctIndex: 0,
+          celebration: 'Correct wrap-around state located.',
+        }}
       />
     </ScrollSection>
   );
@@ -1256,12 +1292,17 @@ function Part8Section() {
       <SectionCheckpoint
         title="Part 8 checkpoint"
         sectionId="part8"
-        reflectionPrompt="Describe how domain boundaries should change model design rather than being ignored."
         prompts={[
           'I can test whether an operation is outside its domain.',
           'I can treat undefined as a model signal, not personal failure.',
           'I can choose a better world/model when boundaries appear.'
         ]}
+        visualChallenge={{
+          prompt: 'Your model outputs log(-3) in ℝ. Best next move?',
+          options: ['Clamp to +3 silently', 'Treat as boundary signal and revise model/domain', 'Ignore it'],
+          correctIndex: 1,
+          celebration: 'Exactly—boundary errors are diagnostics for model redesign.',
+        }}
       />
     </ScrollSection>
   );

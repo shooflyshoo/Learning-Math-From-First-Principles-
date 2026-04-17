@@ -1,51 +1,64 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Circle, RefreshCcw, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, Circle, RefreshCcw, Sparkles, Wand2 } from 'lucide-react';
+
+interface VisualChallenge {
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  celebration: string;
+}
 
 interface SectionCheckpointProps {
   title: string;
   prompts: string[];
   sectionId: string;
-  reflectionPrompt?: string;
+  visualChallenge: VisualChallenge;
 }
 
 interface SavedCheckpointState {
   checked: boolean[];
-  reflection: string;
+  selectedOption: number | null;
+  challengeSolved: boolean;
 }
 
 const STORAGE_PREFIX = 'mfp.checkpoint.';
 const PROGRESS_EVENT = 'mfp-checkpoint-updated';
-const MIN_REFLECTION_CHARS = 60;
 
 function normalizeSaved(raw: string | null, promptCount: number): SavedCheckpointState {
-  if (!raw) {
-    return { checked: Array.from({ length: promptCount }, () => false), reflection: '' };
-  }
+  const fallback: SavedCheckpointState = {
+    checked: Array.from({ length: promptCount }, () => false),
+    selectedOption: null,
+    challengeSolved: false,
+  };
+
+  if (!raw) return fallback;
 
   try {
     const parsed = JSON.parse(raw) as SavedCheckpointState | boolean[];
     if (Array.isArray(parsed)) {
-      const checked = parsed.length === promptCount ? parsed : Array.from({ length: promptCount }, () => false);
-      return { checked, reflection: '' };
+      const checked = parsed.length === promptCount ? parsed : fallback.checked;
+      return { ...fallback, checked };
     }
 
     if (parsed && Array.isArray(parsed.checked)) {
-      const checked = parsed.checked.length === promptCount ? parsed.checked : Array.from({ length: promptCount }, () => false);
-      return { checked, reflection: parsed.reflection ?? '' };
+      return {
+        checked: parsed.checked.length === promptCount ? parsed.checked : fallback.checked,
+        selectedOption: typeof parsed.selectedOption === 'number' ? parsed.selectedOption : null,
+        challengeSolved: Boolean(parsed.challengeSolved),
+      };
     }
   } catch {
     // ignore malformed storage and fallback to defaults
   }
 
-  return { checked: Array.from({ length: promptCount }, () => false), reflection: '' };
+  return fallback;
 }
 
-export default function SectionCheckpoint({ title, prompts, sectionId, reflectionPrompt }: SectionCheckpointProps) {
+export default function SectionCheckpoint({ title, prompts, sectionId, visualChallenge }: SectionCheckpointProps) {
   const storageKey = `${STORAGE_PREFIX}${sectionId}`;
   const [state, setState] = useState<SavedCheckpointState>(() => normalizeSaved(localStorage.getItem(storageKey), prompts.length));
 
   const done = useMemo(() => state.checked.filter(Boolean).length, [state.checked]);
-  const reflectionReady = state.reflection.trim().length >= MIN_REFLECTION_CHARS;
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(state));
@@ -59,10 +72,19 @@ export default function SectionCheckpoint({ title, prompts, sectionId, reflectio
     }));
   };
 
+  const chooseOption = (idx: number) => {
+    setState((prev) => ({
+      ...prev,
+      selectedOption: idx,
+      challengeSolved: idx === visualChallenge.correctIndex,
+    }));
+  };
+
   const reset = () => {
     setState({
       checked: prompts.map(() => false),
-      reflection: '',
+      selectedOption: null,
+      challengeSolved: false,
     });
   };
 
@@ -85,29 +107,41 @@ export default function SectionCheckpoint({ title, prompts, sectionId, reflectio
         ))}
       </div>
 
-      <div className="mt-4 rounded-xl border border-slate-700/70 bg-slate-900/60 p-4">
-        <p className="mb-2 flex items-center gap-2 text-sm text-slate-200">
-          <ShieldCheck size={15} className={reflectionReady ? 'text-green-400' : 'text-amber-400'} />
-          Mastery gate: explain the section in your own words.
+      <div className="checkpoint-challenge">
+        <p className="checkpoint-challenge-title">
+          <Sparkles size={15} /> Mastery remix: pick the move that best fits this section.
         </p>
-        <p className="mb-2 text-xs text-slate-400">
-          {reflectionPrompt ?? 'Write how you would teach the core idea to a teammate in one concise paragraph.'}
-        </p>
-        <textarea
-          value={state.reflection}
-          onChange={(event) => setState((prev) => ({ ...prev, reflection: event.target.value }))}
-          className="min-h-[100px] w-full rounded-lg border border-slate-700 bg-slate-950/70 p-3 text-sm text-slate-200 outline-none focus:border-cyan-500"
-          placeholder="Type your explanation here..."
-        />
-        <p className={`mt-2 text-xs ${reflectionReady ? 'text-green-300' : 'text-slate-500'}`}>
-          {reflectionReady
-            ? 'Gate complete: clear reflection recorded.'
-            : `Need ${MIN_REFLECTION_CHARS - state.reflection.trim().length} more characters to complete this gate.`}
-        </p>
+        <p className="checkpoint-challenge-prompt">{visualChallenge.prompt}</p>
+
+        <div className="checkpoint-challenge-grid">
+          {visualChallenge.options.map((option, idx) => {
+            const selected = state.selectedOption === idx;
+            const correct = idx === visualChallenge.correctIndex;
+            return (
+              <button
+                key={option}
+                onClick={() => chooseOption(idx)}
+                className={`checkpoint-choice ${selected ? 'selected' : ''} ${state.challengeSolved && correct ? 'correct' : ''}`}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+
+        {state.selectedOption !== null && !state.challengeSolved && (
+          <p className="checkpoint-feedback warn">Not quite—try another move and watch which one preserves the section’s rule.</p>
+        )}
+
+        {state.challengeSolved && (
+          <p className="checkpoint-feedback success">
+            <Wand2 size={14} /> {visualChallenge.celebration}
+          </p>
+        )}
       </div>
 
       <button className="section-checkpoint-reset" onClick={reset}>
-        <RefreshCcw size={13} /> Reset checklist
+        <RefreshCcw size={13} /> Reset checkpoint
       </button>
     </section>
   );
