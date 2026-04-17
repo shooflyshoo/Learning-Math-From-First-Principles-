@@ -31,3 +31,18 @@ export { ToastProvider, useToast } from './Toast';
 // Experiential components (make you FEEL the insight)
 export { default as WallExperience } from './WallExperience';
 export { default as RuleBreaker } from './RuleBreaker';
+
+export { default as WebGLHero } from './WebGLHero';
+export { default as JourneyMap } from './JourneyMap';
+export { default as ComplexRotationWebGL } from './ComplexRotationWebGL';
+export { default as ConceptBridge } from './ConceptBridge';
+export { default as SectionCheckpoint } from './SectionCheckpoint';
+export { default as TransferChallenge } from './TransferChallenge';
+export { default as UnitCancellationFlow } from './UnitCancellationFlow';
+export { default as BasePlaceValueStory } from './BasePlaceValueStory';
+export { default as DomainHeatmap } from './DomainHeatmap';
+export { default as OperationMachine } from './OperationMachine';
+export { default as LogScaleBridge } from './LogScaleBridge';
+export { default as LearnerPreferencesPanel } from './LearnerPreferencesPanel';
+
+export { default as MisconceptionClinic } from './MisconceptionClinic';
