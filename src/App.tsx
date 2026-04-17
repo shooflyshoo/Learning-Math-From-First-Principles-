@@ -43,6 +43,7 @@ import {
   ToastProvider,
   JourneyMap,
   ConceptBridge,
+  MisconceptionClinic,
   SectionCheckpoint,
   TransferChallenge,
   UnitCancellationFlow,
@@ -72,6 +73,121 @@ const WebGLHero = lazy(() => import('./components/WebGLHero'));
 const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
 const GrowthCurvesWebGL = lazy(() => import('./components/GrowthCurvesWebGL'));
 const ModularWrapWebGL = lazy(() => import('./components/ModularWrapWebGL'));
+
+const misconceptionClinics = {
+  part1: [
+    {
+      myth: '“If it is undefined in ℝ, it is impossible everywhere.”',
+      failureTest: 'You would reject x² + 1 = 0 permanently, which blocks useful models like oscillation and rotations.',
+      correction: 'Undefined is world-specific. In ℂ, x² + 1 = 0 has solutions ±i without breaking prior real rules.',
+      transfer: 'When a tool fails, ask whether you need a larger model rather than forcing a broken workaround.',
+    },
+    {
+      myth: '“Rationals are dense, so they already cover everything measurable.”',
+      failureTest: 'You cannot express √2 exactly as p/q, so geometry lengths start leaking precision.',
+      correction: 'Density is not completeness. ℝ fills limit-gaps that ℚ can approach but never hit exactly.',
+      transfer: '“Many samples” is not the same as “full coverage” in datasets and models.',
+    },
+  ],
+  part2: [
+    {
+      myth: '“Operation rules are conventions; we can redefine them freely.”',
+      failureTest: 'If (−1)(−1) were −1, distributivity yields contradictions (same expression, two answers).',
+      correction: 'Operation rules are constrained by consistency contracts, not taste.',
+      transfer: 'APIs and protocols also need invariants; arbitrary tweaks create cascading bugs.',
+    },
+    {
+      myth: '“Division by zero should just be a very big number.”',
+      failureTest: 'No unique value x satisfies 0·x = 5, so inverse logic collapses.',
+      correction: 'Division solves inverse multiplication. With zero, the inverse is non-unique or impossible.',
+      transfer: 'When inverse mapping is not one-to-one, expect ambiguity instead of a clean answer.',
+    },
+  ],
+  part3: [
+    {
+      myth: '“Logs are weird standalone formulas.”',
+      failureTest: 'You miss that log questions are inverse exponent questions and misuse domains.',
+      correction: 'log_b(x) asks: “what exponent on b gives x?”; this is an inverse operator view.',
+      transfer: 'Reframe unfamiliar operators as inverse problems to simplify debugging.',
+    },
+    {
+      myth: '“Fractional exponents are decorative notation.”',
+      failureTest: 'You cannot interpret a^(1/2) operationally, so root behavior feels memorized.',
+      correction: 'a^(1/n) is the factor that compounded n times returns a.',
+      transfer: 'Interpret notation as executable process, not symbol decoration.',
+    },
+  ],
+  part4: [
+    {
+      myth: '“Early growth rate tells the full story.”',
+      failureTest: 'Exponential curves can look small initially, then dominate abruptly later.',
+      correction: 'Classify by growth family and long-run behavior, not first few points.',
+      transfer: 'Capacity planning fails when you extrapolate linearly from short windows.',
+    },
+    {
+      myth: '“Polynomial and exponential are practically the same acceleration.”',
+      failureTest: 'For large n, c·n^k is overtaken by a^n (a>1) regardless of constant multipliers.',
+      correction: 'Asymptotics determine dominance; family matters more than short-term fit.',
+      transfer: 'Pick interventions based on trajectory class, not vibes.',
+    },
+  ],
+  part5: [
+    {
+      myth: '“Units are optional labels after calculation.”',
+      failureTest: 'You can accidentally add incompatible quantities and get plausible nonsense.',
+      correction: 'Units are type constraints that must flow through each operation.',
+      transfer: 'Treat units like static typing to catch errors before runtime.',
+    },
+    {
+      myth: '“If the number is right, the unit probably is too.”',
+      failureTest: 'A numerically correct magnitude can still be wrong by a hidden conversion factor.',
+      correction: 'Correct answers require both numeric and dimensional consistency.',
+      transfer: 'Validation should include schema/type checks, not only value checks.',
+    },
+  ],
+  part6: [
+    {
+      myth: '“Binary/hex numbers are different quantities than decimal.”',
+      failureTest: 'You misread 1010₂ as one-thousand-ten instead of value 10₁₀.',
+      correction: 'Base changes representation symbols and place weights, not underlying value.',
+      transfer: 'Encoding formats differ while payload meaning can remain invariant.',
+    },
+    {
+      myth: '“Base-10 rules are universal truth.”',
+      failureTest: 'Carrying/borrowing intuition breaks when base changes.',
+      correction: 'Positional arithmetic depends on chosen radix; algorithms generalize across bases.',
+      transfer: 'Generalize mechanism first, then specialize constants.',
+    },
+  ],
+  part7: [
+    {
+      myth: '“Prime factorization is just classroom busywork.”',
+      failureTest: 'You miss why uniqueness enables cryptographic and integrity systems.',
+      correction: 'Unique prime decomposition is structural, not decorative.',
+      transfer: 'Foundational invariants often power real-world security primitives.',
+    },
+    {
+      myth: '“Modulo is only for clocks.”',
+      failureTest: 'You overlook periodic-state systems like hashing, checksums, and schedules.',
+      correction: 'Modulo models wrapped state spaces where only remainder class matters.',
+      transfer: 'Use congruence classes whenever full magnitude is irrelevant.',
+    },
+  ],
+  part8: [
+    {
+      myth: '“Undefined means I failed at math.”',
+      failureTest: 'You patch outputs blindly instead of investigating model assumptions.',
+      correction: 'Undefined is a diagnostic signal that domain assumptions were violated.',
+      transfer: 'Boundary errors are observability events, not personal mistakes.',
+    },
+    {
+      myth: '“Domain restrictions are minor edge cases.”',
+      failureTest: 'Ignoring them creates silent NaNs, invalid logs, and broken optimizers.',
+      correction: 'Domain is part of the function definition and must be designed explicitly.',
+      transfer: 'Guardrails belong in the model interface, not post-hoc patches.',
+    },
+  ],
+};
 function App() {
   const [activeSection, setActiveSection] = useState('intro');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -117,8 +233,9 @@ function App() {
           return;
         }
         try {
-          const parsed = JSON.parse(raw) as boolean[];
-          status[id] = Array.isArray(parsed) && parsed.length > 0 && parsed.every(Boolean);
+          const parsed = JSON.parse(raw) as boolean[] | { checked?: boolean[] };
+          const checks = Array.isArray(parsed) ? parsed : parsed.checked;
+          status[id] = Array.isArray(checks) && checks.length > 0 && checks.every(Boolean);
         } catch {
           status[id] = false;
         }
@@ -557,10 +674,12 @@ function Part1Section() {
         hint={"Name the current world first, then smallest extension."}
         answer={"In R it is undefined, but extending to C gives sqrt(-9)=3i while preserving prior real rules."}
       />
+      <MisconceptionClinic sectionLabel="Part 1" misconceptions={misconceptionClinics.part1} />
 
       <SectionCheckpoint
         title="Part 1 checkpoint"
         sectionId="part1"
+        reflectionPrompt="Explain to a new learner how “hitting a wall” leads to extending number systems."
         prompts={[
           'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
           'I can identify when an expression hits a system boundary.',
@@ -705,10 +824,12 @@ function Part2Section() {
         hint="Ask whether change depends on multiplying current level."
         answer={"Scale behavior: multiplication-like change. Output depends on factor changes, not constant offsets."}
       />
+      <MisconceptionClinic sectionLabel="Part 2" misconceptions={misconceptionClinics.part2} />
 
       <SectionCheckpoint
         title="Part 2 checkpoint"
         sectionId="part2"
+        reflectionPrompt="Describe operations as transformations and explain one contradiction you can expose by rule-breaking."
         prompts={[
           'I can distinguish shift vs scale operations visually.',
           'I can justify why division by zero fails uniqueness.',
@@ -790,10 +911,12 @@ function Part3Section() {
         hint="Convert to a log question: 5·2^n=40."
         answer={"n=3 because 5*2^3=40. Log view counts multiplicative steps."}
       />
+      <MisconceptionClinic sectionLabel="Part 3" misconceptions={misconceptionClinics.part3} />
 
       <SectionCheckpoint
         title="Part 3 checkpoint"
         sectionId="part3"
+        reflectionPrompt="Teach exponents and logs as inverse processes using a concrete example."
         prompts={[
           'I can move between exponent and log viewpoints.',
           'I can test whether a log input is valid.',
@@ -856,10 +979,12 @@ function Part4Section() {
         hint="Classify growth type before proposing action."
         answer="Exponential growth demands urgent intervention now; waiting causes runaway escalation."
       />
+      <MisconceptionClinic sectionLabel="Part 4" misconceptions={misconceptionClinics.part4} />
 
       <SectionCheckpoint
         title="Part 4 checkpoint"
         sectionId="part4"
+        reflectionPrompt="Give an example where linear intuition fails because growth is exponential."
         prompts={[
           'I can classify a growth pattern by its long-run behavior.',
           'I can articulate why exponential growth becomes dominant.',
@@ -904,10 +1029,12 @@ function Part5Section() {
         hint="Check unit compatibility before arithmetic."
         answer="No. Different dimensions. Multiply to get distance (km), then combine with compatible units."
       />
+      <MisconceptionClinic sectionLabel="Part 5" misconceptions={misconceptionClinics.part5} />
 
       <SectionCheckpoint
         title="Part 5 checkpoint"
         sectionId="part5"
+        reflectionPrompt="Explain why units behave like type safety and how that prevents a specific error."
         prompts={[
           'I can detect unit/type mismatches quickly.',
           'I can track unit cancellation through multiplication/division.',
@@ -951,10 +1078,12 @@ function Part6Section() {
         hint="Representation changes; quantity does not."
         answer="The value is invariant; only the encoding symbols and place weights differ by base."
       />
+      <MisconceptionClinic sectionLabel="Part 6" misconceptions={misconceptionClinics.part6} />
 
       <SectionCheckpoint
         title="Part 6 checkpoint"
         sectionId="part6"
+        reflectionPrompt="Explain base conversion while keeping “same value, different encoding” central."
         prompts={[
           'I can rewrite a value in another base without changing value.',
           'I can explain place-value expansion clearly.',
@@ -1019,10 +1148,12 @@ function Part7Section() {
         hint="Use quotient/remainder and clock wrap."
         answer="38 mod 12 = 2. Cyclic systems ignore full wraps and keep the remainder state."
       />
+      <MisconceptionClinic sectionLabel="Part 7" misconceptions={misconceptionClinics.part7} />
 
       <SectionCheckpoint
         title="Part 7 checkpoint"
         sectionId="part7"
+        reflectionPrompt="Connect prime factors or modular arithmetic to one real system (crypto/checksums/scheduling)."
         prompts={[
           'I can factor numbers into primes methodically.',
           'I can reason with modular wrap-around.',
@@ -1066,10 +1197,12 @@ function Part8Section() {
         hint="Boundary errors are diagnostics, not annoyances."
         answer="Patch the model: either constrain domain or extend framework. For real logs, negative input is invalid."
       />
+      <MisconceptionClinic sectionLabel="Part 8" misconceptions={misconceptionClinics.part8} />
 
       <SectionCheckpoint
         title="Part 8 checkpoint"
         sectionId="part8"
+        reflectionPrompt="Describe how domain boundaries should change model design rather than being ignored."
         prompts={[
           'I can test whether an operation is outside its domain.',
           'I can treat undefined as a model signal, not personal failure.',
