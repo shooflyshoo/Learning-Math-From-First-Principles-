@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import {
   BookOpen,
@@ -12,6 +12,7 @@ import {
   X,
   ChevronUp,
   Sparkles,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   AdditionAsMovement,
@@ -40,6 +41,17 @@ import {
   WallExperience,
   RuleBreaker,
   ToastProvider,
+  LearnerPreferencesPanel,
+  JourneyMap,
+  ConceptBridge,
+  MisconceptionClinic,
+  SectionCheckpoint,
+  TransferChallenge,
+  UnitCancellationFlow,
+  BasePlaceValueStory,
+  DomainHeatmap,
+  OperationMachine,
+  LogScaleBridge,
 } from './components';
 import './index.css';
 
@@ -55,10 +67,158 @@ const sections = [
   { id: 'part8', title: 'Boundaries', icon: AlertCircle },
 ];
 
+
+const checkpointSections = ['part1', 'part2', 'part3', 'part4', 'part5', 'part6', 'part7', 'part8'] as const;
+
+const WebGLHero = lazy(() => import('./components/WebGLHero'));
+const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
+const GrowthCurvesWebGL = lazy(() => import('./components/GrowthCurvesWebGL'));
+const ModularWrapWebGL = lazy(() => import('./components/ModularWrapWebGL'));
+
+type LearnerPreferences = {
+  focusMode: boolean;
+  highContrast: boolean;
+  lowMotion: boolean;
+  conciseText: boolean;
+};
+
+const defaultPreferences: LearnerPreferences = {
+  focusMode: false,
+  highContrast: false,
+  lowMotion: false,
+  conciseText: false,
+};
+
+const PREFERENCES_KEY = 'mfp.preferences';
+
+const misconceptionClinics = {
+  part1: [
+    {
+      myth: '“If it is undefined in ℝ, it is impossible everywhere.”',
+      failureTest: 'You would reject x² + 1 = 0 permanently, which blocks useful models like oscillation and rotations.',
+      correction: 'Undefined is world-specific. In ℂ, x² + 1 = 0 has solutions ±i without breaking prior real rules.',
+      transfer: 'When a tool fails, ask whether you need a larger model rather than forcing a broken workaround.',
+    },
+    {
+      myth: '“Rationals are dense, so they already cover everything measurable.”',
+      failureTest: 'You cannot express √2 exactly as p/q, so geometry lengths start leaking precision.',
+      correction: 'Density is not completeness. ℝ fills limit-gaps that ℚ can approach but never hit exactly.',
+      transfer: '“Many samples” is not the same as “full coverage” in datasets and models.',
+    },
+  ],
+  part2: [
+    {
+      myth: '“Operation rules are conventions; we can redefine them freely.”',
+      failureTest: 'If (−1)(−1) were −1, distributivity yields contradictions (same expression, two answers).',
+      correction: 'Operation rules are constrained by consistency contracts, not taste.',
+      transfer: 'APIs and protocols also need invariants; arbitrary tweaks create cascading bugs.',
+    },
+    {
+      myth: '“Division by zero should just be a very big number.”',
+      failureTest: 'No unique value x satisfies 0·x = 5, so inverse logic collapses.',
+      correction: 'Division solves inverse multiplication. With zero, the inverse is non-unique or impossible.',
+      transfer: 'When inverse mapping is not one-to-one, expect ambiguity instead of a clean answer.',
+    },
+  ],
+  part3: [
+    {
+      myth: '“Logs are weird standalone formulas.”',
+      failureTest: 'You miss that log questions are inverse exponent questions and misuse domains.',
+      correction: 'log_b(x) asks: “what exponent on b gives x?”; this is an inverse operator view.',
+      transfer: 'Reframe unfamiliar operators as inverse problems to simplify debugging.',
+    },
+    {
+      myth: '“Fractional exponents are decorative notation.”',
+      failureTest: 'You cannot interpret a^(1/2) operationally, so root behavior feels memorized.',
+      correction: 'a^(1/n) is the factor that compounded n times returns a.',
+      transfer: 'Interpret notation as executable process, not symbol decoration.',
+    },
+  ],
+  part4: [
+    {
+      myth: '“Early growth rate tells the full story.”',
+      failureTest: 'Exponential curves can look small initially, then dominate abruptly later.',
+      correction: 'Classify by growth family and long-run behavior, not first few points.',
+      transfer: 'Capacity planning fails when you extrapolate linearly from short windows.',
+    },
+    {
+      myth: '“Polynomial and exponential are practically the same acceleration.”',
+      failureTest: 'For large n, c·n^k is overtaken by a^n (a>1) regardless of constant multipliers.',
+      correction: 'Asymptotics determine dominance; family matters more than short-term fit.',
+      transfer: 'Pick interventions based on trajectory class, not vibes.',
+    },
+  ],
+  part5: [
+    {
+      myth: '“Units are optional labels after calculation.”',
+      failureTest: 'You can accidentally add incompatible quantities and get plausible nonsense.',
+      correction: 'Units are type constraints that must flow through each operation.',
+      transfer: 'Treat units like static typing to catch errors before runtime.',
+    },
+    {
+      myth: '“If the number is right, the unit probably is too.”',
+      failureTest: 'A numerically correct magnitude can still be wrong by a hidden conversion factor.',
+      correction: 'Correct answers require both numeric and dimensional consistency.',
+      transfer: 'Validation should include schema/type checks, not only value checks.',
+    },
+  ],
+  part6: [
+    {
+      myth: '“Binary/hex numbers are different quantities than decimal.”',
+      failureTest: 'You misread 1010₂ as one-thousand-ten instead of value 10₁₀.',
+      correction: 'Base changes representation symbols and place weights, not underlying value.',
+      transfer: 'Encoding formats differ while payload meaning can remain invariant.',
+    },
+    {
+      myth: '“Base-10 rules are universal truth.”',
+      failureTest: 'Carrying/borrowing intuition breaks when base changes.',
+      correction: 'Positional arithmetic depends on chosen radix; algorithms generalize across bases.',
+      transfer: 'Generalize mechanism first, then specialize constants.',
+    },
+  ],
+  part7: [
+    {
+      myth: '“Prime factorization is just classroom busywork.”',
+      failureTest: 'You miss why uniqueness enables cryptographic and integrity systems.',
+      correction: 'Unique prime decomposition is structural, not decorative.',
+      transfer: 'Foundational invariants often power real-world security primitives.',
+    },
+    {
+      myth: '“Modulo is only for clocks.”',
+      failureTest: 'You overlook periodic-state systems like hashing, checksums, and schedules.',
+      correction: 'Modulo models wrapped state spaces where only remainder class matters.',
+      transfer: 'Use congruence classes whenever full magnitude is irrelevant.',
+    },
+  ],
+  part8: [
+    {
+      myth: '“Undefined means I failed at math.”',
+      failureTest: 'You patch outputs blindly instead of investigating model assumptions.',
+      correction: 'Undefined is a diagnostic signal that domain assumptions were violated.',
+      transfer: 'Boundary errors are observability events, not personal mistakes.',
+    },
+    {
+      myth: '“Domain restrictions are minor edge cases.”',
+      failureTest: 'Ignoring them creates silent NaNs, invalid logs, and broken optimizers.',
+      correction: 'Domain is part of the function definition and must be designed explicitly.',
+      transfer: 'Guardrails belong in the model interface, not post-hoc patches.',
+    },
+  ],
+};
 function App() {
   const [activeSection, setActiveSection] = useState('intro');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [completedSections, setCompletedSections] = useState<Record<string, boolean>>({});
+  const [preferences, setPreferences] = useState<LearnerPreferences>(() => {
+    const raw = localStorage.getItem(PREFERENCES_KEY);
+    if (!raw) return defaultPreferences;
+    try {
+      return { ...defaultPreferences, ...(JSON.parse(raw) as Partial<LearnerPreferences>) };
+    } catch {
+      return defaultPreferences;
+    }
+  });
   const mainRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll();
@@ -67,6 +227,27 @@ function App() {
     damping: 30,
     restDelta: 0.001,
   });
+
+  useEffect(() => {
+    localStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
+
+    const classMap: Array<[keyof LearnerPreferences, string]> = [
+      ['focusMode', 'focus-mode'],
+      ['highContrast', 'high-contrast'],
+      ['lowMotion', 'low-motion'],
+      ['conciseText', 'concise-text'],
+    ];
+
+    classMap.forEach(([key, className]) => {
+      if (preferences[key]) {
+        document.body.classList.add(className);
+      } else {
+        document.body.classList.remove(className);
+      }
+    });
+
+    window.dispatchEvent(new Event('mfp-preferences-updated'));
+  }, [preferences]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,6 +269,33 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
+  useEffect(() => {
+    const refreshCheckpointState = () => {
+      const status: Record<string, boolean> = {};
+      checkpointSections.forEach((id) => {
+        const raw = localStorage.getItem(`mfp.checkpoint.${id}`);
+        if (!raw) {
+          status[id] = false;
+          return;
+        }
+        try {
+          const parsed = JSON.parse(raw) as boolean[] | { checked?: boolean[]; challengeSolved?: boolean };
+          const checks = Array.isArray(parsed) ? parsed : parsed.checked;
+          const challengeSolved = Array.isArray(parsed) ? true : Boolean(parsed.challengeSolved);
+          status[id] = Array.isArray(checks) && checks.length > 0 && checks.every(Boolean) && challengeSolved;
+        } catch {
+          status[id] = false;
+        }
+      });
+      setCompletedSections(status);
+    };
+
+    refreshCheckpointState();
+    window.addEventListener('mfp-checkpoint-updated', refreshCheckpointState);
+    return () => window.removeEventListener('mfp-checkpoint-updated', refreshCheckpointState);
+  }, []);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -98,6 +306,12 @@ function App() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const completedCount = checkpointSections.filter((id) => completedSections[id]).length;
+  const nextSection = checkpointSections.find((id) => !completedSections[id]);
+  const updatePreferences = (next: LearnerPreferences) => {
+    setPreferences(next);
   };
 
   return (
@@ -146,6 +360,13 @@ function App() {
         </motion.div>
       )}
 
+      <StoryGuideBar
+        activeSection={activeSection}
+        completed={completedCount}
+        total={checkpointSections.length}
+        onJump={scrollToSection}
+      />
+
       {/* Desktop sidebar */}
       <nav className="hidden md:block fixed left-0 top-0 h-full w-64 glass z-40 overflow-y-auto">
         <div className="p-6">
@@ -163,7 +384,8 @@ function App() {
                   className={`nav-link w-full text-left ${activeSection === section.id ? 'active' : ''}`}
                 >
                   <Icon size={16} />
-                  {section.title}
+                  <span>{section.title}</span>
+                  {completedSections[section.id] && <CheckCircle2 size={14} className="text-green-400 ml-auto" />}
                 </button>
               );
             })}
@@ -175,6 +397,18 @@ function App() {
       <main ref={mainRef} className="pt-16 md:pt-0 md:ml-64">
         <article className="essay-content py-8 md:py-16">
           <IntroSection />
+          <Suspense fallback={<WebGLFallback label="Loading visual map..." />}><WebGLHero /></Suspense>
+          <JourneyMap onJump={scrollToSection} />
+          <LearningProgressBanner
+            completed={completedCount}
+            total={checkpointSections.length}
+            nextSectionId={nextSection ?? null}
+            onJump={scrollToSection}
+          />
+          <LearnerPreferencesPanel
+            value={preferences}
+            onChange={updatePreferences}
+          />
           <Part1Section />
           <Part2Section />
           <Part3Section />
@@ -220,6 +454,7 @@ function App() {
             >
               <Icon size={20} />
               <span>{section.title.split(' ')[0]}</span>
+              {completedSections[section.id] && <CheckCircle2 size={12} className="text-green-400" />}
             </button>
           );
         })}
@@ -229,7 +464,94 @@ function App() {
   );
 }
 
+
+
+
+
+
+
+function StoryGuideBar({
+  activeSection,
+  completed,
+  total,
+  onJump,
+}: {
+  activeSection: string;
+  completed: number;
+  total: number;
+  onJump: (id: string) => void;
+}) {
+  const sectionMeta: Record<string, { objective: string; next: string | null }> = {
+    intro: { objective: 'Build the core mental model: worlds and allowed moves.', next: 'part1' },
+    part1: { objective: 'Understand why each number system exists.', next: 'part2' },
+    part2: { objective: 'Feel operations as transformations.', next: 'part3' },
+    part3: { objective: 'Master inverse thinking via exponents/logs.', next: 'part4' },
+    part4: { objective: 'Predict long-run behavior by growth type.', next: 'part5' },
+    part5: { objective: 'Use units as type safety.', next: 'part6' },
+    part6: { objective: 'Decode representation versus value.', next: 'part7' },
+    part7: { objective: 'Use prime/modular structure intentionally.', next: 'part8' },
+    part8: { objective: 'Treat domain boundaries as diagnostic signals.', next: 'epilogue' },
+    epilogue: { objective: 'Consolidate and transfer the model.', next: null },
+  };
+
+  const meta = sectionMeta[activeSection] ?? sectionMeta.intro;
+  return (
+    <div className="story-guide-bar">
+      <div>
+        <p className="story-guide-title">Current objective</p>
+        <p className="story-guide-objective">{meta.objective}</p>
+      </div>
+      <div className="story-guide-actions">
+        <span className="story-guide-progress">{completed}/{total} checkpoints</span>
+        {meta.next && (
+          <button onClick={() => onJump(meta.next!)} className="story-guide-btn">Next chapter</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function LearningProgressBanner({
+  completed,
+  total,
+  nextSectionId,
+  onJump,
+}: {
+  completed: number;
+  total: number;
+  nextSectionId: string | null;
+  onJump: (id: string) => void;
+}) {
+  const percent = Math.round((completed / total) * 100);
+  const nextLabel = sections.find((section) => section.id === nextSectionId)?.title ?? nextSectionId?.toUpperCase();
+  return (
+    <section className="learning-progress-banner">
+      <div>
+        <h3>Your learning arc</h3>
+        <p>{completed}/{total} chapter checkpoints completed ({percent}%).</p>
+      </div>
+      <div className="learning-progress-bar">
+        <div className="learning-progress-fill" style={{ width: `${percent}%` }} />
+      </div>
+      {nextSectionId && (
+        <button className="learning-progress-btn" onClick={() => onJump(nextSectionId)}>
+          Continue: {nextLabel}
+        </button>
+      )}
+    </section>
+  );
+}
+
+function WebGLFallback({ label }: { label: string }) {
+  return (
+    <div className="webgl-fallback">{label}</div>
+  );
+}
+
 function IntroSection() {
+  const [easterClicks, setEasterClicks] = useState(0);
+  const easterUnlocked = easterClicks >= 5;
+
   return (
     <ScrollSection id="intro" className="mb-12">
       <motion.div
@@ -237,14 +559,26 @@ function IntroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h1>MATHEMATICS FROM FIRST PRINCIPLES</h1>
+        <h1 onClick={() => setEasterClicks((v) => v + 1)} className="cursor-pointer select-none">
+          MATHEMATICS FROM FIRST PRINCIPLES
+        </h1>
         <p className="text-lg md:text-xl text-slate-400 mb-8">
-          The Bulletproof Rebuild — For Visual Learners & Pattern-Seeking Minds
+          A visual-first rebuild for pattern-seeking minds.
         </p>
 
+        {easterUnlocked && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="easter-pill"
+          >
+            🥚 Easter egg unlocked: “Every equation is a tiny machine.”
+          </motion.div>
+        )}
+
         <div className="nd-hook mb-8">
-          <strong>What makes this different:</strong> This isn't "here are rules, please obey."
-          This is "here's the machine, here's why it behaves this way, and here's how to debug it."
+          <strong>What makes this different:</strong> We focus on mechanism, not memorization.
+          You will see the rule, why it works, and how to debug it.
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 mb-8">
@@ -269,16 +603,20 @@ function IntroSection() {
         <hr />
 
         <h2>THESIS: Math Is a Tower of "Allowed Moves"</h2>
-        <p>Think of math like a video game world with physics rules:</p>
+        <p>Think of math as worlds with rules:</p>
         <ul>
           <li>Each "number system" is a world with certain allowed moves</li>
           <li>You hit a wall when a move has no valid result</li>
           <li>To continue, you "unlock a new zone" by adding new kinds of numbers</li>
         </ul>
-        <p>
-          <strong>That is the engine of mathematical progress:</strong> Preserve the contracts.
-          Extend the world. Gain new powers.
-        </p>
+        <p><strong>Progress pattern:</strong> preserve contracts, extend the world, gain new moves.</p>
+
+        <ConceptBridge
+          visual="You are navigating worlds with different allowed moves."
+          formal="A number system is useful when operations stay consistent inside it."
+          transfer="When confusion hits, ask: did I hit a boundary or misuse an operation?"
+        />
+
       </motion.div>
     </ScrollSection>
   );
@@ -286,12 +624,18 @@ function IntroSection() {
 
 function Part1Section() {
   return (
-    <ScrollSection id="part1">
+    <ScrollSection id="part1" className="module-shell module-part1">
       <h2>PART ONE: The Number Systems Ladder</h2>
       <p>
         Each level of this ladder exists because <strong>someone hit a wall</strong> and decided
         to extend the system rather than accept the limitation.
       </p>
+
+      <ConceptBridge
+        visual="Treat each system like a game map with unlockable moves."
+        formal="Closure + consistency determine whether an operation is valid in that map."
+        transfer="When stuck, move to the smallest system extension that preserves old truths."
+      />
 
       <InteractiveWrapper
         title="Number Systems Ladder"
@@ -300,6 +644,7 @@ function Part1Section() {
       >
         <NumberSystemsLadder />
       </InteractiveWrapper>
+
 
       <ScrollSection delay={0.1}>
         <h3>Level 1 — Natural Numbers: Counting World</h3>
@@ -374,6 +719,10 @@ function Part1Section() {
           <strong>ℂ = {'{'}a + bi{'}'} where i² = −1</strong>
         </p>
 
+        <div className="my-6">
+          <Suspense fallback={<WebGLFallback label="Loading complex rotation..." />}><ComplexRotationWebGL /></Suspense>
+        </div>
+
         <InteractiveWrapper
           title="The Complex Plane"
           hint="Drag the point or click 'Multiply by i' to see rotation in action"
@@ -387,14 +736,45 @@ function Part1Section() {
           (i²) = 180° = pointing backwards = −1. That's why i² = −1!
         </div>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 1"
+        challenge={"A colleague says sqrt(-9) is impossible forever. How do you respond using world-extension logic?"}
+        hint={"Name the current world first, then smallest extension."}
+        answer={"In R it is undefined, but extending to C gives sqrt(-9)=3i while preserving prior real rules."}
+      />
+      <MisconceptionClinic sectionLabel="Part 1" misconceptions={misconceptionClinics.part1} />
+
+      <SectionCheckpoint
+        title="Part 1 checkpoint"
+        sectionId="part1"
+        prompts={[
+          'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
+          'I can identify when an expression hits a system boundary.',
+          'I can describe i as rotation, not magic.'
+        ]}
+        visualChallenge={{
+          prompt: 'You hit √(-9) while working in reals. Which move keeps old rules intact?',
+          options: ['Force it to be -3', 'Switch to complex numbers and represent it as 3i', 'Ignore the boundary and continue'],
+          correctIndex: 1,
+          celebration: 'Yes—minimal extension unlocked while preserving previous truths.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part2Section() {
   return (
-    <ScrollSection id="part2">
+    <ScrollSection id="part2" className="module-shell module-part2">
       <h2>PART TWO: Operations as "Moves"</h2>
+
+      <ConceptBridge
+        visual="Addition slides. Multiplication stretches. Division asks for the reverse stretch."
+        formal="Operations are transformations with inverses and constraints."
+        transfer="Use this lens in code, finance, and scaling systems: what changes linearly vs multiplicatively?"
+      />
+
+      <OperationMachine />
 
       <div className="overflow-x-auto mb-8">
         <table>
@@ -511,14 +891,45 @@ function Part2Section() {
           <DivisionByZero />
         </InteractiveWrapper>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 2"
+        challenge={"You doubled team size and work output tripled. Is this shift or scale behavior?"}
+        hint="Ask whether change depends on multiplying current level."
+        answer={"Scale behavior: multiplication-like change. Output depends on factor changes, not constant offsets."}
+      />
+      <MisconceptionClinic sectionLabel="Part 2" misconceptions={misconceptionClinics.part2} />
+
+      <SectionCheckpoint
+        title="Part 2 checkpoint"
+        sectionId="part2"
+        prompts={[
+          'I can distinguish shift vs scale operations visually.',
+          'I can justify why division by zero fails uniqueness.',
+          'I can explain distributivity in my own words.'
+        ]}
+        visualChallenge={{
+          prompt: 'If output triples when input triples, which operation lens fits best?',
+          options: ['Shift/add lens', 'Scale/multiply lens', 'Random/no structure'],
+          correctIndex: 1,
+          celebration: 'Nice read—this is multiplicative behavior.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part3Section() {
   return (
-    <ScrollSection id="part3">
+    <ScrollSection id="part3" className="module-shell module-part3">
       <h2>PART THREE: Exponents and Logarithms</h2>
+
+      <ConceptBridge
+        visual="Exponents are repeated zooms; logs count how many zooms happened."
+        formal="Exponentiation and logarithms are inverse operators on positive reals."
+        transfer="Use this to decode growth, sound levels, pH, and compounding timelines."
+      />
+
+      <LogScaleBridge />
 
       <ScrollSection delay={0.1}>
         <h3>Exponents: Repeated Scaling</h3>
@@ -572,17 +983,48 @@ function Part3Section() {
           <LogMultiplicationAddition />
         </InteractiveWrapper>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 3"
+        challenge={"A metric rises from 5 to 40 by repeated x2 steps. How many steps happened?"}
+        hint="Convert to a log question: 5·2^n=40."
+        answer={"n=3 because 5*2^3=40. Log view counts multiplicative steps."}
+      />
+      <MisconceptionClinic sectionLabel="Part 3" misconceptions={misconceptionClinics.part3} />
+
+      <SectionCheckpoint
+        title="Part 3 checkpoint"
+        sectionId="part3"
+        prompts={[
+          'I can move between exponent and log viewpoints.',
+          'I can test whether a log input is valid.',
+          'I can explain fractional exponents as root-questions.'
+        ]}
+        visualChallenge={{
+          prompt: '5·2^n = 40. Which button solves n fastest?',
+          options: ['Additive difference button', 'Log/inverse-step counter button', 'Square-root button'],
+          correctIndex: 1,
+          celebration: 'Perfect—logs count multiplicative steps.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part4Section() {
   return (
-    <ScrollSection id="part4">
+    <ScrollSection id="part4" className="module-shell module-part4">
       <h2>PART FOUR: Growth Types</h2>
+
+      <ConceptBridge
+        visual="Race the curves to feel when one trend overtakes another."
+        formal="Asymptotic behavior decides long-run dominance."
+        transfer="Predict workload, costs, and risk by classifying growth type early."
+      />
       <p>
         This section tells you whether something will <strong>stay stable, creep up, or explode</strong>.
       </p>
+
+      <Suspense fallback={<WebGLFallback label="Loading growth scene..." />}><GrowthCurvesWebGL /></Suspense>
 
       <InteractiveWrapper
         title="Growth Types Race"
@@ -614,17 +1056,48 @@ function Part4Section() {
         <strong>Rule of thumb:</strong> Linear = manageable. Polynomial = manageable with effort.
         Exponential = you're on a timer.
       </div>
+      <TransferChallenge
+        title="Transfer challenge — Part 4"
+        challenge="A bug count grows 4, 8, 16, 32... Which response strategy is safest?"
+        hint="Classify growth type before proposing action."
+        answer="Exponential growth demands urgent intervention now; waiting causes runaway escalation."
+      />
+      <MisconceptionClinic sectionLabel="Part 4" misconceptions={misconceptionClinics.part4} />
+
+      <SectionCheckpoint
+        title="Part 4 checkpoint"
+        sectionId="part4"
+        prompts={[
+          'I can classify a growth pattern by its long-run behavior.',
+          'I can articulate why exponential growth becomes dominant.',
+          'I can connect growth type to practical risk.'
+        ]}
+        visualChallenge={{
+          prompt: 'Sequence: 3, 6, 12, 24... which response posture is safest?',
+          options: ['Treat as linear and monitor monthly', 'Urgent exponential mitigation', 'No action needed'],
+          correctIndex: 1,
+          celebration: 'Exactly—exponential systems need early intervention.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part5Section() {
   return (
-    <ScrollSection id="part5">
+    <ScrollSection id="part5" className="module-shell module-part5">
       <h2>PART FIVE: Units as Type Labels</h2>
+
+      <ConceptBridge
+        visual="Units are colored tags attached to numbers."
+        formal="Dimensional consistency is a non-negotiable equation invariant."
+        transfer="Treat units like type safety to catch bugs before computation."
+      />
       <p>
         If you like <strong>type systems</strong> in programming, units are exactly that.
       </p>
+
+      <UnitCancellationFlow />
 
       <InteractiveWrapper
         title="Unit Calculator"
@@ -638,17 +1111,48 @@ function Part5Section() {
         <strong>Dimensional Analysis = Built-In Error Checking:</strong> If units don't match on
         both sides of an equation, something is wrong — before you even compute!
       </div>
+      <TransferChallenge
+        title="Transfer challenge — Part 5"
+        challenge={"Can you add 60 km/h and 2 hours directly?"}
+        hint="Check unit compatibility before arithmetic."
+        answer="No. Different dimensions. Multiply to get distance (km), then combine with compatible units."
+      />
+      <MisconceptionClinic sectionLabel="Part 5" misconceptions={misconceptionClinics.part5} />
+
+      <SectionCheckpoint
+        title="Part 5 checkpoint"
+        sectionId="part5"
+        prompts={[
+          'I can detect unit/type mismatches quickly.',
+          'I can track unit cancellation through multiplication/division.',
+          'I can use dimensional analysis as pre-check.'
+        ]}
+        visualChallenge={{
+          prompt: 'Which expression is dimensionally valid?',
+          options: ['60 km/h + 2 h', '60 km/h × 2 h', '60 km/h ÷ 2 km'],
+          correctIndex: 1,
+          celebration: 'Great catch—unit multiplication yields distance.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part6Section() {
   return (
-    <ScrollSection id="part6">
+    <ScrollSection id="part6" className="module-shell module-part6">
       <h2>PART SIX: Number Bases</h2>
+
+      <ConceptBridge
+        visual="A number is stacked place-value blocks in whatever base you choose."
+        formal="Representation changes with base; value does not."
+        transfer="Read binary/hex and data encodings without mysticism."
+      />
       <p>
         <strong>3456 in base 10</strong> = 3×10³ + 4×10² + 5×10¹ + 6×10⁰
       </p>
+
+      <BasePlaceValueStory />
 
       <InteractiveWrapper
         title="Place Value Exploder"
@@ -661,14 +1165,43 @@ function Part6Section() {
       <p>
         <strong>Why base 10?</strong> You have 10 fingers. That's it. Any base works mathematically.
       </p>
+      <TransferChallenge
+        title="Transfer challenge — Part 6"
+        challenge={"If 1010 base2 equals 10 base10, what idea stays invariant across bases?"}
+        hint="Representation changes; quantity does not."
+        answer="The value is invariant; only the encoding symbols and place weights differ by base."
+      />
+      <MisconceptionClinic sectionLabel="Part 6" misconceptions={misconceptionClinics.part6} />
+
+      <SectionCheckpoint
+        title="Part 6 checkpoint"
+        sectionId="part6"
+        prompts={[
+          'I can rewrite a value in another base without changing value.',
+          'I can explain place-value expansion clearly.',
+          'I can read positional notation as weighted sum.'
+        ]}
+        visualChallenge={{
+          prompt: 'What stays unchanged when converting 1010₂ to 10₁₀?',
+          options: ['Digit symbols', 'Underlying quantity/value', 'Place weights'],
+          correctIndex: 1,
+          celebration: 'Yes—the encoding changes, the value does not.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part7Section() {
   return (
-    <ScrollSection id="part7">
+    <ScrollSection id="part7" className="module-shell module-part7">
       <h2>PART SEVEN: Number Theory</h2>
+
+      <ConceptBridge
+        visual="Primes are atoms; modular arithmetic wraps the number line into loops."
+        formal="Unique factorization and congruence classes structure integer behavior."
+        transfer="This is the backbone of cryptography, checksums, and scheduling cycles."
+      />
 
       <ScrollSection delay={0.1}>
         <h3>Primes: The Atoms of Multiplication</h3>
@@ -692,6 +1225,8 @@ function Part7Section() {
           Working "mod 12" means numbers wrap: <strong>14 ≡ 2 (mod 12)</strong>
         </p>
 
+        <Suspense fallback={<WebGLFallback label="Loading modular wrap scene..." />}><ModularWrapWebGL /></Suspense>
+
         <InteractiveWrapper
           title="Modular Arithmetic Clock"
           hint="Change the modulus and value to see how numbers wrap around"
@@ -705,14 +1240,43 @@ function Part7Section() {
           scheduling, anything that cycles.
         </div>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 7"
+        challenge={"What is 38 mod 12 and why does this matter for schedules?"}
+        hint="Use quotient/remainder and clock wrap."
+        answer="38 mod 12 = 2. Cyclic systems ignore full wraps and keep the remainder state."
+      />
+      <MisconceptionClinic sectionLabel="Part 7" misconceptions={misconceptionClinics.part7} />
+
+      <SectionCheckpoint
+        title="Part 7 checkpoint"
+        sectionId="part7"
+        prompts={[
+          'I can factor numbers into primes methodically.',
+          'I can reason with modular wrap-around.',
+          'I can identify where modular arithmetic appears in real systems.'
+        ]}
+        visualChallenge={{
+          prompt: '38 mod 12 lands where on the clock?',
+          options: ['2', '6', '10'],
+          correctIndex: 0,
+          celebration: 'Correct wrap-around state located.',
+        }}
+      />
     </ScrollSection>
   );
 }
 
 function Part8Section() {
   return (
-    <ScrollSection id="part8">
+    <ScrollSection id="part8" className="module-shell module-part8">
       <h2>PART EIGHT: Domain Boundaries</h2>
+
+      <ConceptBridge
+        visual="Boundaries are cliffs in the operation landscape."
+        formal="Domain restrictions define where a function is valid."
+        transfer="Boundary awareness prevents silent errors in modeling and code."
+      />
       <p>
         <strong>Boundaries are not embarrassing. They're the truth serum.</strong>
       </p>
@@ -721,6 +1285,8 @@ function Part8Section() {
         you're in.
       </p>
 
+      <DomainHeatmap />
+
       <InteractiveWrapper
         title="Domain Boundary Explorer"
         hint="Explore different operations to see where they break down"
@@ -728,6 +1294,29 @@ function Part8Section() {
       >
         <DomainBoundaryExplorer />
       </InteractiveWrapper>
+      <TransferChallenge
+        title="Transfer challenge — Part 8"
+        challenge={"A model outputs log(-3). Do you patch the number or patch the model world?"}
+        hint="Boundary errors are diagnostics, not annoyances."
+        answer="Patch the model: either constrain domain or extend framework. For real logs, negative input is invalid."
+      />
+      <MisconceptionClinic sectionLabel="Part 8" misconceptions={misconceptionClinics.part8} />
+
+      <SectionCheckpoint
+        title="Part 8 checkpoint"
+        sectionId="part8"
+        prompts={[
+          'I can test whether an operation is outside its domain.',
+          'I can treat undefined as a model signal, not personal failure.',
+          'I can choose a better world/model when boundaries appear.'
+        ]}
+        visualChallenge={{
+          prompt: 'Your model outputs log(-3) in ℝ. Best next move?',
+          options: ['Clamp to +3 silently', 'Treat as boundary signal and revise model/domain', 'Ignore it'],
+          correctIndex: 1,
+          celebration: 'Exactly—boundary errors are diagnostics for model redesign.',
+        }}
+      />
     </ScrollSection>
   );
 }

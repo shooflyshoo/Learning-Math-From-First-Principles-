@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Play, MousePointerClick, Hand, Info } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { Play, MousePointerClick, Hand, Info, Sparkles, Eye } from 'lucide-react';
 
 interface InteractiveWrapperProps {
   children: React.ReactNode;
@@ -8,6 +8,13 @@ interface InteractiveWrapperProps {
   hint: string;
   interactionType?: 'click' | 'drag' | 'input' | 'explore';
 }
+
+const observationPrompt: Record<NonNullable<InteractiveWrapperProps['interactionType']>, string> = {
+  click: 'Watch what changes after each click—and what stays invariant.',
+  drag: 'Sweep slowly across extremes, then return to midpoint to spot patterns.',
+  input: 'Try a friendly case, then an edge case, then a weird case.',
+  explore: 'Track one variable at a time so your mental model stays stable.',
+};
 
 export default function InteractiveWrapper({
   children,
@@ -17,7 +24,23 @@ export default function InteractiveWrapper({
 }: InteractiveWrapperProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const prefersReducedMotion = useReducedMotion();
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [focusMode, setFocusMode] = useState(() => document.body.classList.contains('focus-mode'));
+  const [showCoach, setShowCoach] = useState(() => !document.body.classList.contains('focus-mode'));
+
+  useEffect(() => {
+    const syncPreferences = () => {
+      const isFocus = document.body.classList.contains('focus-mode');
+      setFocusMode(isFocus);
+      if (!isFocus) {
+        setShowCoach(true);
+      }
+    };
+    syncPreferences();
+    window.addEventListener('mfp-preferences-updated', syncPreferences);
+    return () => window.removeEventListener('mfp-preferences-updated', syncPreferences);
+  }, []);
 
   const InteractionIcon = {
     click: MousePointerClick,
@@ -29,14 +52,19 @@ export default function InteractiveWrapper({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 50 }}
+      animate={
+        prefersReducedMotion
+          ? { opacity: 1, y: 0 }
+          : isInView
+          ? { opacity: 1, y: 0 }
+          : { opacity: 0, y: 50 }
+      }
+      transition={{ duration: 0.55, ease: 'easeOut' }}
       className="interactive-wrapper"
       onMouseDown={() => setHasInteracted(true)}
       onTouchStart={() => setHasInteracted(true)}
     >
-      {/* Header */}
       <div className="interactive-header">
         <div className="interactive-badge">
           <Play size={14} />
@@ -45,21 +73,34 @@ export default function InteractiveWrapper({
         <h3 className="interactive-title">{title}</h3>
       </div>
 
-      {/* Hint bar - fades after interaction */}
-      <motion.div
-        className="interactive-hint"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: hasInteracted ? 0.3 : 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <InteractionIcon size={16} className="hint-icon" />
-        <span>{hint}</span>
-      </motion.div>
+      {focusMode && (
+        <div className="coach-toggle-row">
+          <button onClick={() => setShowCoach((prev) => !prev)} className="coach-toggle-btn">
+            <Eye size={14} /> {showCoach ? 'Hide coaching cues' : 'Show coaching cues'}
+          </button>
+        </div>
+      )}
 
-      {/* Content */}
-      <div className="interactive-content">
-        {children}
-      </div>
+      {(showCoach || !focusMode) && (
+        <motion.div
+          className="interactive-hint"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: hasInteracted ? 0.4 : 1 }}
+          transition={{ duration: 0.35 }}
+        >
+          <InteractionIcon size={16} className="hint-icon" />
+          <span>{hint}</span>
+        </motion.div>
+      )}
+
+      {(showCoach || !focusMode) && (
+        <div className="interactive-observation-bar">
+          <Sparkles size={14} className="text-cyan-300" />
+          <span>{observationPrompt[interactionType]}</span>
+        </div>
+      )}
+
+      <div className="interactive-content">{children}</div>
     </motion.div>
   );
 }
