@@ -12,10 +12,20 @@ interface Preferences {
 }
 
 export default function LearningSupportPanel() {
-  const [prefs, setPrefs] = useState<Preferences>({
-    focusMode: false,
-    lowMotion: false,
-    highContrast: false,
+  const [prefs, setPrefs] = useState<Preferences>(() => {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      try {
+        return JSON.parse(raw) as Preferences;
+      } catch {
+        // ignore bad stored state
+      }
+    }
+    return {
+      focusMode: false,
+      lowMotion: false,
+      highContrast: false,
+    };
   });
   const [understoodCount, setUnderstoodCount] = useState(0);
 
@@ -27,17 +37,6 @@ export default function LearningSupportPanel() {
     }),
     [understoodCount],
   );
-
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      try {
-        setPrefs(JSON.parse(raw));
-      } catch {
-        // ignore bad stored state
-      }
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
