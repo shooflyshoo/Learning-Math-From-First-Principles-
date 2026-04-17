@@ -45,6 +45,9 @@ import {
   ConceptBridge,
   SectionCheckpoint,
   TransferChallenge,
+  UnitCancellationFlow,
+  BasePlaceValueStory,
+  DomainHeatmap,
 } from './components';
 import './index.css';
 
@@ -874,6 +877,8 @@ function Part5Section() {
         If you like <strong>type systems</strong> in programming, units are exactly that.
       </p>
 
+      <UnitCancellationFlow />
+
       <InteractiveWrapper
         title="Unit Calculator"
         hint="Enter quantities with units and see how they combine"
@@ -919,6 +924,8 @@ function Part6Section() {
       <p>
         <strong>3456 in base 10</strong> = 3×10³ + 4×10² + 5×10¹ + 6×10⁰
       </p>
+
+      <BasePlaceValueStory />
 
       <InteractiveWrapper
         title="Place Value Exploder"
@@ -1036,6 +1043,8 @@ function Part8Section() {
         Every system has places where operations don't work. Knowing these tells you what world
         you're in.
       </p>
+
+      <DomainHeatmap />
 
       <InteractiveWrapper
         title="Domain Boundary Explorer"
