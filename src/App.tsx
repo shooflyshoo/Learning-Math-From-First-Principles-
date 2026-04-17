@@ -41,6 +41,7 @@ import {
   WallExperience,
   RuleBreaker,
   ToastProvider,
+  LearnerPreferencesPanel,
   JourneyMap,
   ConceptBridge,
   MisconceptionClinic,
@@ -73,6 +74,22 @@ const WebGLHero = lazy(() => import('./components/WebGLHero'));
 const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
 const GrowthCurvesWebGL = lazy(() => import('./components/GrowthCurvesWebGL'));
 const ModularWrapWebGL = lazy(() => import('./components/ModularWrapWebGL'));
+
+type LearnerPreferences = {
+  focusMode: boolean;
+  highContrast: boolean;
+  lowMotion: boolean;
+  conciseText: boolean;
+};
+
+const defaultPreferences: LearnerPreferences = {
+  focusMode: false,
+  highContrast: false,
+  lowMotion: false,
+  conciseText: false,
+};
+
+const PREFERENCES_KEY = 'mfp.preferences';
 
 const misconceptionClinics = {
   part1: [
@@ -193,6 +210,15 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [completedSections, setCompletedSections] = useState<Record<string, boolean>>({});
+  const [preferences, setPreferences] = useState<LearnerPreferences>(() => {
+    const raw = localStorage.getItem(PREFERENCES_KEY);
+    if (!raw) return defaultPreferences;
+    try {
+      return { ...defaultPreferences, ...(JSON.parse(raw) as Partial<LearnerPreferences>) };
+    } catch {
+      return defaultPreferences;
+    }
+  });
   const mainRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll();
@@ -201,6 +227,27 @@ function App() {
     damping: 30,
     restDelta: 0.001,
   });
+
+  useEffect(() => {
+    localStorage.setItem(PREFERENCES_KEY, JSON.stringify(preferences));
+
+    const classMap: Array<[keyof LearnerPreferences, string]> = [
+      ['focusMode', 'focus-mode'],
+      ['highContrast', 'high-contrast'],
+      ['lowMotion', 'low-motion'],
+      ['conciseText', 'concise-text'],
+    ];
+
+    classMap.forEach(([key, className]) => {
+      if (preferences[key]) {
+        document.body.classList.add(className);
+      } else {
+        document.body.classList.remove(className);
+      }
+    });
+
+    window.dispatchEvent(new Event('mfp-preferences-updated'));
+  }, [preferences]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -262,6 +309,9 @@ function App() {
 
   const completedCount = checkpointSections.filter((id) => completedSections[id]).length;
   const nextSection = checkpointSections.find((id) => !completedSections[id]);
+  const updatePreferences = (next: LearnerPreferences) => {
+    setPreferences(next);
+  };
 
   return (
     <ToastProvider>
@@ -353,6 +403,10 @@ function App() {
             total={checkpointSections.length}
             nextSectionId={nextSection ?? null}
             onJump={scrollToSection}
+          />
+          <LearnerPreferencesPanel
+            value={preferences}
+            onChange={updatePreferences}
           />
           <Part1Section />
           <Part2Section />

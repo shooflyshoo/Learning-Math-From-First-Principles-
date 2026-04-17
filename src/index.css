@@ -808,6 +808,12 @@ body.focus-mode .interactive-hint {
   border-color: rgba(34, 211, 238, 0.5);
 }
 
+body.focus-mode .interactive-wrapper {
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.18),
+    0 12px 28px -18px rgba(34, 211, 238, 0.55);
+}
+
 body.high-contrast {
   background: #020617;
 }
@@ -823,6 +829,17 @@ body.low-motion * {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
+}
+
+body.concise-text .essay-content p,
+body.concise-text .essay-content li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+body.concise-text .interactive-hint,
+body.concise-text .interactive-observation-bar {
+  font-size: 0.8rem;
 }
 
 .coach-toggle-row {

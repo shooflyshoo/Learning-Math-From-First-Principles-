@@ -43,5 +43,6 @@ export { default as BasePlaceValueStory } from './BasePlaceValueStory';
 export { default as DomainHeatmap } from './DomainHeatmap';
 export { default as OperationMachine } from './OperationMachine';
 export { default as LogScaleBridge } from './LogScaleBridge';
+export { default as LearnerPreferencesPanel } from './LearnerPreferencesPanel';
 
 export { default as MisconceptionClinic } from './MisconceptionClinic';
