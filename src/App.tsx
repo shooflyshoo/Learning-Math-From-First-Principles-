@@ -44,6 +44,7 @@ import {
   JourneyMap,
   ConceptBridge,
   SectionCheckpoint,
+  TransferChallenge,
 } from './components';
 import './index.css';
 
@@ -544,6 +545,13 @@ function Part1Section() {
           (i²) = 180° = pointing backwards = −1. That's why i² = −1!
         </div>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 1"
+        challenge={"A colleague says sqrt(-9) is impossible forever. How do you respond using world-extension logic?"}
+        hint={"Name the current world first, then smallest extension."}
+        answer={"In R it is undefined, but extending to C gives sqrt(-9)=3i while preserving prior real rules."}
+      />
+
       <SectionCheckpoint
         title="Part 1 checkpoint"
         sectionId="part1"
@@ -683,6 +691,13 @@ function Part2Section() {
           <DivisionByZero />
         </InteractiveWrapper>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 2"
+        challenge={"You doubled team size and work output tripled. Is this shift or scale behavior?"}
+        hint="Ask whether change depends on multiplying current level."
+        answer={"Scale behavior: multiplication-like change. Output depends on factor changes, not constant offsets."}
+      />
+
       <SectionCheckpoint
         title="Part 2 checkpoint"
         sectionId="part2"
@@ -759,6 +774,13 @@ function Part3Section() {
           <LogMultiplicationAddition />
         </InteractiveWrapper>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 3"
+        challenge={"A metric rises from 5 to 40 by repeated x2 steps. How many steps happened?"}
+        hint="Convert to a log question: 5·2^n=40."
+        answer={"n=3 because 5*2^3=40. Log view counts multiplicative steps."}
+      />
+
       <SectionCheckpoint
         title="Part 3 checkpoint"
         sectionId="part3"
@@ -818,6 +840,13 @@ function Part4Section() {
         <strong>Rule of thumb:</strong> Linear = manageable. Polynomial = manageable with effort.
         Exponential = you're on a timer.
       </div>
+      <TransferChallenge
+        title="Transfer challenge — Part 4"
+        challenge="A bug count grows 4, 8, 16, 32... Which response strategy is safest?"
+        hint="Classify growth type before proposing action."
+        answer="Exponential growth demands urgent intervention now; waiting causes runaway escalation."
+      />
+
       <SectionCheckpoint
         title="Part 4 checkpoint"
         sectionId="part4"
@@ -857,6 +886,13 @@ function Part5Section() {
         <strong>Dimensional Analysis = Built-In Error Checking:</strong> If units don't match on
         both sides of an equation, something is wrong — before you even compute!
       </div>
+      <TransferChallenge
+        title="Transfer challenge — Part 5"
+        challenge={"Can you add 60 km/h and 2 hours directly?"}
+        hint="Check unit compatibility before arithmetic."
+        answer="No. Different dimensions. Multiply to get distance (km), then combine with compatible units."
+      />
+
       <SectionCheckpoint
         title="Part 5 checkpoint"
         sectionId="part5"
@@ -895,6 +931,13 @@ function Part6Section() {
       <p>
         <strong>Why base 10?</strong> You have 10 fingers. That's it. Any base works mathematically.
       </p>
+      <TransferChallenge
+        title="Transfer challenge — Part 6"
+        challenge={"If 1010 base2 equals 10 base10, what idea stays invariant across bases?"}
+        hint="Representation changes; quantity does not."
+        answer="The value is invariant; only the encoding symbols and place weights differ by base."
+      />
+
       <SectionCheckpoint
         title="Part 6 checkpoint"
         sectionId="part6"
@@ -956,6 +999,13 @@ function Part7Section() {
           scheduling, anything that cycles.
         </div>
       </ScrollSection>
+      <TransferChallenge
+        title="Transfer challenge — Part 7"
+        challenge={"What is 38 mod 12 and why does this matter for schedules?"}
+        hint="Use quotient/remainder and clock wrap."
+        answer="38 mod 12 = 2. Cyclic systems ignore full wraps and keep the remainder state."
+      />
+
       <SectionCheckpoint
         title="Part 7 checkpoint"
         sectionId="part7"
@@ -994,6 +1044,13 @@ function Part8Section() {
       >
         <DomainBoundaryExplorer />
       </InteractiveWrapper>
+      <TransferChallenge
+        title="Transfer challenge — Part 8"
+        challenge={"A model outputs log(-3). Do you patch the number or patch the model world?"}
+        hint="Boundary errors are diagnostics, not annoyances."
+        answer="Patch the model: either constrain domain or extend framework. For real logs, negative input is invalid."
+      />
+
       <SectionCheckpoint
         title="Part 8 checkpoint"
         sectionId="part8"

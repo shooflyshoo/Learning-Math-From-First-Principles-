@@ -1323,3 +1323,59 @@ body.low-motion .webgl-hero-shell {
 
 @media (max-width: 767px) { .story-guide-bar { display: none; } }
 
+
+.transfer-challenge {
+  margin-top: 1rem;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 0.8rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.75rem;
+}
+
+.transfer-challenge h4 {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #7dd3fc;
+  font-size: 0.86rem;
+}
+
+.transfer-challenge-question {
+  margin: 0.5rem 0 0;
+  color: var(--color-slate-200);
+  font-size: 0.84rem;
+}
+
+.transfer-challenge-actions {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.transfer-challenge-actions button {
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  background: rgba(30, 41, 59, 0.65);
+  color: var(--color-slate-200);
+  border-radius: 0.55rem;
+  padding: 0.35rem 0.58rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.77rem;
+}
+
+.transfer-hint,
+.transfer-answer {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+}
+
+.transfer-hint {
+  color: #fde68a;
+}
+
+.transfer-answer {
+  color: #86efac;
+}

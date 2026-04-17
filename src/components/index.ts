@@ -37,3 +37,4 @@ export { default as JourneyMap } from './JourneyMap';
 export { default as ComplexRotationWebGL } from './ComplexRotationWebGL';
 export { default as ConceptBridge } from './ConceptBridge';
 export { default as SectionCheckpoint } from './SectionCheckpoint';
+export { default as TransferChallenge } from './TransferChallenge';
