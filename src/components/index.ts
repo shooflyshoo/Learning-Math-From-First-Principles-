@@ -31,3 +31,5 @@ export { ToastProvider, useToast } from './Toast';
 // Experiential components (make you FEEL the insight)
 export { default as WallExperience } from './WallExperience';
 export { default as RuleBreaker } from './RuleBreaker';
+
+export { default as LearningSupportPanel } from './LearningSupportPanel';

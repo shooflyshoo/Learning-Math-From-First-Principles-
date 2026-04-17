@@ -40,6 +40,7 @@ import {
   WallExperience,
   RuleBreaker,
   ToastProvider,
+  LearningSupportPanel,
 } from './components';
 import './index.css';
 
@@ -175,6 +176,7 @@ function App() {
       <main ref={mainRef} className="pt-16 md:pt-0 md:ml-64">
         <article className="essay-content py-8 md:py-16">
           <IntroSection />
+          <LearningSupportPanel />
           <Part1Section />
           <Part2Section />
           <Part3Section />

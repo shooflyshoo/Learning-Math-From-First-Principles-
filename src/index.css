@@ -625,3 +625,202 @@ button {
     padding-bottom: 5rem;
   }
 }
+
+/* ============================================
+   LEARNING SUPPORT / NEURODIVERGENT MODES
+   ============================================ */
+
+.mastery-chip {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.mastery-not-started {
+  background: rgba(100, 116, 139, 0.3);
+  color: var(--color-slate-300);
+}
+
+.mastery-exploring {
+  background: rgba(234, 179, 8, 0.2);
+  color: var(--color-yellow-400);
+}
+
+.mastery-understood {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--color-green-400);
+}
+
+.learn-loop-panel,
+.quick-check-panel {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  background: rgba(2, 6, 23, 0.35);
+}
+
+.learn-loop-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .learn-loop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.learn-loop-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+}
+
+.learn-loop-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  color: var(--color-cyan-400);
+  font-weight: 600;
+}
+
+.learn-loop-text {
+  margin: 0 0 0.5rem;
+  color: var(--color-slate-400);
+  font-size: 0.82rem;
+}
+
+.learn-loop-input {
+  width: 100%;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.7);
+  color: var(--color-slate-100);
+  padding: 0.55rem 0.65rem;
+  font-size: 0.9rem;
+}
+
+.quick-check-option {
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(30, 41, 59, 0.45);
+  color: var(--color-slate-200);
+  font-size: 0.86rem;
+  transition: 0.2s ease;
+}
+
+.quick-check-option:hover,
+.quick-check-option.selected {
+  border-color: rgba(34, 211, 238, 0.7);
+  background: rgba(34, 211, 238, 0.12);
+}
+
+.support-panel {
+  margin: 1.25rem 0 2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  background: rgba(2, 6, 23, 0.55);
+  padding: 1rem;
+}
+
+.support-panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-cyan-300);
+}
+
+.support-panel-subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-slate-400);
+}
+
+.support-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
+.support-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(30, 41, 59, 0.55);
+  color: var(--color-slate-200);
+}
+
+.support-toggle.active {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.7);
+  color: var(--color-cyan-300);
+}
+
+.support-progress-wrap {
+  margin-top: 0.9rem;
+}
+
+.support-progress-bar {
+  width: 100%;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: rgba(51, 65, 85, 0.7);
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.support-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-cyan-500), var(--color-blue-500));
+}
+
+.support-reset-btn {
+  margin-top: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--color-slate-400);
+  font-size: 0.78rem;
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+body.focus-mode .essay-content {
+  max-width: 760px;
+}
+
+body.focus-mode .nd-hook,
+body.focus-mode .interactive-hint {
+  border-color: rgba(34, 211, 238, 0.5);
+}
+
+body.high-contrast {
+  background: #020617;
+}
+
+body.high-contrast .interactive-wrapper,
+body.high-contrast .interactive-container,
+body.high-contrast .support-panel {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.low-motion * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
