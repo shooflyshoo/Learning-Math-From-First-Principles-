@@ -1319,3 +1319,291 @@ body.low-motion .webgl-hero-shell {
   outline: 2px solid var(--color-emerald-400);
   outline-offset: 2px;
 }
+
+/* ==========================================================================
+   New visuals: scene stages + per-visual controls
+   ========================================================================== */
+
+.scene-stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: radial-gradient(120% 120% at 10% 10%, rgba(125, 211, 252, 0.08), transparent 55%),
+    radial-gradient(140% 140% at 90% 90%, rgba(244, 114, 182, 0.06), transparent 55%), #05070f;
+  box-shadow: 0 20px 60px -30px rgba(14, 165, 233, 0.35);
+}
+.scene-stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.scene-stage-fallback {
+  display: grid;
+  place-items: center;
+  padding: 3rem;
+  border-radius: 18px;
+  border: 1px dashed rgba(148, 163, 184, 0.25);
+  background: rgba(148, 163, 184, 0.05);
+  color: #94a3b8;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.hero-galaxy-slot {
+  margin: 1.5rem 0 2rem;
+  width: 100%;
+}
+
+/* Eudoxus towers */
+.eudoxus-3d {
+  display: grid;
+  gap: 1rem;
+}
+.eudoxus-3d-controls {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.eudoxus-3d-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.eudoxus-3d-controls input,
+.eudoxus-3d-controls select {
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e2e8f0;
+}
+.eudoxus-3d-verdict {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border-left: 3px solid #4ade80;
+  color: #bbf7d0;
+  display: grid;
+  gap: 0.35rem;
+}
+.eudoxus-3d-verdict.mismatch {
+  background: rgba(248, 113, 113, 0.1);
+  border-left-color: #f87171;
+  color: #fecaca;
+}
+.verdict-pill {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.18);
+  color: #bae6fd;
+  font-size: 0.78rem;
+  margin-right: 0.35rem;
+}
+.verdict-pill.alt {
+  background: rgba(196, 181, 253, 0.2);
+  color: #ddd6fe;
+}
+
+/* Similar triangle */
+.similar-triangle {
+  display: grid;
+  gap: 1rem;
+}
+.similar-triangle-controls {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+}
+.similar-triangle-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.similar-triangle-readout {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 10px;
+  background: rgba(125, 211, 252, 0.1);
+  color: #bae6fd;
+  font-variant-numeric: tabular-nums;
+}
+.similar-triangle-readout strong {
+  font-size: 0.8rem;
+}
+.similar-triangle-readout span {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.similar-triangle-caption {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Complex stage */
+.complex-stage {
+  display: grid;
+  gap: 1rem;
+}
+.complex-stage-controls {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.complex-stage-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.complex-stage-readout {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.complex-stage-readout > div {
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  display: grid;
+  gap: 0.1rem;
+}
+.complex-stage-readout span {
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.complex-stage-readout strong {
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+  color: #e2e8f0;
+}
+
+/* Matrix grid */
+.matrix-grid {
+  display: grid;
+  gap: 1rem;
+}
+.matrix-grid-controls {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+}
+.matrix-grid-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.matrix-display {
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  font-family: 'JetBrains Mono', monospace;
+  color: #cbd5e1;
+}
+.matrix-display span {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  margin-bottom: 0.2rem;
+}
+.matrix-display pre {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  white-space: pre;
+}
+.matrix-caption {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Taylor */
+.taylor-reveal {
+  display: grid;
+  gap: 1rem;
+}
+.taylor-reveal-controls {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+}
+.taylor-reveal-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.taylor-reveal-formula {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(125, 211, 252, 0.1);
+  color: #bae6fd;
+}
+.taylor-reveal-formula span {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+.taylor-reveal-formula code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+.taylor-caption {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Minkowski */
+.minkowski {
+  display: grid;
+  gap: 1rem;
+}
+.minkowski-controls {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.minkowski-controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.minkowski-caption {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.minkowski-caption code {
+  font-family: 'JetBrains Mono', monospace;
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 700px) {
+  .similar-triangle-controls,
+  .matrix-grid-controls,
+  .taylor-reveal-controls {
+    grid-template-columns: 1fr;
+  }
+}
