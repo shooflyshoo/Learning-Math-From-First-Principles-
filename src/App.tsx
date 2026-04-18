@@ -1330,16 +1330,38 @@ function Part3Section() {
 function Part4Section() {
   return (
     <ScrollSection id="part4">
-      <h2>PART FOUR: Growth Types</h2>
+      <h2>PART FOUR: Growth Types and the Birth of Calculus</h2>
+
+      <p className="text-lg text-slate-300 mb-6">
+        This section bridges algebra and calculus. Understanding growth types is the gateway to
+        understanding <em>change itself</em> — the central problem that Newton and Leibniz solved.
+      </p>
 
       <ConceptBridge
         visual="Race the curves to feel when one trend overtakes another."
         formal="Asymptotic behavior decides long-run dominance."
         transfer="Predict workload, costs, and risk by classifying growth type early."
       />
-      <p>
-        This section tells you whether something will <strong>stay stable, creep up, or explode</strong>.
-      </p>
+
+      <div className="my-8 p-6 bg-gradient-to-r from-red-900/30 to-orange-900/30 rounded-xl border border-red-500/20">
+        <h3 className="text-red-400 mb-4">Why Growth Types Matter: Real Consequences</h3>
+        <p className="text-slate-300 mb-4">
+          <strong>Linear growth</strong> is predictable: if you're saving $100/month, you know exactly
+          where you'll be in 10 years. No surprises.
+        </p>
+        <p className="text-slate-300 mb-4">
+          <strong>Exponential growth</strong> is deceptive: COVID-19 went from 100 cases to 100,000,000
+          because each case creates more cases. By the time it "looked serious," it was already everywhere.
+        </p>
+        <p className="text-slate-300 mb-4">
+          <strong>The Grain of Rice Story:</strong> A king offered a reward. The wise man asked for
+          1 grain on the first chess square, 2 on the second, 4 on the third... The king laughed.
+          The total: 18 quintillion grains — more rice than existed on Earth.
+        </p>
+        <p className="text-slate-400 italic">
+          Exponential processes don't announce themselves. They whisper until they scream.
+        </p>
+      </div>
 
       <InteractiveWrapper
         title="Growth Types Race"
@@ -1351,19 +1373,22 @@ function Part4Section() {
 
       <div className="grid gap-4 md:grid-cols-3 my-8">
         <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-          <h4 className="text-blue-400 font-semibold">Linear</h4>
-          <p className="text-sm text-slate-300">+10 each step</p>
-          <p className="text-xs text-slate-500">Predictable, budgetable</p>
+          <h4 className="text-blue-400 font-semibold">Linear: f(n) = an + b</h4>
+          <p className="text-sm text-slate-300">Constant addition each step</p>
+          <p className="text-xs text-slate-400 mt-2">Walking at constant speed. Hourly wages. Fixed monthly costs.</p>
+          <p className="text-xs text-slate-500 mt-1">Derivative: constant</p>
         </div>
         <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-          <h4 className="text-yellow-400 font-semibold">Polynomial</h4>
-          <p className="text-sm text-slate-300">1, 4, 9, 16, 25…</p>
-          <p className="text-xs text-slate-500">Accelerates then stabilizes</p>
+          <h4 className="text-yellow-400 font-semibold">Polynomial: f(n) = n²</h4>
+          <p className="text-sm text-slate-300">Accelerating, but bounded</p>
+          <p className="text-xs text-slate-400 mt-2">Area of a growing square. Braking distance. Network effects (early).</p>
+          <p className="text-xs text-slate-500 mt-1">Derivative: grows linearly</p>
         </div>
         <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-          <h4 className="text-red-400 font-semibold">Exponential</h4>
-          <p className="text-sm text-slate-300">×2 each step</p>
-          <p className="text-xs text-slate-500">Looks cute at first, then explodes</p>
+          <h4 className="text-red-400 font-semibold">Exponential: f(n) = a^n</h4>
+          <p className="text-sm text-slate-300">Multiplicative: ×k each step</p>
+          <p className="text-xs text-slate-400 mt-2">Compound interest. Viral spread. Moore's Law. Nuclear chain reactions.</p>
+          <p className="text-xs text-slate-500 mt-1">Derivative: proportional to itself</p>
         </div>
       </div>
 
@@ -1374,6 +1399,30 @@ function Part4Section() {
 
       <ScrollSection delay={0.2}>
         <h3>The Derivative: Measuring Change Itself</h3>
+
+        <div className="my-6 p-6 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl border border-cyan-500/20">
+          <h4 className="text-cyan-400 mb-4">The Problem That Invented Calculus</h4>
+          <p className="text-slate-300 mb-4">
+            <strong>Aristotle</strong> asked: How can an arrow be moving at an instant? At any single
+            moment, the arrow is in one position. Movement requires time. So how can there be
+            "instantaneous velocity"?
+          </p>
+          <p className="text-slate-300 mb-4">
+            <strong>Zeno's Paradox (450 BCE):</strong> To reach a wall, you must first go halfway.
+            Then half the remaining distance. Then half again. Infinitely many steps — how do you
+            ever arrive?
+          </p>
+          <p className="text-slate-300 mb-4">
+            These paradoxes remained unresolved for 2,000 years. <strong>Newton (1666)</strong> and
+            <strong> Leibniz (1684)</strong> finally cracked them by formalizing "infinitely small"
+            changes — the calculus of infinitesimals.
+          </p>
+          <p className="text-slate-400 italic">
+            The derivative answers Aristotle: instantaneous velocity is the <em>limit</em> of
+            average velocity as the time interval shrinks to zero. It's not magic — it's careful reasoning.
+          </p>
+        </div>
+
         <p>
           Knowing the growth <em>type</em> isn't enough — you need to know the <em>rate</em> at each moment.
           This is the derivative: the speedometer of mathematics.
@@ -1387,11 +1436,87 @@ function Part4Section() {
           <DerivativeIntuition />
         </InteractiveWrapper>
 
-        <p className="text-slate-400 mt-4">
-          <strong>Historical note:</strong> Newton and Leibniz invented calculus in the 1680s
-          to answer exactly this question: "How fast is this changing <em>right now</em>?"
-          The derivative is the foundation of modern physics, engineering, and machine learning.
+        <h4 className="mt-8">Three Ways to Understand the Derivative</h4>
+        <div className="grid gap-4 md:grid-cols-3 my-6">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual: Tangent Slope</h5>
+            <p className="text-sm text-slate-300">
+              Zoom into any smooth curve until it looks straight. The derivative is the slope
+              of that line.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic: Limit</h5>
+            <p className="text-sm text-slate-300">
+              f'(x) = lim[h→0] (f(x+h) - f(x))/h. The ratio of output change to input change,
+              as the input change becomes infinitely small.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Physical: Rate</h5>
+            <p className="text-sm text-slate-300">
+              Position → Velocity → Acceleration. Each derivative answers "how fast is the
+              previous quantity changing?"
+            </p>
+          </div>
+        </div>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-orange-500">
+          <h5 className="text-orange-400 font-semibold mb-2">Why Exponential Growth Is Special</h5>
+          <p className="text-sm text-slate-300 mb-2">
+            The derivative of e^x is... e^x. Exponential functions are their own derivatives.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            This means: the <em>rate of growth</em> equals the <em>current size</em>.
+            The bigger it is, the faster it grows. That's why exponential processes explode.
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            Radioactive decay, population growth, compound interest — they all follow this pattern.
+            Understanding this one fact explains half of applied mathematics.
+          </p>
+        </div>
+      </ScrollSection>
+
+      <ScrollSection delay={0.3}>
+        <h3>The Integral: Reversing the Process</h3>
+        <p className="text-slate-300 mb-4">
+          If the derivative asks "how fast is this changing?", the integral asks the reverse:
+          "given how fast something is changing, what is its total?"
         </p>
+
+        <div className="grid gap-4 md:grid-cols-2 my-6">
+          <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+            <h5 className="text-blue-400 font-semibold mb-2">Derivative: Distance → Velocity</h5>
+            <p className="text-sm text-slate-300">
+              "I've walked 10 km in 2 hours. At this moment, how fast am I walking?"
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+            <h5 className="text-green-400 font-semibold mb-2">Integral: Velocity → Distance</h5>
+            <p className="text-sm text-slate-300">
+              "I've been walking at varying speeds. How far have I traveled total?"
+            </p>
+          </div>
+        </div>
+
+        <p className="text-slate-400">
+          The <strong>Fundamental Theorem of Calculus</strong> — arguably the most important theorem
+          in all of mathematics — says these are exact inverses. Differentiation and integration
+          undo each other.
+        </p>
+
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-xl border border-purple-500/20">
+          <h4 className="text-purple-400 font-semibold mb-2">What Calculus Unlocked</h4>
+          <p className="text-sm text-slate-300">
+            With derivatives and integrals, Newton could finally describe planetary motion,
+            optics, and mechanics. Leibniz applied them to optimization problems.
+            Every physics equation, every engineering model, every economic forecast uses calculus.
+          </p>
+          <p className="text-sm text-slate-400 mt-2 italic">
+            The next chapters (on limits, series, and differential equations) build directly on
+            the intuitions you're developing here.
+          </p>
+        </div>
       </ScrollSection>
 
       <SectionCheckpoint
@@ -1401,7 +1526,9 @@ function Part4Section() {
           'I can classify a growth pattern by its long-run behavior.',
           'I can articulate why exponential growth becomes dominant.',
           'I can connect growth type to practical risk.',
-          'I understand that the derivative measures instantaneous rate of change.'
+          'I understand that the derivative measures instantaneous rate of change.',
+          'I can explain why the derivative of e^x equals e^x.',
+          'I understand that integration is the reverse of differentiation.'
         ]}
       />
     </ScrollSection>
@@ -1488,7 +1615,12 @@ function Part6Section() {
 function Part7Section() {
   return (
     <ScrollSection id="part7">
-      <h2>PART SEVEN: Number Theory</h2>
+      <h2>PART SEVEN: Number Theory — The Queen of Mathematics</h2>
+
+      <p className="text-lg text-slate-300 mb-6">
+        Number theory is the study of integers and their properties. Gauss called it
+        "the queen of mathematics" — pure, beautiful, and surprisingly useful.
+      </p>
 
       <ConceptBridge
         visual="Primes are atoms; modular arithmetic wraps the number line into loops."
@@ -1498,10 +1630,45 @@ function Part7Section() {
 
       <ScrollSection delay={0.1}>
         <h3>Primes: The Atoms of Multiplication</h3>
+
+        <div className="my-6 p-6 bg-gradient-to-r from-emerald-900/30 to-cyan-900/30 rounded-xl border border-emerald-500/20">
+          <h4 className="text-emerald-400 mb-4">2,300 Years of Prime Fascination</h4>
+          <p className="text-slate-300 mb-4">
+            <strong>Euclid (300 BCE)</strong> proved there are infinitely many primes — one of
+            the first "there's no biggest" proofs in history. His proof is elegant: assume there's
+            a largest prime p. Multiply all primes up to p and add 1. This new number isn't divisible
+            by any known prime — contradiction.
+          </p>
+          <p className="text-slate-300 mb-4">
+            <strong>Eratosthenes (200 BCE)</strong> invented the "sieve" — a systematic way to
+            find primes by crossing out multiples. Still taught today.
+          </p>
+          <p className="text-slate-300 mb-4">
+            <strong>Fermat (1640)</strong> discovered that for prime p, a^p ≡ a (mod p). This
+            "little theorem" is now fundamental to cryptography.
+          </p>
+          <p className="text-slate-300 mb-4">
+            <strong>Riemann (1859)</strong> connected primes to complex analysis with the zeta
+            function. His hypothesis about its zeros remains unsolved — with a $1 million prize.
+          </p>
+          <p className="text-slate-400 italic">
+            Primes are simple to define, impossibly hard to predict, and essential to modern security.
+          </p>
+        </div>
+
         <p>
           <strong>Fundamental Theorem of Arithmetic:</strong> Every integer {'>'} 1 factors
-          <em> uniquely</em> into primes.
+          <em> uniquely</em> into primes. This is why primes are "atoms."
         </p>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+          <h5 className="text-emerald-400 font-semibold mb-2">Why Uniqueness Matters</h5>
+          <p className="text-sm text-slate-300">
+            60 = 2² × 3 × 5. There's no other way to factor it (ignoring order).
+            This uniqueness is not obvious — in other number systems, factorization isn't unique.
+            The integers are special.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Prime Factorization Tree"
@@ -1510,10 +1677,39 @@ function Part7Section() {
         >
           <PrimeFactorTree />
         </InteractiveWrapper>
+
+        <h4 className="mt-8">Why Primes Secure the Internet</h4>
+        <p className="text-slate-300 mb-4">
+          <strong>RSA encryption</strong> (used everywhere: banking, messaging, passwords) relies
+          on one fact: multiplying two large primes is easy, but factoring the result back is
+          computationally infeasible.
+        </p>
+        <div className="bg-slate-900 p-4 rounded-lg font-mono text-center mb-4">
+          <p className="text-emerald-400">p = 61, q = 53 → p × q = 3233</p>
+          <p className="text-slate-500 text-sm mt-2">Easy forward, hard backward (for huge primes)</p>
+        </div>
+        <p className="text-slate-400">
+          Your credit card number is protected by the computational difficulty of factoring
+          300-digit numbers. Number theory — pure math from 300 BCE — secures modern commerce.
+        </p>
       </ScrollSection>
 
       <ScrollSection delay={0.15}>
         <h3>Modular Arithmetic: Clock Math</h3>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-blue-500">
+          <h5 className="text-blue-400 font-semibold mb-2">Historical Origin</h5>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Gauss (1801)</strong> systematized modular arithmetic in <em>Disquisitiones
+            Arithmeticae</em>, arguably the most important number theory book ever written.
+            He was 24 years old.
+          </p>
+          <p className="text-sm text-slate-300">
+            The notation a ≡ b (mod n) means "a and b have the same remainder when divided by n."
+            Instead of the infinite number line, we work on a finite circle.
+          </p>
+        </div>
+
         <p>
           Working "mod 12" means numbers wrap: <strong>14 ≡ 2 (mod 12)</strong>
         </p>
@@ -1526,18 +1722,54 @@ function Part7Section() {
           <ModularClock />
         </InteractiveWrapper>
 
+        <h4 className="mt-6">Three Ways to See Modular Arithmetic</h4>
+        <div className="grid gap-4 md:grid-cols-3 my-4">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual: Wrapping</h5>
+            <p className="text-sm text-slate-300">
+              The number line wraps into a circle. 12 o'clock = 0 o'clock.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic: Remainder</h5>
+            <p className="text-sm text-slate-300">
+              a ≡ b (mod n) means a and b give the same remainder when divided by n.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Applied: Cycles</h5>
+            <p className="text-sm text-slate-300">
+              Days of week (mod 7), hours (mod 12/24), months (mod 12). Nature cycles.
+            </p>
+          </div>
+        </div>
+
         <div className="nd-hook">
-          <strong>Where this shows up:</strong> Error checking (ISBN, credit cards), cryptography,
-          scheduling, anything that cycles.
+          <strong>Where this shows up:</strong> Error checking (ISBN uses mod 11, credit cards use mod 10),
+          cryptography, hash functions, scheduling, and calendar calculations.
+        </div>
+
+        <div className="mt-6 p-4 bg-slate-800/50 rounded-lg">
+          <h5 className="text-slate-300 font-semibold mb-2">Quick Check Digits</h5>
+          <p className="text-sm text-slate-400 mb-2">
+            <strong>Credit cards:</strong> The last digit is calculated so that a weighted sum
+            of all digits ≡ 0 (mod 10). One typo breaks this — instant error detection.
+          </p>
+          <p className="text-sm text-slate-400">
+            <strong>ISBNs:</strong> Similar check using mod 11. That's why X sometimes appears
+            (representing 10).
+          </p>
         </div>
       </ScrollSection>
+
       <SectionCheckpoint
         title="Part 7 checkpoint"
         sectionId="part7"
         prompts={[
           'I can factor numbers into primes methodically.',
           'I can reason with modular wrap-around.',
-          'I can identify where modular arithmetic appears in real systems.'
+          'I can identify where modular arithmetic appears in real systems.',
+          'I understand why prime factorization is hard and why that matters for security.'
         ]}
       />
     </ScrollSection>
