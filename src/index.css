@@ -1709,3 +1709,34 @@ body.low-motion .webgl-hero-shell {
   align-items: center;
   gap: 0.3rem;
 }
+
+.easter-pill {
+  margin: -0.8rem 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  background: rgba(250, 204, 21, 0.12);
+  color: #fde68a;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 767px) {
+  .module-shell {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: 0.8rem;
+  }
+
+  .journey-map {
+    padding: 0.75rem;
+  }
+
+  .checkpoint-choice {
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+  }
+}

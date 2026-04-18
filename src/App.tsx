@@ -523,6 +523,7 @@ function LearningProgressBanner({
   onJump: (id: string) => void;
 }) {
   const percent = Math.round((completed / total) * 100);
+  const nextLabel = sections.find((section) => section.id === nextSectionId)?.title ?? nextSectionId?.toUpperCase();
   return (
     <section className="learning-progress-banner">
       <div>
@@ -534,7 +535,7 @@ function LearningProgressBanner({
       </div>
       {nextSectionId && (
         <button className="learning-progress-btn" onClick={() => onJump(nextSectionId)}>
-          Continue where friction is lowest: {nextSectionId.toUpperCase()}
+          Continue: {nextLabel}
         </button>
       )}
     </section>
@@ -548,6 +549,9 @@ function WebGLFallback({ label }: { label: string }) {
 }
 
 function IntroSection() {
+  const [easterClicks, setEasterClicks] = useState(0);
+  const easterUnlocked = easterClicks >= 5;
+
   return (
     <ScrollSection id="intro" className="mb-12">
       <motion.div
@@ -555,14 +559,26 @@ function IntroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h1>MATHEMATICS FROM FIRST PRINCIPLES</h1>
+        <h1 onClick={() => setEasterClicks((v) => v + 1)} className="cursor-pointer select-none">
+          MATHEMATICS FROM FIRST PRINCIPLES
+        </h1>
         <p className="text-lg md:text-xl text-slate-400 mb-8">
-          The Bulletproof Rebuild — For Visual Learners & Pattern-Seeking Minds
+          A visual-first rebuild for pattern-seeking minds.
         </p>
 
+        {easterUnlocked && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="easter-pill"
+          >
+            🥚 Easter egg unlocked: “Every equation is a tiny machine.”
+          </motion.div>
+        )}
+
         <div className="nd-hook mb-8">
-          <strong>What makes this different:</strong> This isn't "here are rules, please obey."
-          This is "here's the machine, here's why it behaves this way, and here's how to debug it."
+          <strong>What makes this different:</strong> We focus on mechanism, not memorization.
+          You will see the rule, why it works, and how to debug it.
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 mb-8">
@@ -587,16 +603,13 @@ function IntroSection() {
         <hr />
 
         <h2>THESIS: Math Is a Tower of "Allowed Moves"</h2>
-        <p>Think of math like a video game world with physics rules:</p>
+        <p>Think of math as worlds with rules:</p>
         <ul>
           <li>Each "number system" is a world with certain allowed moves</li>
           <li>You hit a wall when a move has no valid result</li>
           <li>To continue, you "unlock a new zone" by adding new kinds of numbers</li>
         </ul>
-        <p>
-          <strong>That is the engine of mathematical progress:</strong> Preserve the contracts.
-          Extend the world. Gain new powers.
-        </p>
+        <p><strong>Progress pattern:</strong> preserve contracts, extend the world, gain new moves.</p>
 
         <ConceptBridge
           visual="You are navigating worlds with different allowed moves."
