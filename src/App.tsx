@@ -67,6 +67,13 @@ const checkpointSections = ['part1', 'part2', 'part3', 'part4', 'part5', 'part6'
 
 const WebGLHero = lazy(() => import('./components/WebGLHero'));
 const ComplexRotationWebGL = lazy(() => import('./components/ComplexRotationWebGL'));
+const HeroGalaxy = lazy(() => import('./visuals/HeroGalaxy'));
+const EudoxusTowers3D = lazy(() => import('./visuals/EudoxusTowers3D'));
+const SimilarTriangleMultiplier = lazy(() => import('./visuals/SimilarTriangleMultiplier'));
+const ComplexRotationStage = lazy(() => import('./visuals/ComplexRotationStage'));
+const MatrixTransformGrid = lazy(() => import('./visuals/MatrixTransformGrid'));
+const TaylorSeriesReveal = lazy(() => import('./visuals/TaylorSeriesReveal'));
+const MinkowskiLightcone = lazy(() => import('./visuals/MinkowskiLightcone'));
 function App() {
   const [activeSection, setActiveSection] = useState('intro');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -217,6 +224,11 @@ function App() {
       <main ref={mainRef} className="pt-16 md:pt-0 md:ml-64">
         <article className="essay-content py-8 md:py-16">
           <IntroSection />
+          <Suspense fallback={<WebGLFallback label="Loading visual map..." />}>
+            <div className="hero-galaxy-slot">
+              <HeroGalaxy />
+            </div>
+          </Suspense>
           <Suspense fallback={<WebGLFallback label="Loading visual map..." />}><WebGLHero /></Suspense>
           <JourneyMap onJump={scrollToSection} />
           <LearningProgressBanner
@@ -754,6 +766,16 @@ function Part1Section() {
         </div>
 
         <InteractiveWrapper
+          title="Complex Multiplication: Rotate + Scale"
+          hint="Drag both complex numbers; watch the product trail the rotate-and-scale path."
+          interactionType="drag"
+        >
+          <Suspense fallback={<WebGLFallback label="Loading rotation stage..." />}>
+            <ComplexRotationStage />
+          </Suspense>
+        </InteractiveWrapper>
+
+        <InteractiveWrapper
           title="The Complex Plane"
           hint="Drag the point or click 'Multiply by i' to see rotation in action"
           interactionType="drag"
@@ -959,6 +981,26 @@ function Part2Section() {
           interactionType="drag"
         >
           <MultiplicationAsScaling />
+        </InteractiveWrapper>
+
+        <InteractiveWrapper
+          title="Similar-Triangle Multiplication Machine (Eudoxus → Descartes)"
+          hint="Move a and b — the parallel line construction computes a·b geometrically."
+          interactionType="drag"
+        >
+          <Suspense fallback={<WebGLFallback label="Loading construction..." />}>
+            <SimilarTriangleMultiplier />
+          </Suspense>
+        </InteractiveWrapper>
+
+        <InteractiveWrapper
+          title="Eudoxus Towers — Equality of Ratio Without Multiplication"
+          hint="Pick a scenario and sweep m, n. Matching verdicts mean A:B = C:D."
+          interactionType="drag"
+        >
+          <Suspense fallback={<WebGLFallback label="Loading Eudoxus towers..." />}>
+            <EudoxusTowers3D />
+          </Suspense>
         </InteractiveWrapper>
 
         <div className="grid gap-4 md:grid-cols-3 my-6">
@@ -1436,6 +1478,26 @@ function Part4Section() {
           <DerivativeIntuition />
         </InteractiveWrapper>
 
+        <InteractiveWrapper
+          title="Taylor Series: Local Information Rebuilds the Whole"
+          hint="Raise the polynomial order — watch the approximation peel outward from 0."
+          interactionType="drag"
+        >
+          <Suspense fallback={<WebGLFallback label="Loading Taylor stage..." />}>
+            <TaylorSeriesReveal />
+          </Suspense>
+        </InteractiveWrapper>
+
+        <InteractiveWrapper
+          title="Matrices as Transformations of Space"
+          hint="Pick a transformation and interpolate. Basis vectors carry the whole grid."
+          interactionType="drag"
+        >
+          <Suspense fallback={<WebGLFallback label="Loading transform grid..." />}>
+            <MatrixTransformGrid />
+          </Suspense>
+        </InteractiveWrapper>
+
         <h4 className="mt-8">Three Ways to Understand the Derivative</h4>
         <div className="grid gap-4 md:grid-cols-3 my-6">
           <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
@@ -1817,6 +1879,23 @@ function Part8Section() {
 function EpilogueSection() {
   return (
     <ScrollSection id="epilogue" className="mt-16">
+      <h2>BONUS: E = mc² — The Same Machine, Curved Into Spacetime</h2>
+      <p className="text-slate-300 mb-4">
+        The same habit — pick a symmetry, find its invariant — continues all the way
+        into relativity. Different observers disagree about x and ct but agree on the
+        spacetime interval <code>s² = c²t² − x²</code>. Slide β to boost your frame.
+      </p>
+
+      <InteractiveWrapper
+        title="Minkowski Spacetime: Boost and Invariant Interval"
+        hint="Move β (v/c) to rotate the observer's axes. The hyperbola never moves."
+        interactionType="drag"
+      >
+        <Suspense fallback={<WebGLFallback label="Loading spacetime stage..." />}>
+          <MinkowskiLightcone />
+        </Suspense>
+      </InteractiveWrapper>
+
       <h2>EPILOGUE: The Load-Bearing Walls</h2>
 
       <div className="space-y-4 mb-8">
