@@ -39,9 +39,9 @@ export default function JourneyMap({ onJump }: JourneyMapProps) {
   return (
     <section className="journey-map">
       <header>
-        <h3><Compass size={18} /> Suggested first journey (desktop)</h3>
+        <h3><Compass size={18} /> Your Learning Path</h3>
         <p>
-          Follow this path once, then free-explore. It is designed to build one durable mental model before adding detail.
+          Follow this sequence once to build a durable mental model, then explore freely.
         </p>
       </header>
 

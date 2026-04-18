@@ -304,7 +304,7 @@ function LearningProgressBanner({
       </div>
       {nextSectionId && (
         <button className="learning-progress-btn" onClick={() => onJump(nextSectionId)}>
-          Continue where friction is lowest: {nextSectionId.toUpperCase()}
+          Continue → {sections.find(s => s.id === nextSectionId)?.title || nextSectionId}
         </button>
       )}
     </section>
