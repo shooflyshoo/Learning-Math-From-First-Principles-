@@ -345,16 +345,59 @@ function IntroSection() {
               <li>• "Just memorize this"</li>
               <li>• "Because I said so"</li>
               <li>• "Don't worry about why"</li>
+              <li>• Tricks without understanding</li>
             </ul>
           </div>
           <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
             <h4 className="text-green-400 font-semibold mb-2">What you will find:</h4>
             <ul className="text-sm text-slate-300 space-y-1">
-              <li>• The actual machinery</li>
+              <li>• The actual machinery exposed</li>
               <li>• Why each part works that way</li>
               <li>• How to debug confusion</li>
+              <li>• Multiple ways to see the same truth</li>
             </ul>
           </div>
+        </div>
+
+        <hr />
+
+        <h2>Why This Approach Matters</h2>
+        <p>
+          The greatest mathematicians — Euclid, Newton, Euler, Gauss, Einstein — didn't memorize formulas.
+          They understood <em>structures</em>. They could see why things <em>had</em> to be true.
+        </p>
+        <p>
+          <strong>Euclid</strong> (300 BCE) built geometry from five simple axioms. Everything else followed logically.
+          <strong>Newton</strong> invented calculus because he needed to describe motion — the math didn't exist, so he created it.
+          <strong>Euler</strong> connected exponentials, trigonometry, and imaginary numbers into one beautiful equation (e^(iπ) + 1 = 0).
+          <strong>Einstein</strong> derived relativity by taking simple principles seriously and following them to their conclusions.
+        </p>
+        <p className="text-slate-400">
+          They weren't geniuses because they memorized more. They were geniuses because they understood <em>less</em> —
+          fewer, deeper truths that unlocked everything else.
+        </p>
+
+        <div className="my-8 p-6 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-xl border border-purple-500/20">
+          <h3 className="text-purple-400 mb-4">The Secret: Math Is Invented, Not Discovered</h3>
+          <p className="text-slate-300 mb-4">
+            Here's what most math education gets wrong: it presents math as a set of eternal truths
+            handed down from above. "Here's the quadratic formula. Memorize it."
+          </p>
+          <p className="text-slate-300 mb-4">
+            But math was <em>invented by humans</em> to solve problems. Every concept exists because
+            someone hit a wall and decided to build a tool to get past it:
+          </p>
+          <ul className="text-slate-300 space-y-2 mb-4">
+            <li>• <strong>Negative numbers:</strong> Invented for accounting debts (7th century India)</li>
+            <li>• <strong>Zero:</strong> Invented as a placeholder, became a number (5th century India)</li>
+            <li>• <strong>Fractions:</strong> Invented for fair division (ancient Egypt)</li>
+            <li>• <strong>Irrational numbers:</strong> Discovered when measuring diagonals (ancient Greece)</li>
+            <li>• <strong>Imaginary numbers:</strong> Invented to solve cubic equations (16th century Italy)</li>
+            <li>• <strong>Calculus:</strong> Invented to describe motion and change (17th century)</li>
+          </ul>
+          <p className="text-purple-300 font-medium">
+            When you understand <em>why</em> each tool was invented, you understand <em>when</em> to use it.
+          </p>
         </div>
 
         <hr />
@@ -371,11 +414,45 @@ function IntroSection() {
           Extend the world. Gain new powers.
         </p>
 
+        <h3>Three Ways to See Any Concept</h3>
+        <p className="text-slate-400 mb-4">
+          Throughout this guide, we'll look at each idea from three angles:
+        </p>
+        <div className="grid gap-4 md:grid-cols-3 mb-8">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h4 className="text-cyan-400 font-semibold mb-2">🎨 Visual / Geometric</h4>
+            <p className="text-sm text-slate-300">
+              What does it look like? Can you draw it? This is how Euclid thought — shapes and constructions.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h4 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic / Symbolic</h4>
+            <p className="text-sm text-slate-300">
+              What are the rules? What patterns hold? This is how Euler thought — manipulation and transformation.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h4 className="text-emerald-400 font-semibold mb-2">🌍 Applied / Physical</h4>
+            <p className="text-sm text-slate-300">
+              Where does this show up in the real world? This is how Newton thought — motion and force.
+            </p>
+          </div>
+        </div>
+
         <ConceptBridge
           visual="You are navigating worlds with different allowed moves."
           formal="A number system is useful when operations stay consistent inside it."
           transfer="When confusion hits, ask: did I hit a boundary or misuse an operation?"
         />
+
+        <div className="mt-8 p-4 bg-slate-800/50 rounded-lg border-l-4 border-cyan-500">
+          <h4 className="text-cyan-400 font-semibold mb-2">For Neurodivergent Learners</h4>
+          <p className="text-sm text-slate-300">
+            If traditional math felt like arbitrary rules without reason, you're not broken — the teaching was.
+            Pattern-seeking minds need to see the <em>why</em> before the <em>how</em>. That's exactly what this guide provides.
+            Every rule here exists because it <em>has to</em>, and you'll see why.
+          </p>
+        </div>
 
       </motion.div>
     </ScrollSection>
@@ -388,7 +465,8 @@ function Part1Section() {
       <h2>PART ONE: The Number Systems Ladder</h2>
       <p>
         Each level of this ladder exists because <strong>someone hit a wall</strong> and decided
-        to extend the system rather than accept the limitation.
+        to extend the system rather than accept the limitation. This is a 4,000-year story of
+        human ingenuity.
       </p>
 
       <ConceptBridge
@@ -410,6 +488,25 @@ function Part1Section() {
         <p>
           <strong>ℕ = {'{'}0, 1, 2, 3, …{'}'}</strong> — Apples, clicks, steps. Anything you can count.
         </p>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+          <h4 className="text-emerald-400 font-semibold mb-2">Historical Origin: The First Numbers</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            Natural numbers are humanity's oldest mathematical invention — older than writing itself.
+            Tally marks on bones from 30,000 BCE show our ancestors counting.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>The Sumerians (3000 BCE)</strong> created the first number system for accounting.
+            <strong>The Egyptians</strong> used hieroglyphic numerals to track harvests and build pyramids.
+            <strong>The Mayans</strong> independently invented place-value notation with zero.
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            For millennia, these were the <em>only</em> numbers. Negative numbers didn't exist.
+            If you owed someone 3 sheep, you didn't have "negative 3 sheep" — you had a debt,
+            a social obligation, not a mathematical object.
+          </p>
+        </div>
+
         <p>
           <strong>The Wall:</strong> 3 − 5 = ? You can't have negative apples in counting-world.
         </p>
@@ -421,6 +518,27 @@ function Part1Section() {
         >
           <WallExperience />
         </InteractiveWrapper>
+
+        <div className="grid gap-4 md:grid-cols-2 my-6">
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">What Naturals Can Do</h5>
+            <ul className="text-sm text-slate-300 space-y-1">
+              <li>✓ Add any two naturals → get a natural</li>
+              <li>✓ Multiply any two naturals → get a natural</li>
+              <li>✓ Compare (which is bigger?)</li>
+              <li>✓ Count discrete objects</li>
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+            <h5 className="text-red-400 font-semibold mb-2">What Naturals Can't Do</h5>
+            <ul className="text-sm text-slate-300 space-y-1">
+              <li>✗ Subtract larger from smaller</li>
+              <li>✗ Divide without remainder</li>
+              <li>✗ Represent debts or losses</li>
+              <li>✗ Measure continuous quantities</li>
+            </ul>
+          </div>
+        </div>
       </ScrollSection>
 
       <ScrollSection delay={0.15}>
@@ -428,6 +546,29 @@ function Part1Section() {
         <p>
           <strong>ℤ = {'{'}…, −2, −1, 0, 1, 2, …{'}'}</strong> — We added "reverse gear."
         </p>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-blue-500">
+          <h4 className="text-blue-400 font-semibold mb-2">Historical Origin: Debts Become Numbers</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Ancient China (200 BCE):</strong> The Nine Chapters on Mathematical Art used red rods
+            for positive numbers and black rods for negative — for accounting. But they weren't considered
+            "real" numbers, just bookkeeping tricks.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>India (7th century CE):</strong> Brahmagupta first treated negatives as legitimate
+            numbers with arithmetic rules. He wrote: "A debt subtracted from zero is a fortune."
+            This was revolutionary — debts weren't just social concepts anymore, they were mathematical objects.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Europe (16th-17th century):</strong> Mathematicians like Cardano reluctantly used
+            negatives but called them "absurd" and "fictitious." It took centuries for Europeans to
+            accept what Indian mathematicians knew 1,000 years earlier.
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            The resistance to negatives shows how hard it is to expand our concept of "number."
+            Every extension meets skepticism until its usefulness becomes undeniable.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Building Floors: Understanding Negatives"
@@ -437,8 +578,31 @@ function Part1Section() {
           <BuildingFloors />
         </InteractiveWrapper>
 
+        <h4 className="mt-6">Three Ways to Understand Negatives</h4>
+        <div className="grid gap-4 md:grid-cols-3 my-4">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual: Direction</h5>
+            <p className="text-sm text-slate-300">
+              Negatives point the opposite way on the number line. -3 is "3 steps left."
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic: Inverse</h5>
+            <p className="text-sm text-slate-300">
+              -a is "the number that, when added to a, gives zero." It's the additive inverse.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Applied: Balance</h5>
+            <p className="text-sm text-slate-300">
+              Temperature below zero, floors below ground, money owed. Context where "less than nothing" makes sense.
+            </p>
+          </div>
+        </div>
+
         <p>
           <strong>Key insight:</strong> Negatives aren't "less than nothing." They're <em>directions</em>.
+          Once you see this, negative times negative = positive becomes obvious (two reversals = forward).
         </p>
       </ScrollSection>
 
@@ -448,6 +612,24 @@ function Part1Section() {
           <strong>ℚ = {'{'}p/q : p, q ∈ ℤ, q ≠ 0{'}'}</strong> — Now 7 ÷ 3 = 7/3 has an answer.
         </p>
 
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-yellow-500">
+          <h4 className="text-yellow-400 font-semibold mb-2">Historical Origin: Fair Division</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Ancient Egypt (2000 BCE):</strong> The Rhind Papyrus shows elaborate fraction
+            arithmetic. Egyptians only used "unit fractions" (1/n) — to write 2/5, they'd say 1/3 + 1/15.
+            This seems bizarre, but it guaranteed fair division: to split 2 loaves among 5 people,
+            give each person 1/3 of a loaf and 1/15 of a loaf.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Babylon (1800 BCE):</strong> Used base-60 fractions (why we have 60 seconds in a
+            minute). The first "decimal-like" system.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>India & Arabia (500-1200 CE):</strong> Developed our modern fraction notation
+            and the algorithms we still use today.
+          </p>
+        </div>
+
         <InteractiveWrapper
           title="Rational Density: The √2 Gap"
           hint="Zoom in on √2 to see the 'hole' that rationals can't fill"
@@ -456,20 +638,83 @@ function Part1Section() {
           <RationalDensityZoom />
         </InteractiveWrapper>
 
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-red-500">
+          <h4 className="text-red-400 font-semibold mb-2">The Crisis: √2 Is Not a Fraction</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Ancient Greece (500 BCE):</strong> The Pythagoreans believed "all is number" —
+            meaning ratios of whole numbers explained everything. Then someone (possibly Hippasus)
+            proved that √2 cannot be expressed as a fraction.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>The proof:</strong> Assume √2 = p/q in lowest terms. Then 2 = p²/q², so p² = 2q².
+            This means p² is even, so p is even. Write p = 2k. Then 4k² = 2q², so q² = 2k².
+            This means q is also even. But we said p/q was in lowest terms — contradiction!
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            Legend says the Pythagoreans were so disturbed by this discovery that they drowned Hippasus.
+            The existence of "irrational" numbers shattered their worldview.
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            This is the first mathematical crisis: numbers exist that cannot be written as ratios.
+            The number line has "gaps" between the fractions.
+          </p>
+        </div>
+
         <p>
-          <strong>The Wall:</strong> Despite being infinitely dense, rationals have <em>gaps</em>.
-          √2 is not a fraction.
+          <strong>The Wall:</strong> Despite being infinitely dense (between any two rationals,
+          there's another rational), rationals have <em>gaps</em>. √2, π, e — these cannot be fractions.
         </p>
       </ScrollSection>
 
       <ScrollSection delay={0.25}>
         <h3>Level 4 — Reals: No More Gaps</h3>
         <p>
-          <strong>ℝ</strong> — Fills the holes. Now limits and measurement work reliably.
+          <strong>ℝ</strong> — Fills every hole. Now limits and measurement work reliably.
         </p>
-        <p>
-          <strong>The Wall:</strong> √(−1) doesn't exist. No real number squared is negative.
-        </p>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-orange-500">
+          <h4 className="text-orange-400 font-semibold mb-2">Historical Origin: Taming the Infinite</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Ancient Greece:</strong> Eudoxus developed a theory of proportions that handled
+            irrationals geometrically, without naming them as numbers. For 2,000 years, √2 was a
+            <em>length</em>, not a number.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Stevin (1585):</strong> Introduced decimal notation, making irrationals look
+            like regular numbers: 1.41421356... The infinite decimal expansion made irrationals
+            concrete.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Dedekind (1872):</strong> Finally made real numbers rigorous using "cuts" —
+            a real number is defined by the set of rationals less than it. This filled every gap.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Cantor (1874):</strong> Proved there are "more" real numbers than rationals —
+            the reals are <em>uncountably</em> infinite. Mind-blowing: there are different sizes of infinity!
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 my-6">
+          <div className="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+            <h5 className="text-orange-400 font-semibold mb-2">Why Reals Matter</h5>
+            <ul className="text-sm text-slate-300 space-y-1">
+              <li>• Measurement requires continuous values</li>
+              <li>• Calculus needs limits that converge</li>
+              <li>• Physics needs precise coordinates</li>
+              <li>• Every point on the number line has a value</li>
+            </ul>
+          </div>
+          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+            <h5 className="text-red-400 font-semibold mb-2">The Final Wall</h5>
+            <p className="text-sm text-slate-300">
+              √(−1) still doesn't exist. No real number, when squared, gives a negative.
+              The equation x² + 1 = 0 has no real solution.
+            </p>
+            <p className="text-sm text-slate-400 mt-2 italic">
+              Or does it? What if we just... invented one?
+            </p>
+          </div>
+        </div>
       </ScrollSection>
 
       <ScrollSection delay={0.3}>
@@ -477,6 +722,32 @@ function Part1Section() {
         <p>
           <strong>ℂ = {'{'}a + bi{'}'} where i² = −1</strong>
         </p>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-purple-500">
+          <h4 className="text-purple-400 font-semibold mb-2">Historical Origin: The "Imaginary" Numbers</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Cardano (1545):</strong> While solving cubic equations, found formulas that
+            required square roots of negative numbers. He called them "sophistic" and "as subtle
+            as they are useless." But they gave correct real answers!
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Bombelli (1572):</strong> First to work systematically with √(-1), showing
+            that these "imaginary" quantities followed consistent rules and solved real problems.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Euler (1748):</strong> Named √(-1) as "i" and discovered the stunning equation
+            e^(iπ) + 1 = 0, connecting five fundamental constants.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>Gauss & Argand (early 1800s):</strong> Showed complex numbers are points on
+            a <em>plane</em>. Multiplication by i is rotation by 90°. Suddenly "imaginary" became
+            <em>geometric</em> — as real as any other direction.
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            The name "imaginary" is a historical accident. Complex numbers are no more fictional
+            than negative numbers — which were also once called "absurd."
+          </p>
+        </div>
 
         <div className="my-6">
           <Suspense fallback={<WebGLFallback label="Loading complex rotation..." />}><ComplexRotationWebGL /></Suspense>
@@ -490,18 +761,57 @@ function Part1Section() {
           <ComplexPlane />
         </InteractiveWrapper>
 
+        <h4 className="mt-6">Three Ways to Understand i</h4>
+        <div className="grid gap-4 md:grid-cols-3 my-4">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual: Rotation</h5>
+            <p className="text-sm text-slate-300">
+              Multiplying by i rotates a point 90° counterclockwise. Two rotations (i²) = 180° = -1.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic: Closure</h5>
+            <p className="text-sm text-slate-300">
+              i is "the number that squares to -1." With it, every polynomial has a root (Fundamental Theorem of Algebra).
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Applied: Waves</h5>
+            <p className="text-sm text-slate-300">
+              AC electricity, quantum physics, signal processing — all use complex numbers because rotation is fundamental.
+            </p>
+          </div>
+        </div>
+
         <div className="nd-hook">
           <strong>Mind-bending insight:</strong> Multiplying by i = rotating 90°. Two rotations
           (i²) = 180° = pointing backwards = −1. That's why i² = −1!
         </div>
+
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-xl border border-purple-500/20">
+          <h4 className="text-purple-400 font-semibold mb-2">The Punchline</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            We now have <strong>ℂ — the algebraically closed field</strong>. Every polynomial
+            equation has a solution here. Every number system we've built is contained within it:
+          </p>
+          <p className="text-center font-mono text-lg text-slate-300 my-4">
+            ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ
+          </p>
+          <p className="text-sm text-slate-400 italic">
+            Each extension was resisted, called "absurd" or "imaginary," then eventually accepted
+            when its usefulness became undeniable. This is how mathematics grows.
+          </p>
+        </div>
       </ScrollSection>
+
       <SectionCheckpoint
         title="Part 1 checkpoint"
         sectionId="part1"
         prompts={[
           'I can explain why ℕ, ℤ, ℚ, ℝ, ℂ were introduced in sequence.',
           'I can identify when an expression hits a system boundary.',
-          'I can describe i as rotation, not magic.'
+          'I can describe i as rotation, not magic.',
+          'I understand that each number system extension was historically controversial.'
         ]}
       />
     </ScrollSection>
@@ -513,43 +823,82 @@ function Part2Section() {
     <ScrollSection id="part2">
       <h2>PART TWO: Operations as "Moves"</h2>
 
+      <p className="text-lg text-slate-300 mb-6">
+        Here's a secret that transforms how you see arithmetic: every operation is a <em>transformation</em>.
+        Numbers aren't just sitting there — operations <em>do things</em> to them.
+      </p>
+
       <ConceptBridge
         visual="Addition slides. Multiplication stretches. Division asks for the reverse stretch."
         formal="Operations are transformations with inverses and constraints."
         transfer="Use this lens in code, finance, and scaling systems: what changes linearly vs multiplicatively?"
       />
 
-      <div className="overflow-x-auto mb-8">
-        <table>
-          <thead>
-            <tr>
-              <th>Operation</th>
-              <th>What It Does</th>
-              <th>Inverse</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Addition</td>
-              <td>Move/shift</td>
-              <td>Subtraction</td>
-            </tr>
-            <tr>
-              <td>Multiplication</td>
-              <td>Scale/stretch</td>
-              <td>Division</td>
-            </tr>
-            <tr>
-              <td>Exponentiation</td>
-              <td>Repeated scaling</td>
-              <td>Logarithm</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="my-8 p-6 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 rounded-xl border border-cyan-500/20">
+        <h3 className="text-cyan-400 mb-4">The Key Insight: Operations Have Geometry</h3>
+        <p className="text-slate-300 mb-4">
+          This is how mathematicians from Euclid to Einstein thought about operations — not as
+          abstract symbol manipulation, but as <em>physical actions</em> on space:
+        </p>
+        <div className="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Operation</th>
+                <th>Geometric Meaning</th>
+                <th>Inverse</th>
+                <th>What It Preserves</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Addition</td>
+                <td>Slide/translate</td>
+                <td>Subtraction</td>
+                <td>Distances between points</td>
+              </tr>
+              <tr>
+                <td>Multiplication</td>
+                <td>Scale/stretch from origin</td>
+                <td>Division</td>
+                <td>Ratios between points</td>
+              </tr>
+              <tr>
+                <td>Exponentiation</td>
+                <td>Repeated scaling</td>
+                <td>Logarithm</td>
+                <td>Multiplicative structure</td>
+              </tr>
+              <tr>
+                <td>Rotation (complex)</td>
+                <td>Spin around origin</td>
+                <td>Opposite rotation</td>
+                <td>Distances from origin</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-slate-400 text-sm mt-4 italic">
+          Once you see operations as geometry, you can <em>visualize</em> algebraic manipulation.
+          This is how Newton saw physics, how Einstein saw spacetime.
+        </p>
       </div>
 
       <ScrollSection delay={0.1}>
         <h3>Addition: Moving on the Number Line</h3>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-blue-500">
+          <h4 className="text-blue-400 font-semibold mb-2">Historical Origin</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            Addition is the oldest operation — cave people could combine piles of things.
+            But seeing it as <em>movement</em> came later.
+          </p>
+          <p className="text-sm text-slate-300">
+            <strong>Wallis (1655)</strong> introduced the number line. Suddenly arithmetic became geometric:
+            +3 means "move right 3 units." This visualization made negative numbers intuitive —
+            they're just the opposite direction.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Addition as Movement"
@@ -562,10 +911,47 @@ function Part2Section() {
         <p>
           <strong>5 + 3</strong> means "start at 5, move right 3." Subtraction is just moving left.
         </p>
+
+        <div className="grid gap-4 md:grid-cols-3 my-6">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual</h5>
+            <p className="text-sm text-slate-300">
+              Addition = sliding along the number line. Direction matters (left vs right).
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic</h5>
+            <p className="text-sm text-slate-300">
+              Addition is commutative (a+b = b+a) and associative ((a+b)+c = a+(b+c)).
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Physical</h5>
+            <p className="text-sm text-slate-300">
+              Walking, bank deposits, combining quantities. Adding is <em>accumulating</em>.
+            </p>
+          </div>
+        </div>
       </ScrollSection>
 
       <ScrollSection delay={0.15}>
         <h3>Multiplication: Scaling</h3>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-green-500">
+          <h4 className="text-green-400 font-semibold mb-2">Historical Origin: Area to Scaling</h4>
+          <p className="text-sm text-slate-300 mb-2">
+            Originally, multiplication was about <em>area</em>: 3 × 4 is a rectangle with sides 3 and 4.
+            This is why we call it "3 times 4" — you're laying out 3 rows of 4.
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            <strong>The deeper view:</strong> Multiplication is <em>scaling</em>. Multiplying by 2
+            doubles everything. Multiplying by 0.5 halves everything. Multiplying by -1 flips direction.
+          </p>
+          <p className="text-sm text-slate-300">
+            <strong>Descartes (1637)</strong> unified arithmetic and geometry, showing that multiplying
+            numbers corresponds to stretching lengths. This insight is the foundation of analytic geometry.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Multiplication as Scaling"
@@ -575,7 +961,32 @@ function Part2Section() {
           <MultiplicationAsScaling />
         </InteractiveWrapper>
 
+        <div className="grid gap-4 md:grid-cols-3 my-6">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual</h5>
+            <p className="text-sm text-slate-300">
+              Multiplication = stretching from the origin. Factor {'>'} 1 expands; factor {'<'} 1 shrinks.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic</h5>
+            <p className="text-sm text-slate-300">
+              Commutative, associative, and <em>distributes</em> over addition: a(b+c) = ab + ac.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Physical</h5>
+            <p className="text-sm text-slate-300">
+              Interest rates, zoom, unit conversion. Scaling changes <em>everything proportionally</em>.
+            </p>
+          </div>
+        </div>
+
         <h4>Why Negative × Negative = Positive</h4>
+        <p className="text-slate-400 mb-4">
+          This confuses almost everyone when first encountered. But it's not arbitrary — it's <em>required</em>
+          by the laws we want multiplication to obey.
+        </p>
 
         <InteractiveWrapper
           title="The Double Flip"
@@ -584,6 +995,26 @@ function Part2Section() {
         >
           <NegativeTimesNegative />
         </InteractiveWrapper>
+
+        <div className="my-6 p-4 bg-slate-800/50 rounded-lg border-l-4 border-yellow-500">
+          <h4 className="text-yellow-400 font-semibold mb-2">Three Proofs That (-1) × (-1) = 1</h4>
+          <div className="space-y-4 text-sm text-slate-300">
+            <div>
+              <strong className="text-yellow-300">1. Pattern continuation:</strong><br />
+              -1 × 3 = -3, -1 × 2 = -2, -1 × 1 = -1, -1 × 0 = 0...<br />
+              Each step adds 1. So -1 × (-1) = 0 + 1 = 1.
+            </div>
+            <div>
+              <strong className="text-yellow-300">2. Distributive law:</strong><br />
+              We know 0 = (-1) × 0 = (-1) × (1 + (-1)) = (-1)(1) + (-1)(-1) = -1 + ?<br />
+              For this to equal 0, the ? must be 1.
+            </div>
+            <div>
+              <strong className="text-yellow-300">3. Geometric:</strong><br />
+              Multiplying by -1 = flipping across origin. Two flips = back to start.
+            </div>
+          </div>
+        </div>
 
         <p className="mt-6 text-slate-400">
           But why <em>must</em> it be this way? What if we just... decided differently?
@@ -686,11 +1117,41 @@ function Part3Section() {
     <ScrollSection id="part3">
       <h2>PART THREE: Exponents and Logarithms</h2>
 
+      <p className="text-lg text-slate-300 mb-6">
+        Exponents and logarithms are <em>inverse</em> operations — like addition/subtraction or
+        multiplication/division. But they unlock something profound: they convert between
+        <strong> additive</strong> and <strong>multiplicative</strong> worlds.
+      </p>
+
       <ConceptBridge
         visual="Exponents are repeated zooms; logs count how many zooms happened."
         formal="Exponentiation and logarithms are inverse operators on positive reals."
         transfer="Use this to decode growth, sound levels, pH, and compounding timelines."
       />
+
+      <div className="my-8 p-6 bg-gradient-to-r from-orange-900/30 to-red-900/30 rounded-xl border border-orange-500/20">
+        <h3 className="text-orange-400 mb-4">Historical Context: The Invention That Changed Science</h3>
+        <p className="text-slate-300 mb-4">
+          <strong>John Napier (1614):</strong> A Scottish mathematician spent 20 years creating tables
+          of logarithms to help astronomers with the tedious multiplication of large numbers.
+          His invention was immediately hailed as "shortening the labours" of calculation by half.
+        </p>
+        <p className="text-slate-300 mb-4">
+          <strong>Why it mattered:</strong> Before calculators, multiplying 7-digit numbers took minutes.
+          With log tables, you could look up log(a) + log(b) and convert back — reducing multiplication
+          to addition. Kepler used Napier's logs to discover his laws of planetary motion.
+        </p>
+        <p className="text-slate-300 mb-4">
+          <strong>Euler (1748):</strong> Discovered the number <em>e</em> ≈ 2.71828... as the "natural"
+          base for logarithms. He showed that e^(iπ) + 1 = 0 — linking exponentials, trigonometry,
+          and imaginary numbers in what's called "the most beautiful equation in mathematics."
+        </p>
+        <p className="text-slate-400 italic">
+          The slide rule — a physical log calculator — was the engineer's essential tool until
+          the 1970s. Understanding logs isn't historical curiosity; it's understanding how
+          science was actually done for 350 years.
+        </p>
+      </div>
 
       <ScrollSection delay={0.1}>
         <h3>Exponents: Repeated Scaling</h3>
@@ -706,10 +1167,45 @@ function Part3Section() {
           <ExponentsAsSteps />
         </InteractiveWrapper>
 
+        <div className="grid gap-4 md:grid-cols-3 my-6">
+          <div className="p-4 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+            <h5 className="text-cyan-400 font-semibold mb-2">🎨 Visual</h5>
+            <p className="text-sm text-slate-300">
+              Exponents = repeated zooming. Each step multiplies by the base.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <h5 className="text-purple-400 font-semibold mb-2">⚙️ Algebraic</h5>
+            <p className="text-sm text-slate-300">
+              a^m × a^n = a^(m+n). Adding exponents = multiplying values.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <h5 className="text-emerald-400 font-semibold mb-2">🌍 Physical</h5>
+            <p className="text-sm text-slate-300">
+              Compound interest, population growth, radioactive decay. Processes that scale themselves.
+            </p>
+          </div>
+        </div>
+
         <h4>Fractional Exponents = Roots</h4>
-        <p>
+        <p className="text-slate-300 mb-4">
           <strong>a^(1/2)</strong> means: "What number, when used as a scaling factor twice, gives a?"
+          This is the square root. Similarly, a^(1/3) is the cube root.
         </p>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-purple-500">
+          <h5 className="text-purple-400 font-semibold mb-2">Why This Makes Sense</h5>
+          <p className="text-sm text-slate-300 mb-2">
+            If a^m × a^n = a^(m+n), then what should a^(1/2) × a^(1/2) equal?
+          </p>
+          <p className="text-sm text-slate-300 mb-2">
+            By the rule: a^(1/2 + 1/2) = a^1 = a
+          </p>
+          <p className="text-sm text-slate-300">
+            So a^(1/2) must be the number that, multiplied by itself, gives a. That's √a.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Fractional Exponents: Finding Roots"
@@ -718,6 +1214,16 @@ function Part3Section() {
         >
           <FractionalExponents />
         </InteractiveWrapper>
+
+        <h4 className="mt-8">Negative Exponents = Reciprocals</h4>
+        <p className="text-slate-300 mb-4">
+          <strong>a^(-1)</strong> = 1/a. Why? Because a^1 × a^(-1) should equal a^(1-1) = a^0 = 1.
+          The only way that works is if a^(-1) = 1/a.
+        </p>
+        <p className="text-slate-400">
+          This is the power of mathematical consistency: we don't <em>define</em> fractional and
+          negative exponents arbitrarily. We ask "what must they be for the rules to stay consistent?"
+        </p>
       </ScrollSection>
 
       <ScrollSection delay={0.15}>
@@ -725,6 +1231,19 @@ function Part3Section() {
         <p>
           If exponents are "do repeated scaling," logs ask <strong>"how many times?"</strong>
         </p>
+
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-orange-500">
+          <h5 className="text-orange-400 font-semibold mb-2">The Question Logs Answer</h5>
+          <p className="text-sm text-slate-300">
+            "2 to what power gives 8?" Answer: 3. We write log₂(8) = 3.
+          </p>
+          <p className="text-sm text-slate-300 mt-2">
+            "10 to what power gives 1000?" Answer: 3. We write log₁₀(1000) = 3.
+          </p>
+          <p className="text-sm text-slate-300 mt-2">
+            "e to what power gives 7.389...?" Answer: 2. We write ln(7.389) = 2.
+          </p>
+        </div>
 
         <InteractiveWrapper
           title="Logarithm Counter"
@@ -735,6 +1254,16 @@ function Part3Section() {
         </InteractiveWrapper>
 
         <h4>The Magic: Logs Turn Multiplication into Addition</h4>
+        <p className="text-slate-300 mb-4">
+          This is why Napier's invention was revolutionary:
+        </p>
+        <div className="bg-slate-900 p-4 rounded-lg font-mono text-center text-lg mb-4">
+          <span className="text-orange-400">log(a × b)</span> = <span className="text-cyan-400">log(a)</span> + <span className="text-cyan-400">log(b)</span>
+        </div>
+        <p className="text-slate-400 mb-4">
+          To multiply big numbers: find their logs, add (easy!), then convert back.
+          You've turned hard multiplication into easy addition.
+        </p>
 
         <InteractiveWrapper
           title="Log Property Visualizer"
@@ -743,14 +1272,55 @@ function Part3Section() {
         >
           <LogMultiplicationAddition />
         </InteractiveWrapper>
+
+        <h4 className="mt-8">The Natural Log and the Number e</h4>
+        <div className="my-4 p-4 bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+          <h5 className="text-emerald-400 font-semibold mb-2">Why e ≈ 2.71828...?</h5>
+          <p className="text-sm text-slate-300 mb-2">
+            Imagine compound interest. If you earn 100% per year, compounded:
+          </p>
+          <ul className="text-sm text-slate-300 space-y-1 mb-2">
+            <li>• Once per year: $1 → $2.00</li>
+            <li>• Twice per year (50% each): $1 → $2.25</li>
+            <li>• Monthly (8.33% each): $1 → $2.61...</li>
+            <li>• Daily: $1 → $2.714...</li>
+            <li>• Continuously: $1 → <strong>e ≈ $2.71828...</strong></li>
+          </ul>
+          <p className="text-sm text-slate-300">
+            The number e emerges naturally from continuous compounding. It's the base where
+            <strong> the derivative of e^x is exactly e^x</strong> — growth proportional to current size.
+          </p>
+        </div>
+
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-xl border border-purple-500/20">
+          <h4 className="text-purple-400 font-semibold mb-2">Euler's Identity: The Most Beautiful Equation</h4>
+          <p className="text-center font-mono text-2xl text-slate-200 my-4">
+            e^(iπ) + 1 = 0
+          </p>
+          <p className="text-sm text-slate-300">
+            This single equation connects the five most important constants in mathematics:
+            <strong className="text-cyan-400"> e</strong> (natural growth),
+            <strong className="text-purple-400"> i</strong> (rotation),
+            <strong className="text-emerald-400"> π</strong> (circles),
+            <strong className="text-yellow-400"> 1</strong> (multiplication identity),
+            <strong className="text-slate-400"> 0</strong> (addition identity).
+          </p>
+          <p className="text-sm text-slate-400 mt-2 italic">
+            That these five constants combine so simply suggests deep structure in mathematics
+            that we're only beginning to understand.
+          </p>
+        </div>
       </ScrollSection>
+
       <SectionCheckpoint
         title="Part 3 checkpoint"
         sectionId="part3"
         prompts={[
           'I can move between exponent and log viewpoints.',
           'I can test whether a log input is valid.',
-          'I can explain fractional exponents as root-questions.'
+          'I can explain fractional exponents as root-questions.',
+          'I understand why logs convert multiplication to addition.',
+          'I can explain what makes e special.'
         ]}
       />
     </ScrollSection>
