@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, Skull } from 'lucide-react';
+import { AlertTriangle, Skull, Sliders, RotateCcw } from 'lucide-react';
 
 /**
  * Growth Types Race
@@ -20,24 +20,35 @@ interface DataPoint {
   exponential: number;
 }
 
+const realWorldExamples = [
+  { name: 'Virus spread', base: 2, linear: 10, desc: 'Each infected person infects 2 more' },
+  { name: 'Compound interest (7%)', base: 1.07, linear: 7, desc: 'Money doubles every ~10 years' },
+  { name: 'Social media viral', base: 3, linear: 50, desc: 'Each share gets 3 reshares' },
+  { name: 'Moore\'s Law', base: 2, linear: 1, desc: 'Transistors double every 2 years' },
+];
+
 export default function GrowthTypesRace() {
   const [isRunning, setIsRunning] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState<DataPoint[]>([]);
   const [showDanger, setShowDanger] = useState(false);
   const [raceComplete, setRaceComplete] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+
+  // Adjustable parameters
+  const [linearRate, setLinearRate] = useState(5);
+  const [expBase, setExpBase] = useState(2);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
+
   const intervalRef = useRef<number | null>(null);
 
   const maxSteps = 20;
 
-  // Using values that make the race interesting
-  // At step 10, exponential should start to clearly pull ahead
-  // By step 15-20, it should be ridiculous
   const calculateValues = (step: number): DataPoint => ({
     step,
-    linear: 5 * step, // 0, 5, 10, 15...
-    quadratic: step * step, // 0, 1, 4, 9, 16, 25...
-    exponential: Math.pow(2, step), // 1, 2, 4, 8, 16, 32, 64...
+    linear: linearRate * step,
+    quadratic: step * step,
+    exponential: Math.pow(expBase, step),
   });
 
   useEffect(() => {
@@ -48,7 +59,9 @@ export default function GrowthTypesRace() {
     setData(newData);
 
     // Trigger danger warning when exponential gets scary
-    if (currentStep >= 12 && !showDanger) {
+    const expVal = Math.pow(expBase, currentStep);
+    const linVal = linearRate * currentStep;
+    if (expVal > linVal * 10 && !showDanger) {
       setShowDanger(true);
     }
 
@@ -56,7 +69,7 @@ export default function GrowthTypesRace() {
       setRaceComplete(true);
       setIsRunning(false);
     }
-  }, [currentStep, showDanger]);
+  }, [currentStep, linearRate, expBase, showDanger]);
 
   const startRace = () => {
     setIsRunning(true);
@@ -75,9 +88,15 @@ export default function GrowthTypesRace() {
     setRaceComplete(false);
   };
 
+  const applyPreset = (preset: typeof realWorldExamples[0]) => {
+    reset();
+    setExpBase(preset.base);
+    setLinearRate(preset.linear);
+    setActivePreset(preset.name);
+  };
+
   useEffect(() => {
     if (isRunning && currentStep < maxSteps) {
-      // Speed up slightly as we go to build tension
       const baseDelay = currentStep < 8 ? 600 : currentStep < 15 ? 400 : 300;
       intervalRef.current = window.setTimeout(() => {
         setCurrentStep(s => s + 1);
@@ -91,10 +110,7 @@ export default function GrowthTypesRace() {
 
   const current = data[data.length - 1] || calculateValues(0);
 
-  // Calculate chart scaling - exponential will blow this up
   const maxY = Math.max(current.linear, current.quadratic, current.exponential, 50);
-
-  // For display purposes, cap how high exponential can go on chart
   const chartMax = Math.min(maxY, current.quadratic * 3 + 100);
   const expOffChart = current.exponential > chartMax;
 
@@ -107,20 +123,111 @@ export default function GrowthTypesRace() {
     return 50 + (step / maxSteps) * 500;
   };
 
-  // Commentary based on race progress
   const getCommentary = () => {
-    if (currentStep <= 3) return { text: "They all look pretty similar...", color: "text-slate-400" };
-    if (currentStep <= 6) return { text: "Exponential is starting to pull ahead slightly.", color: "text-yellow-400" };
-    if (currentStep <= 9) return { text: "Wait, exponential is really moving now.", color: "text-orange-400" };
-    if (currentStep <= 12) return { text: "This is getting out of hand...", color: "text-red-400" };
-    if (currentStep <= 15) return { text: "EXPONENTIAL HAS LEFT THE CHAT", color: "text-red-500" };
-    return { text: "Linear and quadratic aren't even visible from exponential's perspective.", color: "text-red-600" };
+    const ratio = current.exponential / Math.max(current.linear, 1);
+    if (ratio < 1.5) return { text: "They all look pretty similar...", color: "text-slate-400" };
+    if (ratio < 3) return { text: "Exponential is starting to pull ahead slightly.", color: "text-yellow-400" };
+    if (ratio < 10) return { text: "Wait, exponential is really moving now.", color: "text-orange-400" };
+    if (ratio < 50) return { text: "This is getting out of hand...", color: "text-red-400" };
+    if (ratio < 500) return { text: "EXPONENTIAL HAS LEFT THE CHAT", color: "text-red-500" };
+    return { text: "Linear and quadratic aren't even visible anymore.", color: "text-red-600" };
   };
 
   const commentary = getCommentary();
 
   return (
     <div className="space-y-6">
+      {/* Parameter controls toggle */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <button
+          onClick={() => setShowControls(!showControls)}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all min-h-[44px] ${
+            showControls ? 'bg-purple-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+          }`}
+        >
+          <Sliders size={16} />
+          {showControls ? 'Hide Controls' : 'Adjust Parameters'}
+        </button>
+
+        {activePreset && (
+          <span className="text-sm text-purple-400">
+            Scenario: {activePreset}
+          </span>
+        )}
+      </div>
+
+      {/* Parameter controls panel */}
+      <AnimatePresence>
+        {showControls && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-slate-800/70 rounded-xl p-4 space-y-4">
+              {/* Sliders */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-slate-400 block mb-2">
+                    Linear rate: <span className="text-blue-400 font-mono">+{linearRate}</span> per step
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="20"
+                    value={linearRate}
+                    onChange={(e) => { setLinearRate(Number(e.target.value)); setActivePreset(null); reset(); }}
+                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-slate-400 block mb-2">
+                    Exponential base: <span className="text-red-400 font-mono">×{expBase}</span> per step
+                  </label>
+                  <input
+                    type="range"
+                    min="1.05"
+                    max="3"
+                    step="0.05"
+                    value={expBase}
+                    onChange={(e) => { setExpBase(Number(e.target.value)); setActivePreset(null); reset(); }}
+                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-500"
+                  />
+                </div>
+              </div>
+
+              {/* Real-world presets */}
+              <div>
+                <div className="text-sm text-slate-400 mb-2">Real-world scenarios:</div>
+                <div className="flex flex-wrap gap-2">
+                  {realWorldExamples.map((ex) => (
+                    <button
+                      key={ex.name}
+                      onClick={() => applyPreset(ex)}
+                      className={`px-3 py-2 rounded-lg text-xs transition-all min-h-[40px] ${
+                        activePreset === ex.name
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                      }`}
+                      title={ex.desc}
+                    >
+                      {ex.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {activePreset && (
+                <p className="text-sm text-slate-400 italic">
+                  {realWorldExamples.find(e => e.name === activePreset)?.desc}
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Race header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -142,8 +249,9 @@ export default function GrowthTypesRace() {
           </button>
           <button
             onClick={reset}
-            className="px-4 sm:px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm sm:text-base min-h-[44px]"
+            className="px-4 sm:px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm sm:text-base min-h-[44px] flex items-center gap-2"
           >
+            <RotateCcw size={16} />
             Reset
           </button>
         </div>

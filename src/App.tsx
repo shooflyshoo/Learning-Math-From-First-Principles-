@@ -44,6 +44,9 @@ import {
   JourneyMap,
   ConceptBridge,
   SectionCheckpoint,
+  FunctionTransformer,
+  ProportionalReasoning,
+  DerivativeIntuition,
 } from './components';
 import './index.css';
 
@@ -631,13 +634,47 @@ function Part2Section() {
           <DivisionByZero />
         </InteractiveWrapper>
       </ScrollSection>
+
+      <ScrollSection delay={0.3}>
+        <h3>Proportional Reasoning: Constant vs Changing Rates</h3>
+        <p>
+          Before exponential growth, there's <em>linear</em> growth — a constant rate.
+          Understanding the difference is the foundation of advanced math.
+        </p>
+
+        <InteractiveWrapper
+          title="Rates and Proportions"
+          hint="Explore different scenarios and watch how constant rates create straight lines"
+          interactionType="drag"
+        >
+          <ProportionalReasoning />
+        </InteractiveWrapper>
+      </ScrollSection>
+
+      <ScrollSection delay={0.35}>
+        <h3>Function Transformations: Shift, Stretch, Flip</h3>
+        <p>
+          Every function can be transformed. Understanding <em>how</em> transformations work
+          unlocks graphing, modeling, and calculus.
+        </p>
+
+        <InteractiveWrapper
+          title="Transform Functions"
+          hint="Adjust sliders to shift, stretch, and flip functions — watch the equation change"
+          interactionType="drag"
+        >
+          <FunctionTransformer />
+        </InteractiveWrapper>
+      </ScrollSection>
+
       <SectionCheckpoint
         title="Part 2 checkpoint"
         sectionId="part2"
         prompts={[
           'I can distinguish shift vs scale operations visually.',
           'I can justify why division by zero fails uniqueness.',
-          'I can explain distributivity in my own words.'
+          'I can explain distributivity in my own words.',
+          'I understand why f(x+2) shifts LEFT, not right.'
         ]}
       />
     </ScrollSection>
@@ -764,13 +801,37 @@ function Part4Section() {
         <strong>Rule of thumb:</strong> Linear = manageable. Polynomial = manageable with effort.
         Exponential = you're on a timer.
       </div>
+
+      <ScrollSection delay={0.2}>
+        <h3>The Derivative: Measuring Change Itself</h3>
+        <p>
+          Knowing the growth <em>type</em> isn't enough — you need to know the <em>rate</em> at each moment.
+          This is the derivative: the speedometer of mathematics.
+        </p>
+
+        <InteractiveWrapper
+          title="Derivative Intuition"
+          hint="Drag along the curve to see how the slope (rate of change) varies"
+          interactionType="drag"
+        >
+          <DerivativeIntuition />
+        </InteractiveWrapper>
+
+        <p className="text-slate-400 mt-4">
+          <strong>Historical note:</strong> Newton and Leibniz invented calculus in the 1680s
+          to answer exactly this question: "How fast is this changing <em>right now</em>?"
+          The derivative is the foundation of modern physics, engineering, and machine learning.
+        </p>
+      </ScrollSection>
+
       <SectionCheckpoint
         title="Part 4 checkpoint"
         sectionId="part4"
         prompts={[
           'I can classify a growth pattern by its long-run behavior.',
           'I can articulate why exponential growth becomes dominant.',
-          'I can connect growth type to practical risk.'
+          'I can connect growth type to practical risk.',
+          'I understand that the derivative measures instantaneous rate of change.'
         ]}
       />
     </ScrollSection>

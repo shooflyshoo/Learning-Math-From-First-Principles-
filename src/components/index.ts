@@ -20,6 +20,9 @@ export { default as PlaceValueExploder } from './PlaceValueExploder';
 export { default as PrimeFactorTree } from './PrimeFactorTree';
 export { default as DomainBoundaryExplorer } from './DomainBoundaryExplorer';
 export { default as DebugKit } from './DebugKit';
+export { default as FunctionTransformer } from './FunctionTransformer';
+export { default as ProportionalReasoning } from './ProportionalReasoning';
+export { default as DerivativeIntuition } from './DerivativeIntuition';
 
 // Layout components
 export { default as InteractiveWrapper } from './InteractiveWrapper';
